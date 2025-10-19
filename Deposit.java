@@ -70,16 +70,15 @@ public class Deposit extends Transaction
       Screen screen = getScreen(); // get reference to screen
 
       // display the prompt
-      screen.displayMessage( "\nPlease enter a deposit amount in " + 
-         "CENTS (or 0 to cancel): " );
-      int input = keypad.getInput(); // receive input of deposit amount
+      screen.displayMessage( "\nPlease enter a deposit amount in HKDollar (or 0 to cancel): " );
+      double input = keypad.getDoubleInput(); // receive input of deposit amount
       
       // check whether the user canceled or entered a valid amount
       if ( input == CANCELED ) 
          return CANCELED;
       else
       {
-         return ( double ) input / 100; // return dollar amount 
+         return input; // return dollar amount 
       } // end else
    } // end method promptForDepositAmount
 } // end class Deposit
