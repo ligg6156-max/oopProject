@@ -2,16 +2,16 @@ public class Saving_Account extends Account
 {
     private double AvailableBalance;
     private double TotalBalance;
-    private double Limit_per_cheque = 0.0025;
+    private double Interest_rate = 0.0025;
     public Saving_Account(int AccountNumber, int PIN, double AvailableBalance, double TotalBalance)
     {
 
         super(AccountNumber, PIN, AvailableBalance, TotalBalance);
     }
-    public double getLimit_per_cheque(){
-        return Limit_per_cheque;
+    public double getInterest_rate(){
+        return Interest_rate;
     }
-    public void setLimit_per_cheque(double Limit){
-        Limit_per_cheque = Limit;
+    public void setInterest_rate(double interest){
+        Interest_rate = interest;
     }
 }
