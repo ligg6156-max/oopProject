@@ -12,6 +12,6 @@ public class Saving_Account extends Account
         return Limit_per_cheque;
     }
     public void setLimit_per_cheque(double Limit){
-    Limit_per_cheque = Limit;
+        Limit_per_cheque = Limit;
     }
 }
