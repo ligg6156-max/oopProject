@@ -92,18 +92,18 @@ public class Withdrawal extends Transaction
       Screen screen = getScreen(); // get screen reference
       
       // array of amounts to correspond to menu numbers
-      int amounts[] = { 0, 100, 200, 500, 1000, 2000 };
+      int amounts[] = { 0, 200, 400, 800, 1000, 0};
 
       // loop while no valid choice has been made
       while ( userChoice == 0 )
       {
          // display the menu
          screen.displayMessageLine( "\nWithdrawal Menu:" );
-         screen.displayMessageLine( "1 - HKD100" );
-         screen.displayMessageLine( "2 - HKD200" );
-         screen.displayMessageLine( "3 - HKD500" );
+         screen.displayMessageLine( "1 - HKD200" );
+         screen.displayMessageLine( "2 - HKD400" );
+         screen.displayMessageLine( "3 - HKD800" );
          screen.displayMessageLine( "4 - HKD1000" );
-         screen.displayMessageLine( "5 - HKD2000" );
+         screen.displayMessageLine( "5 - Type out the amount of cash withdraw manually" );
          screen.displayMessageLine( "6 - Cancel transaction" );
          screen.displayMessage( "\nChoose a withdrawal amount: " );
 
@@ -115,9 +115,28 @@ public class Withdrawal extends Transaction
             case 2: // (i.e., chose option 1, 2, 3, 4 or 5), return the
             case 3: // corresponding amount from amounts array
             case 4:
-            case 5:
                userChoice = amounts[ input ]; // save user's choice
-               break;       
+               break; 
+            case 5:
+               screen.displayMessageLine( "Type out the amount of cash withdraw manually" );
+               boolean times = true;
+               while(times == true){
+                   input = keypad.getIntInput();
+               if (input%100 == 0){
+                   userChoice = input;
+                   times = false;
+                   break;
+               }
+               else if (input == 1){
+               break;
+               }
+               else{
+               screen.displayMessage( "\nThe amount must be divided by HKD100, try again.\n Or press 1 to return Withdrawal Menu.\n"); 
+               
+                }
+               
+            }
+            break;
             case CANCELED: // the user chose to cancel
                userChoice = CANCELED; // save user's choice
                break;
