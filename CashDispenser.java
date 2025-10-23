@@ -4,28 +4,29 @@
 public class CashDispenser 
 {
    // the default initial number of bills in the cash dispenser
-   private final static int INITIAL_COUNT = 50000000;
-   private int count; // number of $20 bills remaining
+   private final static int INITIAL_COUNT[] = {50000000,5000000,5000000};
+   private int count[]={0,0,0};
    
    // no-argument CashDispenser constructor initializes count to default
    public CashDispenser()
    {
-      count = INITIAL_COUNT; // set count attribute to default
+      count[0] = INITIAL_COUNT[0];
+      count[1] = INITIAL_COUNT[1];
+      count[2] = INITIAL_COUNT[2];// set count attribute to default
    } // end CashDispenser constructor
 
    // simulates dispensing of specified amount of cash
-   public void dispenseCash( int amount )
+   public void dispenseCash( int cashCount1,int cashCount2,int cashCount3 )
    {
-      int billsRequired = amount; // number of HKD 100 bills required
-      count -= billsRequired; // update the count of bills
+      count[0] -= cashCount1;
+      count[1] -= cashCount2;
+      count[2] -= cashCount3;// update the count of bills
    } // end method dispenseCash
 
    // indicates whether cash dispenser can dispense desired amount
-   public boolean isSufficientCashAvailable( int amount )
+   public boolean isSufficientCashAvailable( int cashCount1,int cashCount2,int cashCount3 )
    {
-      int billsRequired = amount ; // number of HKD 100bills required
-
-      if ( count >= billsRequired  )
+      if ( count[0] >= cashCount1 && count[1] >= cashCount2 && count[2] >= cashCount3)
          return true; // enough bills available
       else 
          return false; // not enough bills available
