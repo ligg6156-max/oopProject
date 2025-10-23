@@ -4,7 +4,7 @@
 public class CashDispenser 
 {
    // the default initial number of bills in the cash dispenser
-   private final static int INITIAL_COUNT[] = {50000000,5000000,5000000};
+   private final static int INITIAL_COUNT[] = {50000000,5000000,5000000}; //[0] is HK$1000 , [1] is HK$500 , [2] is HK$100 physical cash have
    private int count[]={0,0,0};
    
    // no-argument CashDispenser constructor initializes count to default
