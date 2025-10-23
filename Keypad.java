@@ -19,6 +19,17 @@ public class Keypad
     int num = 0;
     try{
         num = Integer.parseInt(input.nextLine());
+        if (num < 0){
+            if(i > 0){
+                System.out.printf("\nThe number cannot be negative, %d try remaining\n", i);
+                System.out.print("Try again: ");
+                continue;
+            }
+            else
+            {
+                return -1;
+            }   
+        }
         return num;
     }
     catch (java.lang.NumberFormatException e)
@@ -29,7 +40,7 @@ public class Keypad
         }
         else
         {
-            return 6;
+            return -1;
         }
     }
    }
@@ -41,6 +52,17 @@ public class Keypad
     double num = 0;
     try{
         num = Double.parseDouble(input.nextLine());
+        if (num < 0){
+            if(i > 0){
+                System.out.printf("\nThe number cannot be negative, %d try remaining\n", i);
+                System.out.print("Try again: ");
+                continue;
+            }
+            else
+            {
+                return -1;
+            }   
+        }
         return num;
     }
     catch (java.lang.NumberFormatException e)

@@ -9,7 +9,7 @@ public class BankDatabase
    public BankDatabase()
    {
       accounts = new Account[ 2 ]; // just 2 accounts for testing
-      accounts[ 0 ] = new Account( 54445, 54321, 1000.0, 1200.0 );
+      accounts[ 0 ] = new Account( 54445, 54321, 4500.0, 4500.0 );
       accounts[ 1 ] = new Account( 98765, 56789, 200.0, 200.0 );  
    } // end no-argument BankDatabase constructor
    

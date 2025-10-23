@@ -30,7 +30,7 @@ public class Deposit extends Transaction
       amount = promptForDepositAmount(); // get deposit amount from user
 
       // check whether user entered a deposit amount or canceled
-      if ( amount != CANCELED )
+      if ( amount > CANCELED )
       {
          // request deposit envelope containing specified amount
          screen.displayMessage( 
@@ -74,7 +74,7 @@ public class Deposit extends Transaction
       double input = keypad.getDoubleInput(); // receive input of deposit amount
       
       // check whether the user canceled or entered a valid amount
-      if ( input == CANCELED ) 
+      if ( input <= CANCELED ) 
          return CANCELED;
       else
       {

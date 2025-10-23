@@ -8,7 +8,7 @@ public class Withdrawal extends Transaction
    private CashDispenser cashDispenser; // reference to cash dispenser
 
    // constant corresponding to menu option to cancel
-   private final static int CANCELED = 6;
+   private final static int CANCELED = -1;
 
    // Withdrawal constructor
    public Withdrawal( int userAccountNumber, Screen atmScreen, 
@@ -57,10 +57,25 @@ public class Withdrawal extends Transaction
                   
                   cashDispenser.dispenseCash( amount ); // dispense cash
                   cashDispensed = true; // cash was dispensed
-
+                  int tmp = amount;
+                  int cashCount[] = {0,0,0};
+                  while (tmp > 0){
+                  if (tmp >= 1000){
+                    cashCount[0] ++;
+                    tmp -=1000;
+                    }
+                    else if (tmp >= 500){
+                    cashCount[1] ++;
+                    tmp -= 500;
+                    }
+                    else {
+                    cashCount[2] ++;
+                    tmp -= 100;
+                    }
+                }
                   // instruct user to take cash
-                  screen.displayMessageLine( 
-                     "\nPlease take your cash now." );
+                  System.out.printf( 
+                     "\nPlease take your cash now. You Get %d HKD100, %d HKD500 and %d HKD1000",cashCount[2],cashCount[1],cashCount[0] );
                } // end if
                else // cash dispenser does not have enough cash
                   screen.displayMessageLine( 
@@ -127,17 +142,17 @@ public class Withdrawal extends Transaction
                    times = false;
                    break;
                }
-               else if (input == 1){
+               else if (input <= 0){
                break;
                }
                else{
-               screen.displayMessage( "\nThe amount must be divided by HKD100, try again.\n Or press 1 to return Withdrawal Menu.\n"); 
+               screen.displayMessage( "\nThe amount must be the mutiple of HKD100, try again.\n Or press 0 to return Withdrawal Menu.\n"); 
                
                 }
                
             }
             break;
-            case CANCELED: // the user chose to cancel
+            case 6: // the user chose to cancel
                userChoice = CANCELED; // save user's choice
                break;
             default: // the user did not enter a value from 1-6
