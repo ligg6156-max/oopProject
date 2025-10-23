@@ -75,7 +75,8 @@ public class Withdrawal extends Transaction
                 }
                   // instruct user to take cash
                   System.out.printf( 
-                     "\nPlease take your cash now. You Get %d HKD100, %d HKD500 and %d HKD1000",cashCount[2],cashCount[1],cashCount[0] );
+                     "\nPlease take your cash now. \nYou Get %d HKD100, %d HKD500 and %d HKD1,000 withdraw from ",cashCount[2],cashCount[1],cashCount[0]);
+                  screen.displayDollarAmount(amount);
                } // end if
                else // cash dispenser does not have enough cash
                   screen.displayMessageLine( 
@@ -117,7 +118,7 @@ public class Withdrawal extends Transaction
          screen.displayMessageLine( "1 - HKD200" );
          screen.displayMessageLine( "2 - HKD400" );
          screen.displayMessageLine( "3 - HKD800" );
-         screen.displayMessageLine( "4 - HKD1000" );
+         screen.displayMessageLine( "4 - HKD1,000" );
          screen.displayMessageLine( "5 - Type out the amount of cash withdraw manually" );
          screen.displayMessageLine( "6 - Cancel transaction" );
          screen.displayMessage( "\nChoose a withdrawal amount: " );
