@@ -75,7 +75,7 @@ public class Withdrawal extends Transaction
                 }
                   // instruct user to take cash
                   System.out.printf( 
-                     "\nPlease take your cash now. \nYou Get %d HKD100, %d HKD500 and %d HKD1,000 withdraw from ",cashCount[2],cashCount[1],cashCount[0]);
+                     "\nPlease take your cash now. \nYou Get %d HK$100, %d HK$500 and %d HK$1,000 withdraw from ",cashCount[2],cashCount[1],cashCount[0]);
                   screen.displayDollarAmount(amount);
                } // end if
                else // cash dispenser does not have enough cash
@@ -115,10 +115,10 @@ public class Withdrawal extends Transaction
       {
          // display the menu
          screen.displayMessageLine( "\nWithdrawal Menu:" );
-         screen.displayMessageLine( "1 - HKD200" );
-         screen.displayMessageLine( "2 - HKD400" );
-         screen.displayMessageLine( "3 - HKD800" );
-         screen.displayMessageLine( "4 - HKD1,000" );
+         screen.displayMessageLine( "1 - HK$200" );
+         screen.displayMessageLine( "2 - HK$400" );
+         screen.displayMessageLine( "3 - HK$800" );
+         screen.displayMessageLine( "4 - HK$1,000" );
          screen.displayMessageLine( "5 - Type out the amount of cash withdraw manually" );
          screen.displayMessageLine( "6 - Cancel transaction" );
          screen.displayMessage( "\nChoose a withdrawal amount: " );
@@ -147,7 +147,7 @@ public class Withdrawal extends Transaction
                break;
                }
                else{
-               screen.displayMessage( "\nThe amount must be the mutiple of HKD100, try again.\n Or press 0 to return Withdrawal Menu.\n"); 
+               screen.displayMessage( "\nThe amount must be the mutiple of HK$100, try again.\n Or press 0 to return Withdrawal Menu.\n"); 
                
                 }
                
