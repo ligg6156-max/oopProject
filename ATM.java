@@ -16,7 +16,8 @@ public class ATM
    private static final int WITHDRAWAL = 2;
    private static final int DEPOSIT = 3;
    private static final int EXIT = 4;
-
+   private static final int CANCELED = 6;
+   
    // no-argument ATM constructor initializes instance variables
    public ATM() 
    {
@@ -54,8 +55,16 @@ public class ATM
    {
       screen.displayMessage( "\nPlease enter your account number: " );
       int accountNumber = keypad.getIntInput(); // input account number
+      if (accountNumber == CANCELED){
+        screen.displayMessageLine( "Invalid account number or PIN. Please try again." );
+        return;
+        }
       screen.displayMessage( "\nEnter your PIN: " ); // prompt for PIN
       int pin = keypad.getIntInput(); // input PIN
+      if (accountNumber == CANCELED){
+        screen.displayMessageLine( "Invalid account number or PIN. Please try again." );
+        return;
+      }
       
       // set userAuthenticated to boolean value returned by database
       userAuthenticated = 
@@ -100,6 +109,10 @@ public class ATM
                currentTransaction.execute(); // execute transaction
                break; 
             case EXIT: // user chose to terminate session
+               screen.displayMessageLine( "\nExiting the system..." );
+               userExited = true; // this ATM session should end
+               break;
+            case CANCELED:
                screen.displayMessageLine( "\nExiting the system..." );
                userExited = true; // this ATM session should end
                break;

@@ -15,12 +15,48 @@ public class Keypad
    // return an integer value entered by user 
    public int getIntInput()
    {
-      return input.nextInt(); // we assume that user enters an integer 
-   } // end method getInput
+    for(int i = 2; i > -1; i--){
+    int num = 0;
+    try{
+        num = Integer.parseInt(input.nextLine());
+        return num;
+    }
+    catch (java.lang.NumberFormatException e)
+    {
+        if(i > 0){
+            System.out.printf("The following input is not an integer! %d try remaining\n", i);
+            System.out.print("Try again: ");
+        }
+        else
+        {
+            return 6;
+        }
+    }
+   }
+   return 0;
+}// end method getInput
    public double getDoubleInput()
    {
-      return input.nextDouble(); // we assume that user enters an double  
-   } // end method getInput
+    for(int i = 2; i > -1; i--){
+    double num = 0;
+    try{
+        num = Double.parseDouble(input.nextLine());
+        return num;
+    }
+    catch (java.lang.NumberFormatException e)
+    {
+        if(i > 0){
+            System.out.printf("The following input is not a number! %d try remaining\n", i);
+            System.out.print("Try again: ");
+        }
+        else
+        {
+            return 0;
+        }
+    }
+   }
+   return 0;
+}
 } // end class Keypad  
 
 
