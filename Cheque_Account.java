@@ -8,7 +8,7 @@ public class Cheque_Account extends Account
 
         super(AccountNumber, PIN, AvailableBalance, TotalBalance);
     }
-    public double Limit_per_cheque(){
+    public double getLimit_per_cheque(){
         return Limit_per_cheque;
     }
     public void setLimit_per_cheque(double limit){
