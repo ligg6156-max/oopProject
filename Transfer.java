@@ -18,7 +18,7 @@ public class Transfer extends Transaction {
     @Override
         public void execute() {
         screen.displayMessage("\nEnter transfer amount (HKD): ");
-        int amount = keypad.getIntInput();
+        double amount = keypad.getDoubleInput();
 
         screen.displayMessage("Enter the account number to transfer to: ");
         int toAccount = keypad.getIntInput();
