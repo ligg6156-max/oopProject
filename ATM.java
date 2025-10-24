@@ -153,6 +153,30 @@ private Transaction createTransaction(int type) {
    } // end method displayMainMenu
 }    
    // return object of specified Transaction subclass
+<<<<<<< HEAD
+=======
+   private Transaction createTransaction( int type )
+   {
+      Transaction temp = null; // temporary Transaction variable
+      
+      // determine which type of Transaction to create     
+      switch ( type )
+      {
+         case BALANCE_INQUIRY: // create new BalanceInquiry transaction
+            temp = new BalanceInquiry( 
+               currentAccountNumber, screen, bankDatabase );
+            break;
+         case WITHDRAWAL: // create new Withdrawal transaction
+            temp = new Withdrawal( currentAccountNumber, screen, 
+               bankDatabase, keypad, cashDispenser );
+            break; 
+      } // end switch
+
+      return temp; // return the newly created object
+   } // end method createTransaction
+} // end class ATM
+
+>>>>>>> 138e614cda38f3f396cf1fa49d01c7ed596abe63
 
 
 /**************************************************************************
