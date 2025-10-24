@@ -14,7 +14,7 @@ public class BankDatabase
    } // end no-argument BankDatabase constructor
    
    // retrieve Account object containing specified account number
-   private Account getAccount( int accountNumber )
+   public Account getAccount( int accountNumber )
    {
       // loop through accounts searching for matching account number
       for ( Account currentAccount : accounts )
@@ -27,6 +27,20 @@ public class BankDatabase
       return null; // if no matching account was found, return null
    } // end method getAccount
 
+    
+    public void transferFunds(int fromAccount, int toAccount, double amount) 
+    {
+        Account sender = getAccount(fromAccount);
+        Account receiver = getAccount(toAccount);
+
+        if (sender != null && receiver != null) {
+            sender.debit(amount);
+            receiver.credit(amount);
+        }
+    
+
+    // Assume getAccount(), debit(), and credit() are defined
+}
    // determine whether user-specified account number and PIN match
    // those of an account in the database
    public boolean authenticateUser( int userAccountNumber, int userPIN )
@@ -64,7 +78,9 @@ public class BankDatabase
    {
       getAccount( userAccountNumber ).debit( amount );
    } // end method debit
-} // end class BankDatabase
+   
+}
+ // end class BankDatabase
 
 
 
