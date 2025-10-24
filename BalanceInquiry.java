@@ -16,6 +16,7 @@ public class BalanceInquiry extends Transaction
       // get references to bank database and screen
       BankDatabase bankDatabase = getBankDatabase();
       Screen screen = getScreen();
+      Account account = bankDatabase.getAccount(getAccountNumber());
 
       // get the available balance for the account involved
       double availableBalance = 
@@ -32,6 +33,16 @@ public class BalanceInquiry extends Transaction
       screen.displayMessage( "\n - Total balance:     " );
       screen.displayDollarAmount( totalBalance );
       screen.displayMessageLine( "" );
+      
+      // show monthly interest and interest rate
+      if (account instanceof Saving_Account)
+      {
+       Saving_Account savingAccount = (Saving_Account) account;
+       screen.displayMessage(" - Interest rate: " + (savingAccount.getInterest_rate() * 100) + "% p.a." );
+       double monthlyInterest = savingAccount.getTotalBalance() * savingAccount.getInterest_rate() / 12;
+       screen.displayMessage(" - Monthly interest: ");
+       screen.displayDollarAmount(monthlyInterest);
+        }
    } // end method execute
 } // end class BalanceInquiry
 
