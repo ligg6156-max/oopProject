@@ -49,26 +49,26 @@ public class Withdrawal extends Transaction
             // check whether the user has enough money in the account 
             if ( amount <= availableBalance )
             {  
+               // check whether the cash dispenser has enough money
+               if ( cashDispenser.isSufficientCashAvailable( amount ) )
+               {
                   int tmp = amount;
                   int cashCount[] = {0,0,0};
                   while (tmp > 0){
-                  if (tmp >= 1000){
+                  if (tmp >= 1000 && cashCount[0] < cashDispenser.getCashCount(0)){
                     cashCount[0] ++;
                     tmp -=1000;
                     }
-                    else if (tmp >= 500){
+                    else if (tmp >= 500 && cashCount[1] < cashDispenser.getCashCount(1)){
                     cashCount[1] ++;
                     tmp -= 500;
                     }
-                    else {
+                    else if(tmp >=100 &&  cashCount[2] < cashDispenser.getCashCount(2)){
                     cashCount[2] ++;
                     tmp -= 100;
                     }
                 }
-               // check whether the cash dispenser has enough money
-               if ( cashDispenser.isSufficientCashAvailable( cashCount[0],cashCount[1],cashCount[2] ) )
-               {
-                  // update the account involved to reflect withdrawal
+                   // update the account involved to reflect withdrawal
                   bankDatabase.debit( getAccountNumber(), amount );
                   
                   cashDispenser.dispenseCash( cashCount[0], cashCount[1], cashCount[2] ); // dispense cash
