@@ -29,8 +29,8 @@ Suppose that the bank would like to enhance the prototype with the following
 new features:
 
 (A) The prototype was originally designed for the use in USA. Adjust the 
-selection of options for cash withdrawal to fit in the situation in HK (only
-the multiples of HKD100, HKD500, or HKD1000 are allowed).
+selection of options for cash withdrawal to fit in the situation in HK 
+(only the multiples of HKD100, HKD500, or HKD1000 are allowed).
 
 (B) Introduce two specific types of bank accounts as subclasses – saving 
 account and cheque account: Saving Account has a specific attribute – 
