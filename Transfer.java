@@ -25,6 +25,15 @@ public class Transfer extends Transaction {
             screen.displayMessageLine("Transfer canceled.");
             return;
         }
+        if (account instanceof Cheque_Account) {
+            Cheque_Account chequeAccount = (Cheque_Account) account;
+            if (amount > chequeAccount.getLimit_per_cheque()) {
+                screen.displayMessageLine("Amount exceeds cheque limit of ");
+                screen.displayDollarAmount(chequeAccount.getLimit_per_cheque());
+                screen.displayMessageLine("Transfer canceled.");
+                return;
+            }
+        }
         screen.displayMessage("Enter the account number to transfer to: ");
         int toAccount = keypad.getIntInput();
         if (accountNumber == toAccount){

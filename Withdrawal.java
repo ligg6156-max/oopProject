@@ -32,7 +32,7 @@ public class Withdrawal extends Transaction
       // get references to bank database and screen
       BankDatabase bankDatabase = getBankDatabase(); 
       Screen screen = getScreen();
-
+      Account account = bankDatabase.getAccount(getAccountNumber());
       // loop until cash is dispensed or the user cancels
       do
       {
@@ -43,9 +43,23 @@ public class Withdrawal extends Transaction
          if ( amount != CANCELED )
          {
             // get available balance of account involved
+
+               
+            if (account instanceof Cheque_Account) {
+               Cheque_Account chequeAccount = (Cheque_Account) account;
+               if (amount > chequeAccount.getLimit_per_cheque()) {
+                  screen.displayMessageLine( 
+                     "\nAmount exceeds cheque limit of " );
+                  screen.displayDollarAmount(chequeAccount.getLimit_per_cheque());
+                  screen.displayMessageLine( "\nPlease choose a smaller amount." );
+                  continue;
+                  // will loop again for user to type another amount
+               }
+            }
+            
             availableBalance = 
                bankDatabase.getAvailableBalance( getAccountNumber() );
-      
+               
             // check whether the user has enough money in the account 
             if ( amount <= availableBalance )
             {  
