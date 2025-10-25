@@ -79,18 +79,6 @@ public class BankDatabase
       getAccount( userAccountNumber ).debit( amount );
    } // end method debit
    
-   //calculate monthly interest of saving account
-   public void calculateMonthlyInterest( int userAccountNumber )
-   {
-      // attempt to retrieve the account with the account number
-      Account userAccount = getAccount( userAccountNumber );
-      if ( userAccount instanceof Saving_Account){
-        Saving_Account savingAccount = (Saving_Account) userAccount;
-        double interest = savingAccount.getTotalBalance() * savingAccount.getInterest_rate() / 12;
-        savingAccount.credit(interest);
-        }
-    } //end method calculateMonthlyInterest
-   
 }
  // end class BankDatabase
 
