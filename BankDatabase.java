@@ -37,7 +37,7 @@ public class BankDatabase
    } // end method getAccount
 
     
-    public void transferFunds(int fromAccount, int toAccount, double amount) 
+    public boolean transferFunds(int fromAccount, int toAccount, double amount) 
     {
         Account sender = getAccount(fromAccount);
         Account receiver = getAccount(toAccount);
@@ -45,9 +45,11 @@ public class BankDatabase
         if (sender != null && receiver != null) {
             sender.debit(amount);
             receiver.credit(amount);
+            return true;
         }
-    
-
+        else {
+            return false;
+        }
     // Assume getAccount(), debit(), and credit() are defined
 }
    // determine whether user-specified account number and PIN match
@@ -63,7 +65,7 @@ public class BankDatabase
       else
          return false; // account number not found, so return false
    } // end method authenticateUser
-
+   
    // return available balance of Account with specified account number
    public double getAvailableBalance( int userAccountNumber )
    {

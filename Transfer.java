@@ -40,11 +40,16 @@ public class Transfer extends Transaction {
             screen.displayMessageLine("Cannot transfer money to yourself. Transfer canceled.");
             return;
         }
+        
         double availableBalance = bankDatabase.getAvailableBalance(getAccountNumber());
 
         if (amount <= availableBalance) {
-            bankDatabase.transferFunds(getAccountNumber(), toAccount, amount);
+            if(bankDatabase.transferFunds(getAccountNumber(), toAccount, amount)) {
             screen.displayMessageLine("Transfer successful.");
+            }
+            else {
+            screen.displayMessageLine("The following account is not exist. Transfer canceled.");
+            }
         }
         else {
             screen.displayMessageLine("Insufficient funds. Transfer canceled.");
