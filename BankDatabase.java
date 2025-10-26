@@ -4,26 +4,35 @@
 public class BankDatabase
 {
    private Account accounts[]; // array of Accounts
-   
+   private Cheque_Account cheque_accounts[];
+   private Saving_Account saving_accounts[];
    // no-argument BankDatabase constructor initializes accounts
    public BankDatabase()
    {
-      accounts = new Account[ 2 ]; // just 2 accounts for testing
-      accounts[ 0 ] = new Account( 54445, 54321, 4500.0, 4500.0 );
-      accounts[ 1 ] = new Account( 98765, 56789, 200.0, 200.0 );  
+      cheque_accounts = new Cheque_Account[2];
+      saving_accounts = new Saving_Account[2];// just 2 accounts for testing
+      cheque_accounts[ 0 ] = new Cheque_Account( 24001, 54321, 4500.0, 4500.0 );
+      cheque_accounts[ 1 ] = new Cheque_Account( 24002, 12345, 60000.0, 60000.0 );
+      saving_accounts[ 0 ] = new Saving_Account( 25001, 56789, 200.0, 200.0 );  
+      saving_accounts[ 1 ] = new Saving_Account( 25002, 98765, 4000.5, 4000.5 ); 
    } // end no-argument BankDatabase constructor
    
    // retrieve Account object containing specified account number
    public Account getAccount( int accountNumber )
    {
       // loop through accounts searching for matching account number
-      for ( Account currentAccount : accounts )
+      for ( Cheque_Account currentAccount : cheque_accounts )
       {
          // return current account if match found
          if ( currentAccount.getAccountNumber() == accountNumber )
             return currentAccount;
       } // end for
-
+      for ( Saving_Account currentAccount : saving_accounts )
+      {
+         // return current account if match found
+         if ( currentAccount.getAccountNumber() == accountNumber )
+            return currentAccount;
+      }
       return null; // if no matching account was found, return null
    } // end method getAccount
 
