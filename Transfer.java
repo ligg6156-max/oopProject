@@ -21,6 +21,7 @@ public class Transfer extends Transaction {
         public void execute() {
         screen.displayMessage("\n(Press 0 to cancel transfer) Enter transfer amount (HKD): ");
         double amount = keypad.getDoubleInput();
+        Account account = bankDatabase.getAccount(getAccountNumber());
         if (amount == 0){
             screen.displayMessageLine("Transfer canceled.");
             return;
@@ -30,7 +31,7 @@ public class Transfer extends Transaction {
             if (amount > chequeAccount.getLimit_per_cheque()) {
                 screen.displayMessageLine("Amount exceeds cheque limit of ");
                 screen.displayDollarAmount(chequeAccount.getLimit_per_cheque());
-                screen.displayMessageLine("Transfer canceled.");
+                screen.displayMessageLine("\nTransfer canceled.");
                 return;
             }
         }
