@@ -13,72 +13,10 @@ public class Keypad
    } // end no-argument Keypad constructor
 
    // return an integer value entered by user 
-   public int getIntInput()
+   public int getInput()
    {
-    for(int i = 2; i > -1; i--){
-    int num = 0;
-    try{
-        num = Integer.parseInt(input.nextLine());
-        if (num < 0){
-            if(i > 0){
-                System.out.printf("\nThe number cannot be negative, %d try remaining\n", i);
-                System.out.print("Try again: ");
-                continue;
-            }
-            else
-            {
-                return -1;
-            }   
-        }
-        return num;
-    }
-    catch (java.lang.NumberFormatException e)
-    {
-        if(i > 0){
-            System.out.printf("The following input is not an integer! %d try remaining\n", i);
-            System.out.print("Try again: ");
-        }
-        else
-        {
-            return -1;
-        }
-    }
-   }
-   return 0;
-}// end method getInput
-   public double getDoubleInput()
-   {
-    for(int i = 2; i > -1; i--){
-    double num = 0;
-    try{
-        num = Double.parseDouble(input.nextLine());
-        if (num < 0){
-            if(i > 0){
-                System.out.printf("\nThe number cannot be negative, %d try remaining\n", i);
-                System.out.print("Try again: ");
-                continue;
-            }
-            else
-            {
-                return -1;
-            }   
-        }
-        return num;
-    }
-    catch (java.lang.NumberFormatException e)
-    {
-        if(i > 0){
-            System.out.printf("The following input is not a number! %d try remaining\n", i);
-            System.out.print("Try again: ");
-        }
-        else
-        {
-            return 0;
-        }
-    }
-   }
-   return 0;
-}
+      return input.nextInt(); // we assume that user enters an integer  
+   } // end method getInput
 } // end class Keypad  
 
 

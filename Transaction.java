@@ -3,7 +3,6 @@
 
 public abstract class Transaction
 {
-   public static final int TRANSFER = 4;
    private int accountNumber; // indicates account involved
    private Screen screen; // ATM's screen
    private BankDatabase bankDatabase; // account info database
@@ -37,7 +36,6 @@ public abstract class Transaction
 
    // perform the transaction (overridden by each subclass)
    abstract public void execute();
-   
 } // end class Transaction
 
 

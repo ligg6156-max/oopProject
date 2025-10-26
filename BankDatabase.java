@@ -4,54 +4,29 @@
 public class BankDatabase
 {
    private Account accounts[]; // array of Accounts
-   private Cheque_Account cheque_accounts[];
-   private Saving_Account saving_accounts[];
+   
    // no-argument BankDatabase constructor initializes accounts
    public BankDatabase()
    {
-      cheque_accounts = new Cheque_Account[2];
-      saving_accounts = new Saving_Account[2];// just 2 accounts for testing
-      cheque_accounts[ 0 ] = new Cheque_Account( 24001, 54321, 4500.0, 4500.0 );
-      cheque_accounts[ 1 ] = new Cheque_Account( 24002, 12345, 60000.0, 60000.0 );
-      saving_accounts[ 0 ] = new Saving_Account( 25001, 56789, 200.0, 200.0 );  
-      saving_accounts[ 1 ] = new Saving_Account( 25002, 98765, 4000.5, 4000.5 ); 
+      accounts = new Account[ 2 ]; // just 2 accounts for testing
+      accounts[ 0 ] = new Account( 12345, 54321, 1000.0, 1200.0 );
+      accounts[ 1 ] = new Account( 98765, 56789, 200.0, 200.0 );  
    } // end no-argument BankDatabase constructor
    
    // retrieve Account object containing specified account number
-   public Account getAccount( int accountNumber )
+   private Account getAccount( int accountNumber )
    {
       // loop through accounts searching for matching account number
-      for ( Cheque_Account currentAccount : cheque_accounts )
+      for ( Account currentAccount : accounts )
       {
          // return current account if match found
          if ( currentAccount.getAccountNumber() == accountNumber )
             return currentAccount;
       } // end for
-      for ( Saving_Account currentAccount : saving_accounts )
-      {
-         // return current account if match found
-         if ( currentAccount.getAccountNumber() == accountNumber )
-            return currentAccount;
-      }
+
       return null; // if no matching account was found, return null
    } // end method getAccount
 
-    
-   public boolean transferFunds(int fromAccount, int toAccount, double amount) 
-   {
-        Account sender = getAccount(fromAccount);
-        Account receiver = getAccount(toAccount);
-
-        if (sender != null && receiver != null) {
-            sender.debit(amount);
-            receiver.credit(amount);
-            return true;
-        }
-        else {
-            return false;
-        }
-        // Assume getAccount(), debit(), and credit() are defined
-   }
    // determine whether user-specified account number and PIN match
    // those of an account in the database
    public boolean authenticateUser( int userAccountNumber, int userPIN )
@@ -65,7 +40,7 @@ public class BankDatabase
       else
          return false; // account number not found, so return false
    } // end method authenticateUser
-   
+
    // return available balance of Account with specified account number
    public double getAvailableBalance( int userAccountNumber )
    {
@@ -89,9 +64,7 @@ public class BankDatabase
    {
       getAccount( userAccountNumber ).debit( amount );
    } // end method debit
-   
-}
- // end class BankDatabase
+} // end class BankDatabase
 
 
 

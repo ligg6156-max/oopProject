@@ -16,7 +16,6 @@ public class BalanceInquiry extends Transaction
       // get references to bank database and screen
       BankDatabase bankDatabase = getBankDatabase();
       Screen screen = getScreen();
-      Account account = bankDatabase.getAccount(getAccountNumber());
 
       // get the available balance for the account involved
       double availableBalance = 
@@ -25,21 +24,7 @@ public class BalanceInquiry extends Transaction
       // get the total balance for the account involved
       double totalBalance = 
          bankDatabase.getTotalBalance( getAccountNumber() );
-
-      // show interest rate if account is saving_acount
-      if (account instanceof Saving_Account) {
-         Saving_Account savingAccount = (Saving_Account) account;
-         screen.displayMessageLine( " - Account Type: Saving Account" );
-         screen.displayMessage( " - Interest Rate: " );
-         screen.displayMessageLine( String.valueOf(savingAccount.getInterest_rate() * 100) + "%" );
-      } else if (account instanceof Cheque_Account) {
-         Cheque_Account chequeAccount = (Cheque_Account) account;
-         screen.displayMessageLine( " - Account Type: Cheque Account" );
-         screen.displayMessage( " - Limit per cheque: " );
-         screen.displayDollarAmount( chequeAccount.getLimit_per_cheque() );
-         screen.displayMessageLine( "" );
-      }// show transfer limit if account is cheque_acount
-        
+      
       // display the balance information on the screen
       screen.displayMessageLine( "\nBalance Information:" );
       screen.displayMessage( " - Available balance: " ); 
@@ -47,7 +32,6 @@ public class BalanceInquiry extends Transaction
       screen.displayMessage( "\n - Total balance:     " );
       screen.displayDollarAmount( totalBalance );
       screen.displayMessageLine( "" );
-      
    } // end method execute
 } // end class BalanceInquiry
 
