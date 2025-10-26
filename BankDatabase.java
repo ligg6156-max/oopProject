@@ -37,8 +37,8 @@ public class BankDatabase
    } // end method getAccount
 
     
-    public boolean transferFunds(int fromAccount, int toAccount, double amount) 
-    {
+   public boolean transferFunds(int fromAccount, int toAccount, double amount) 
+   {
         Account sender = getAccount(fromAccount);
         Account receiver = getAccount(toAccount);
 
@@ -50,8 +50,8 @@ public class BankDatabase
         else {
             return false;
         }
-    // Assume getAccount(), debit(), and credit() are defined
-}
+        // Assume getAccount(), debit(), and credit() are defined
+   }
    // determine whether user-specified account number and PIN match
    // those of an account in the database
    public boolean authenticateUser( int userAccountNumber, int userPIN )
