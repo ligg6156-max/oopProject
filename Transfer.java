@@ -38,7 +38,7 @@ public class Transfer extends Transaction {
         screen.displayMessage("Enter the account number to transfer to: ");
         int toAccount = keypad.getIntInput();
         if (accountNumber == toAccount){
-            screen.displayMessageLine("Cannot transfer money to yourself. Transfer canceled.");
+            screen.displayMessageLine("Cannot transfer to this account. Transfer canceled.");
             return;
         }
         
