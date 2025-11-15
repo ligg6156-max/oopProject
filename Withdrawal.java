@@ -1,19 +1,24 @@
 // Withdrawal.java
 // Represents a withdrawal ATM transaction
-
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 public class Withdrawal extends Transaction
 {
    private int amount; // amount to withdraw
    private Keypad keypad; // reference to keypad
    private CashDispenser cashDispenser; // reference to cash dispenser
-
+   private JPanel screenPanel; // reference to screen_panel from ATM
+   
    // constant corresponding to menu option to cancel
    private final static int CANCELED = -1;
 
    // Withdrawal constructor
    public Withdrawal( int userAccountNumber, Screen atmScreen, 
       BankDatabase atmBankDatabase, Keypad atmKeypad, 
-      CashDispenser atmCashDispenser )
+      CashDispenser atmCashDispenser, JPanel screenPanel )
    {
       // initialize superclass variables
       super( userAccountNumber, atmScreen, atmBankDatabase );
@@ -21,17 +26,57 @@ public class Withdrawal extends Transaction
       // initialize references to keypad and cash dispenser
       keypad = atmKeypad;
       cashDispenser = atmCashDispenser;
+      this.screenPanel = screenPanel;
    } // end Withdrawal constructor
-
+   
+   public void withdrawalUI() {
+      if (screenPanel != null) {
+         screenPanel.removeAll();
+         
+         // Create a new panel for withdrawal UI
+         JPanel withdrawalPanel = new JPanel(new BorderLayout(10,10));
+         withdrawalPanel.setBackground(Color.BLUE);
+         screenPanel.add(withdrawalPanel);
+         // Add instruction
+         JLabel Title = new JLabel("Withdraw\nPlease select withdrawal amount:", JLabel.CENTER);
+         Title.setForeground(Color.WHITE);
+         withdrawalPanel.add(Title, BorderLayout.NORTH);
+         JPanel Table = new JPanel(new GridLayout(2,2,10,10));
+         Table.setBackground(Color.BLUE);
+         JLabel option1 = new JLabel("1 - HK$200", JLabel.CENTER);
+         option1.setForeground(Color.WHITE);
+         JLabel option2 = new JLabel("2 - HK$400", JLabel.CENTER);
+         option2.setForeground(Color.WHITE);
+         JLabel option3 = new JLabel("3 - HK$800", JLabel.CENTER);
+         option3.setForeground(Color.WHITE);
+         JLabel option4 = new JLabel("4 - HK$1,000", JLabel.CENTER);
+         option4.setForeground(Color.WHITE);
+         Table.add(option1);
+         Table.add(option2);
+         Table.add(option3);
+         Table.add(option4);
+         withdrawalPanel.add(Table, BorderLayout.CENTER);
+         withdrawalPanel.add(Table, BorderLayout.CENTER);
+         JLabel option5 = new JLabel("5 - Type out the amount of cash withdraw manually", JLabel.CENTER);
+         option5.setForeground(Color.WHITE);
+         withdrawalPanel.add(option5, BorderLayout.SOUTH);
+         
+         // Add the withdrawal panel to screen_panel
+         screenPanel.revalidate();
+         screenPanel.repaint();
+      }
+   }
    // perform transaction
    public void execute()
    {
+      Screen screen = getScreen();
+      screen.clear();
+      withdrawalUI();
       boolean cashDispensed = false; // cash was not dispensed yet
       double availableBalance; // amount available for withdrawal
 
       // get references to bank database and screen
-      BankDatabase bankDatabase = getBankDatabase(); 
-      Screen screen = getScreen();
+      BankDatabase bankDatabase = getBankDatabase();
       Account account = bankDatabase.getAccount(getAccountNumber());
       // loop until cash is dispensed or the user cancels
       do

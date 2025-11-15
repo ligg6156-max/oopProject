@@ -1,25 +1,53 @@
 // Screen.java
 // Represents the screen of the ATM
+import java.awt.TextArea;
+import javax.swing.SwingUtilities;
+
 
 public class Screen
 {
+   private TextArea textArea; // Reference to the TextArea in ATM
+   
+   // Constructor that accepts TextArea from ATM
+   public Screen(TextArea textArea) {
+      this.textArea = textArea;
+   }
+   
    // displays a message without a carriage return
    public void displayMessage( String message ) 
    {
-      System.out.print( message ); 
+      System.out.print( message );
+      if (textArea != null) {
+         SwingUtilities.invokeLater(() -> textArea.append(message));
+      }
    } // end method displayMessage
 
    // display a message with a carriage return
    public void displayMessageLine( String message ) 
    {
-      System.out.println( message );   
+      System.out.println( message );
+      if (textArea != null) {
+         SwingUtilities.invokeLater(() -> textArea.append(message + "\n"));
+      }
    } // end method displayMessageLine
 
    // display a dollar amount
    public void displayDollarAmount( double amount )
    {
-      System.out.printf( "HK$%,.2f", amount );   
+      System.out.printf( "HK$%,.2f", amount );
+      if (textArea != null) {
+         String formatted = String.format("HK$%,.2f", amount);
+         SwingUtilities.invokeLater(() -> textArea.append(formatted));
+      }
    } // end method displayDollarAmount 
+   
+   // clear the screen
+   public void clear()
+   {
+      if (textArea != null) {
+         SwingUtilities.invokeLater(() -> textArea.setText(""));
+      }
+   } // end method clear
 } // end class Screen
 
 

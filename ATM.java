@@ -1,6 +1,16 @@
 // ATM.java
 // Represents an automated teller machine
-
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.TextArea;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
 public class ATM 
 {
    private boolean userAuthenticated; // whether user is authenticated
@@ -16,51 +26,146 @@ public class ATM
    private static final int TRANSFER = 3;
    private static final int EXIT = 4;
    private static final int CANCELED = -1;
-  
-   
+   protected JFrame frame;
+   protected JButton[] Sidebuttons;
+   protected JLabel label;
+   protected JPanel screen_panel;
+   private TextArea displayArea; // For both displaying messages and input
    // no-argument ATM constructor initializes instance variables
    public ATM() 
    {
       userAuthenticated = false; // user is not authenticated to start
       currentAccountNumber = 0; // no current account number to start
-      screen = new Screen(); // create screen
-      keypad = new Keypad(); // create keypad 
+      // Create single TextArea for display and input (4:3 aspect ratio)
+      displayArea = new TextArea("", 30, 80, TextArea.SCROLLBARS_NONE); // Approximately 4:3 ratio for inner screen, no scrollbars
+      displayArea.setEditable(false); // Make it non-editable - use KeyListener for input
+      displayArea.setBackground(Color.BLUE); // Black background
+      displayArea.setForeground(Color.WHITE); // White text
+      screen = new Screen(displayArea); // create screen with display TextArea
       cashDispenser = new CashDispenser(); // create cash dispenser
       bankDatabase = new BankDatabase(); // create acct info database
-   } // end no-argument ATM constructor
+      JPanel mainpanel = new JPanel(new BorderLayout(10,10));
+      mainpanel.setBackground(Color.BLACK);
+      screen_panel = new JPanel(new BorderLayout());
+      screen_panel.setPreferredSize(new Dimension(800, 600));
+      screen_panel.setBackground(Color.BLUE);
+      screen_panel.add(new JLabel("Loading"));
+      frame = new JFrame("ATM Machine");
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setSize(1120, 720); // 5:3 aspect ratio (1000 width, 600 height)
+      frame.setLayout(new BorderLayout(10,10));
+      frame.setBackground(Color.BLACK); // Set frame background to black
+      UIManager.put("Button.font", new Font("Arial", Font.PLAIN, 20));
+      UIManager.put("Label.font", new Font("Arial", Font.PLAIN, 20));
+      Font customFont = new Font("Arial", Font.PLAIN, 20);
+      displayArea.setFont(customFont);
+      UIManager.put("TextArea.font", new Font("Arial", Font.PLAIN, 20));
+      // Create keypad after frame and TextArea are created
+      keypad = new Keypad(displayArea); // create keypad with TextArea for GUI input
+      frame.addKeyListener(keypad); // register keypad as listener for frame
+      displayArea.addKeyListener(keypad); // register keypad as listener for TextArea
+      frame.setFocusable(true); // Make frame focusable to receive key events
+      mainpanel.add(screen_panel, BorderLayout.CENTER);
+            // Create side button panels. BorderLayout only accepts one component
+      // per region, so use a panel with GridLayout for multiple buttons.
+      Sidebuttons = new JButton[8];
+      JPanel leftPanel = new JPanel(new GridLayout(4, 1, 20, 10));
+      JPanel rightPanel = new JPanel(new GridLayout(4, 1, 20, 10));
+      leftPanel.setPreferredSize(new Dimension(180, 0)); // Set width to 150 pixels for reasonable button size
+      rightPanel.setPreferredSize(new Dimension(150, 0)); // Set width to 150 pixels for reasonable button size
+      rightPanel.setBackground(Color.BLACK);
+      leftPanel.setBackground(Color.BLACK);
+      for (int i = 0; i < 4; i++) {
+         Sidebuttons[i] = new JButton("<");
+         Sidebuttons[i].setBackground(Color.WHITE); // Set button background to white
+         Sidebuttons[i].setFocusable(false); // Prevent button from taking focus
+         leftPanel.add(Sidebuttons[i]);
+      }
+      for (int i = 4; i < 8; i++) {
+         Sidebuttons[i] = new JButton(">");
+         Sidebuttons[i].setBackground(Color.WHITE); // Set button background to white
+         Sidebuttons[i].setFocusable(false); // Prevent button from taking focus
+         rightPanel.add(Sidebuttons[i]);
+      }
 
+      mainpanel.add(leftPanel, BorderLayout.WEST);
+      mainpanel.add(rightPanel, BorderLayout.EAST);
+      frame.add(mainpanel);
+      frame.setVisible(true);
+      frame.requestFocus(); // Request focus so key events are received
+   } // end no-argument ATM constructor
+   
    // start ATM 
+   public void wellcome(){
+      screen_panel.removeAll();
+      JLabel welcomeLabel = new JLabel("Welcome to the ATM - Press Enter to begin");
+      welcomeLabel.setForeground(Color.WHITE); // Set label text to white
+      screen_panel.add(welcomeLabel);
+      screen_panel.revalidate();
+      screen_panel.repaint();
+      
+      // Wait for Enter key press (blocking)
+      while (keypad.getkeyPressed() != 1){
+         try {
+            Thread.sleep(100);
+         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return;
+         }
+      }
+      
+      // Enter was pressed, show login screen
+      loginScreen();
+   }
+   
+   public void loginScreen(){
+      screen_panel.removeAll();
+      screen_panel.add(displayArea);
+      screen_panel.revalidate();
+      screen_panel.repaint();
+      displayArea.requestFocus(); // Focus on TextArea
+   }
    public void run()
    {
-      // welcome and authenticate user; perform transactions
-      while ( true )
-      {
-         // loop while user is not yet authenticated
-         while ( !userAuthenticated ) 
+      // Start wellcome in a separate thread so GUI doesn't freeze
+      Thread atmThread = new Thread(() -> {
+         wellcome();
+         // welcome and authenticate user; perform transactions
+         while ( true )
          {
-            screen.displayMessageLine( "\nWelcome!" );       
-            authenticateUser(); // authenticate user
+            // loop while user is not yet authenticated
+            while ( !userAuthenticated ) 
+            {
+               screen.displayMessageLine( "\nWelcome!" );       
+               authenticateUser(); // authenticate user
+            } // end while
+            
+            performTransactions(); // user is now authenticated 
+            userAuthenticated = false; // reset before next ATM session
+            currentAccountNumber = 0; // reset before next ATM session 
+            screen.displayMessageLine( "\nThank you! Goodbye!" );
          } // end while
-         
-         performTransactions(); // user is now authenticated 
-         userAuthenticated = false; // reset before next ATM session
-         currentAccountNumber = 0; // reset before next ATM session 
-         screen.displayMessageLine( "\nThank you! Goodbye!" );
-      } // end while   
+      });
+      atmThread.start();
    } // end method run
 
    // attempts to authenticate user against database
    private void authenticateUser() 
    {
+      screen.clear();
       screen.displayMessage( "\nPlease enter your account number: " );
       int accountNumber = keypad.getIntInput(); // input account number
       if (accountNumber == CANCELED){
+        screen.clear();
         screen.displayMessageLine( "Invalid account number or PIN. Please try again." );
         return;
         }
       screen.displayMessage( "\nEnter your PIN: " ); // prompt for PIN
+      keypad.setPasswordMode(true); // Enable password masking
       int pin = keypad.getIntInput(); // input PIN
+      keypad.setPasswordMode(false); // Disable password masking
       if (accountNumber == CANCELED){
+        screen.clear();
         screen.displayMessageLine( "Invalid account number or PIN. Please try again." );
         return;
       }
@@ -75,8 +180,11 @@ public class ATM
          currentAccountNumber = accountNumber; // save user's account #
       } // end if
       else
+      {
+         screen.clear();
          screen.displayMessageLine( 
              "Invalid account number or PIN. Please try again." );
+      }
    } // end method authenticateUser
 private Transaction createTransaction(int type) {
     Transaction temp = null;
@@ -86,7 +194,7 @@ private Transaction createTransaction(int type) {
             temp = new BalanceInquiry(currentAccountNumber, screen, bankDatabase);
             break;
         case WITHDRAWAL:
-            temp = new Withdrawal(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser);
+            temp = new Withdrawal(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser, screen_panel);
             break;
       
         case TRANSFER:
@@ -142,6 +250,7 @@ private Transaction createTransaction(int type) {
    // display the main menu and return an input selection
    private int displayMainMenu()
    {
+      screen.clear();
       screen.displayMessageLine( "\nMain menu:" );
       screen.displayMessageLine( "1 - View my balance" );
       screen.displayMessageLine( "2 - Withdraw cash" );

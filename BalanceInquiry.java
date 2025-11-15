@@ -16,6 +16,7 @@ public class BalanceInquiry extends Transaction
       // get references to bank database and screen
       BankDatabase bankDatabase = getBankDatabase();
       Screen screen = getScreen();
+      screen.clear();
       Account account = bankDatabase.getAccount(getAccountNumber());
 
       // get the available balance for the account involved

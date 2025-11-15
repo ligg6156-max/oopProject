@@ -19,6 +19,7 @@ public class Transfer extends Transaction {
 
     @Override
         public void execute() {
+        screen.clear();
         screen.displayMessage("\n(Press 0 to cancel transfer) Enter transfer amount (HKD): ");
         double amount = keypad.getDoubleInput();
         Account account = bankDatabase.getAccount(getAccountNumber());
