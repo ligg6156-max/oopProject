@@ -3,9 +3,12 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.TextArea;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -39,27 +42,27 @@ public class ATM
       // Create single TextArea for display and input (4:3 aspect ratio)
       displayArea = new TextArea("", 30, 80, TextArea.SCROLLBARS_NONE); // Approximately 4:3 ratio for inner screen, no scrollbars
       displayArea.setEditable(false); // Make it non-editable - use KeyListener for input
-      displayArea.setBackground(Color.BLUE); // Black background
-      displayArea.setForeground(Color.WHITE); // White text
+      displayArea.setBackground(new Color(0, 0, 255)); // Modern dark background
+      displayArea.setForeground(new Color(255, 255, 255)); // Modern cyan text
       screen = new Screen(displayArea); // create screen with display TextArea
       cashDispenser = new CashDispenser(); // create cash dispenser
       bankDatabase = new BankDatabase(); // create acct info database
-      JPanel mainpanel = new JPanel(new BorderLayout(10,10));
-      mainpanel.setBackground(Color.BLACK);
+      JPanel mainpanel = new JPanel(new BorderLayout(15,15));
+      mainpanel.setBackground(new Color(30, 30, 40)); // Modern dark gray
       screen_panel = new JPanel(new BorderLayout());
       screen_panel.setPreferredSize(new Dimension(800, 600));
-      screen_panel.setBackground(Color.BLUE);
+      screen_panel.setBackground(new Color(20, 20, 30)); // Match display area
       screen_panel.add(new JLabel("Loading"));
       frame = new JFrame("ATM Machine");
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setSize(1120, 720); // 5:3 aspect ratio (1000 width, 600 height)
       frame.setLayout(new BorderLayout(10,10));
       frame.setBackground(Color.BLACK); // Set frame background to black
-      UIManager.put("Button.font", new Font("Arial", Font.PLAIN, 20));
-      UIManager.put("Label.font", new Font("Arial", Font.PLAIN, 20));
-      Font customFont = new Font("Arial", Font.PLAIN, 20);
+      UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 18));
+      UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 22));
+      Font customFont = new Font("Consolas", Font.PLAIN, 18);
       displayArea.setFont(customFont);
-      UIManager.put("TextArea.font", new Font("Arial", Font.PLAIN, 20));
+      UIManager.put("TextArea.font", new Font("Consolas", Font.PLAIN, 18));
       // Create keypad after frame and TextArea are created
       keypad = new Keypad(displayArea); // create keypad with TextArea for GUI input
       frame.addKeyListener(keypad); // register keypad as listener for frame
@@ -69,23 +72,40 @@ public class ATM
             // Create side button panels. BorderLayout only accepts one component
       // per region, so use a panel with GridLayout for multiple buttons.
       Sidebuttons = new JButton[8];
-      JPanel leftPanel = new JPanel(new GridLayout(4, 1, 20, 10));
-      JPanel rightPanel = new JPanel(new GridLayout(4, 1, 20, 10));
+      JPanel leftPanel = new JPanel(new GridBagLayout());
+      JPanel rightPanel = new JPanel(new GridBagLayout());
+      GridBagConstraints c = new GridBagConstraints();
+      c.fill = GridBagConstraints.CENTER;
+      c.weightx = 50;
+      c.weighty = 50;
+      c.gridx = 0;
+      c.gridy= 0;
+      leftPanel.add(Box.createVerticalStrut(100), c);
+      leftPanel.add(Box.createVerticalStrut(100), c);
+      rightPanel.add(Box.createVerticalStrut(100), c);
+      rightPanel.add(Box.createVerticalStrut(100), c);
       leftPanel.setPreferredSize(new Dimension(180, 0)); // Set width to 150 pixels for reasonable button size
       rightPanel.setPreferredSize(new Dimension(150, 0)); // Set width to 150 pixels for reasonable button size
-      rightPanel.setBackground(Color.BLACK);
-      leftPanel.setBackground(Color.BLACK);
+      rightPanel.setBackground(new Color(30, 30, 40));
+      leftPanel.setBackground(new Color(30, 30, 40));
       for (int i = 0; i < 4; i++) {
-         Sidebuttons[i] = new JButton("<");
-         Sidebuttons[i].setBackground(Color.WHITE); // Set button background to white
+         c.gridy = i + 1;
+         Sidebuttons[i] = new JButton("◄");
+         Sidebuttons[i].setPreferredSize(new Dimension(100, 100));
+         Sidebuttons[i].setBackground(new Color(0, 0, 0)); // Modern cyan
+         Sidebuttons[i].setForeground(Color.WHITE);
          Sidebuttons[i].setFocusable(false); // Prevent button from taking focus
-         leftPanel.add(Sidebuttons[i]);
+         leftPanel.add(Sidebuttons[i], c);
       }
+      c.gridy = 0;
       for (int i = 4; i < 8; i++) {
-         Sidebuttons[i] = new JButton(">");
-         Sidebuttons[i].setBackground(Color.WHITE); // Set button background to white
+         c.gridy = i + 1;
+         Sidebuttons[i] = new JButton("►");
+         Sidebuttons[i].setPreferredSize(new Dimension(100, 100));
+         Sidebuttons[i].setBackground(new Color(0, 0, 0)); // Modern cyan
+         Sidebuttons[i].setForeground(Color.WHITE);
          Sidebuttons[i].setFocusable(false); // Prevent button from taking focus
-         rightPanel.add(Sidebuttons[i]);
+         rightPanel.add(Sidebuttons[i], c);
       }
 
       mainpanel.add(leftPanel, BorderLayout.WEST);
@@ -98,8 +118,10 @@ public class ATM
    // start ATM 
    public void wellcome(){
       screen_panel.removeAll();
+      screen_panel.setLayout(new FlowLayout());
+      screen_panel.setBackground(new Color(0, 0, 255)); // Keep modern dark background
       JLabel welcomeLabel = new JLabel("Welcome to the ATM - Press Enter to begin");
-      welcomeLabel.setForeground(Color.WHITE); // Set label text to white
+      welcomeLabel.setForeground(new Color(255, 255, 255)); // Modern cyan text to match
       screen_panel.add(welcomeLabel);
       screen_panel.revalidate();
       screen_panel.repaint();
@@ -120,7 +142,8 @@ public class ATM
    
    public void loginScreen(){
       screen_panel.removeAll();
-      screen_panel.add(displayArea);
+      screen_panel.setLayout(new BorderLayout()); // Reset to BorderLayout for proper stretching
+      screen_panel.add(displayArea, BorderLayout.CENTER); // Add to CENTER for full coverage
       screen_panel.revalidate();
       screen_panel.repaint();
       displayArea.requestFocus(); // Focus on TextArea
@@ -130,6 +153,7 @@ public class ATM
       // Start wellcome in a separate thread so GUI doesn't freeze
       Thread atmThread = new Thread(() -> {
          wellcome();
+         frame.pack();
          // welcome and authenticate user; perform transactions
          while ( true )
          {

@@ -1,16 +1,18 @@
 // Withdrawal.java
 // Represents a withdrawal ATM transaction
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 public class Withdrawal extends Transaction
 {
    private int amount; // amount to withdraw
    private Keypad keypad; // reference to keypad
    private CashDispenser cashDispenser; // reference to cash dispenser
-   private JPanel screenPanel; // reference to screen_panel from ATM
+   public JPanel screenPanel; // reference to screen_panel from ATM
    
    // constant corresponding to menu option to cancel
    private final static int CANCELED = -1;
@@ -32,36 +34,87 @@ public class Withdrawal extends Transaction
    public void withdrawalUI() {
       if (screenPanel != null) {
          screenPanel.removeAll();
+         screenPanel.setLayout(new GridBagLayout());
+         screenPanel.setBackground(new Color(0, 0, 255)); // Match modern theme
+         GridBagConstraints c = new GridBagConstraints();
+         c.fill = GridBagConstraints.BOTH;
+         c.insets = new java.awt.Insets(10, 10, 10, 10);
+         c.weightx = 1.0;
+         c.weighty = 10.0;
+         // Add title
+         Border lineborder = javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5);
+         JLabel title = new JLabel("Withdrawal - Please select amount:", JLabel.CENTER);
+         title.setForeground(new Color(255, 255, 255)); // Modern cyan
+         title.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+         title.setPreferredSize(new Dimension(50, 50));
+         title.setBorder(lineborder);
+         c.gridx = 0;
+         c.gridy = 0;
+         c.gridwidth = 2;
+         screenPanel.add(title, c);
          
-         // Create a new panel for withdrawal UI
-         JPanel withdrawalPanel = new JPanel(new BorderLayout(10,10));
-         withdrawalPanel.setBackground(Color.BLUE);
-         screenPanel.add(withdrawalPanel);
-         // Add instruction
-         JLabel Title = new JLabel("Withdraw\nPlease select withdrawal amount:", JLabel.CENTER);
-         Title.setForeground(Color.WHITE);
-         withdrawalPanel.add(Title, BorderLayout.NORTH);
-         JPanel Table = new JPanel(new GridLayout(2,2,10,10));
-         Table.setBackground(Color.BLUE);
+         // Reset gridwidth for options
+         c.gridwidth = 1;
+         c.gridy = 1;
+         
+         // Left column options
          JLabel option1 = new JLabel("1 - HK$200", JLabel.CENTER);
-         option1.setForeground(Color.WHITE);
-         JLabel option2 = new JLabel("2 - HK$400", JLabel.CENTER);
-         option2.setForeground(Color.WHITE);
-         JLabel option3 = new JLabel("3 - HK$800", JLabel.CENTER);
-         option3.setForeground(Color.WHITE);
-         JLabel option4 = new JLabel("4 - HK$1,000", JLabel.CENTER);
-         option4.setForeground(Color.WHITE);
-         Table.add(option1);
-         Table.add(option2);
-         Table.add(option3);
-         Table.add(option4);
-         withdrawalPanel.add(Table, BorderLayout.CENTER);
-         withdrawalPanel.add(Table, BorderLayout.CENTER);
-         JLabel option5 = new JLabel("5 - Type out the amount of cash withdraw manually", JLabel.CENTER);
-         option5.setForeground(Color.WHITE);
-         withdrawalPanel.add(option5, BorderLayout.SOUTH);
+         option1.setForeground(new Color(255, 255, 255));
+         option1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
+         option1.setPreferredSize(new Dimension(50, 50)); 
+         option1.setBorder(lineborder);
+         c.gridx = 0;
+         screenPanel.add(option1, c);
          
-         // Add the withdrawal panel to screen_panel
+         JLabel option3 = new JLabel("3 - HK$800", JLabel.CENTER);
+         option3.setForeground(new Color(255, 255, 255));
+         option3.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
+         option3.setPreferredSize(new Dimension(50, 50)); 
+         option3.setBorder(lineborder);
+         c.gridx = 1;
+         screenPanel.add(option3, c);
+         
+         // Second row
+         c.gridy = 2;
+         
+         JLabel option2 = new JLabel("2 - HK$400", JLabel.CENTER);
+         option2.setForeground(new Color(255, 255, 255));
+         option2.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
+         option2.setPreferredSize(new Dimension(50, 50));
+         option2.setBorder(lineborder);
+         c.gridx = 0;
+         screenPanel.add(option2, c);
+         
+         JLabel option4 = new JLabel("4 - HK$1,000", JLabel.CENTER);
+         option4.setForeground(new Color(255, 255, 255));
+         option4.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
+         option4.setPreferredSize(new Dimension(50, 50));
+         option4.setBorder(lineborder);
+         c.gridx = 1;
+         screenPanel.add(option4, c);
+         
+         // Manual entry option (spans both columns)
+         c.gridy = 3;
+         c.gridx = 0;
+         c.gridwidth = 2;
+         JLabel option5 = new JLabel("5 - Type amount manually", JLabel.CENTER);
+         option5.setForeground(new Color(255, 255, 255));
+         option5.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
+         option5.setPreferredSize(new Dimension(50, 50));
+         option5.setBorder(lineborder);
+         screenPanel.add(option5, c);
+
+         // Manual entry option (spans both columns)
+         c.gridy = 4;
+         c.gridx = 0;
+         c.gridwidth = 2;
+         JLabel option6 = new JLabel("5 - Type amount manually", JLabel.CENTER);
+         option6.setForeground(new Color(255, 255, 255));
+         option6.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
+         option6.setPreferredSize(new Dimension(50, 50));
+         option6.setBorder(lineborder);
+         screenPanel.add(option6, c);
+         
          screenPanel.revalidate();
          screenPanel.repaint();
       }
