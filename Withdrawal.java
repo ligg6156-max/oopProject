@@ -1,12 +1,13 @@
 // Withdrawal.java
 // Represents a withdrawal ATM transaction
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.TextArea;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.border.Border;
 public class Withdrawal extends Transaction
 {
@@ -15,6 +16,7 @@ public class Withdrawal extends Transaction
    private Screen screen; // reference to screen
    private CashDispenser cashDispenser; // reference to cash dispenser
    public JPanel screenPanel; // reference to screen_panel from ATM   
+   private ATM atm; // reference to the ATM
    // constant corresponding to menu option to cancel
    private final static int CANCELED = -1;
 
@@ -109,18 +111,24 @@ public class Withdrawal extends Transaction
          c.gridy = 4;
          c.gridx = 0;
          c.gridwidth = 2;
-         JTextArea inputField = new JTextArea("", 2, 80);
+         JPanel inputPanel = new JPanel();
+         inputPanel.setBackground(new Color(0, 0, 255));
+         inputPanel.setPreferredSize(new Dimension(50, 50));
+         inputPanel.setLayout(new BorderLayout());
+         inputPanel.setBorder(lineborder);
+         screenPanel.add(inputPanel, c);
+
+         TextArea inputField = new TextArea("", 2, 10, TextArea.SCROLLBARS_NONE);
          inputField.append("HK$");
          inputField.setEditable(false); // Must be non-editable so KeyListener controls all input
          inputField.setBackground(new Color(0, 0, 255));
          inputField.setForeground(new Color(255, 255, 255));
          inputField.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
-         inputField.setPreferredSize(new Dimension(50, 50));
-         inputField.setBorder(lineborder);
          inputField.setFocusable(true); // Ensure it can receive focus
-         screenPanel.add(inputField, c);
+         inputPanel.add(inputField, BorderLayout.EAST);
          screen = new Screen(inputField);
-         keypad = new Keypad(inputField);
+         // Update existing keypad to use new inputField (keeps button connections)
+         keypad.setTextArea(inputField);
          inputField.addKeyListener(keypad);
          inputField.requestFocusInWindow(); // Request focus so it receives key events
          screenPanel.revalidate();
@@ -130,6 +138,7 @@ public class Withdrawal extends Transaction
    // perform transaction
    public void execute()
    {
+      keypad.buttonPressState = true;
       Screen screen = getScreen();
       screen.clear();
       withdrawalUI();
@@ -242,9 +251,26 @@ public class Withdrawal extends Transaction
          screen.displayMessageLine( "5 - Type out the amount of cash withdraw manually" );
          screen.displayMessageLine( "6 - Cancel transaction" );
          screen.displayMessage( "\nChoose a withdrawal amount: " );
-
          int input = keypad.getIntInput(); // get user input through keypad
-         // determine how to proceed based on the input value
+         if (keypad.getButtonPressed() ==1) {
+             input = 1;
+         } else if (keypad.getButtonPressed() ==2) {
+             input = 3;
+         } else if (keypad.getButtonPressed() ==3) {
+             input = 5;
+         } else if (keypad.getButtonPressed() ==4) {
+             input = 7;
+         } else if (keypad.getButtonPressed() ==5) {
+             input = 2;
+         } else if (keypad.getButtonPressed() ==6) {
+             input = 4;
+         } else if (keypad.getButtonPressed() ==7) {
+             input = 6; // Invalid input
+         } else if (keypad.getButtonPressed() ==8) {
+             input = 8; // Invalid input
+         } else {
+               // No button pressed, keep input as is
+         }
          switch ( input )
          {
             case 1: // if the user chose a withdrawal amount 
@@ -255,9 +281,13 @@ public class Withdrawal extends Transaction
                break; 
             case 5:
                screen.displayMessageLine( "Type out the amount of cash withdraw manually" );
+               this.screen.clear();
+               this.screen.displayMessage("HK$");
                boolean times = true;
                while(times == true){
                    input = keypad.getIntInput();
+                   this.screen.clear();
+                   this.screen.displayMessage("HK$");
                if (input%100 == 0){
                    userChoice = input;
                    times = false;
@@ -279,7 +309,7 @@ public class Withdrawal extends Transaction
             default: // the user did not enter a value from 1-6
                times = true;
                while(times == true){
-                   input = keypad.getIntInput();
+                   
                if (input%100 == 0){
                    userChoice = input;
                    times = false;
@@ -290,14 +320,12 @@ public class Withdrawal extends Transaction
                }
                else{
                screen.displayMessage( "\nThe amount must be the mutiple of HK$100, try again.\n Or press 0 to return Withdrawal Menu.\n"); 
-               break;
+               input = keypad.getIntInput();
+               this.screen.clear();
+               this.screen.displayMessage("HK$");
                 }
-               
             }
-            screen.clear();
-            screen.displayMessage("HK$");
-               screen.displayMessageLine( 
-                  "\nIvalid selection. Try again." );
+            break;
          } // end switch
       } // end while
 

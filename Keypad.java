@@ -3,49 +3,35 @@
 import java.awt.TextArea;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Scanner;
-import javax.swing.JTextArea; // program uses Scanner to obtain user input
+import java.util.Scanner; // program uses Scanner to obtain user input
 
 public class Keypad implements KeyListener
 {
    private Scanner input; // reads data from the command line
    private int keypressed; // stores the key press state
    private TextArea textArea; // reference to GUI TextArea (optional)
-   private JTextArea jTextArea; // reference to GUI JTextArea (optional)
    private StringBuilder currentInput; // stores current input being typed
    private boolean passwordMode; // whether to mask input as asterisks
    private int inputStartPosition; // position where user input starts
-                         
+   protected int ButtonPressed;
+   protected boolean buttonPressState;                      
    // constructor that accepts optional TextArea
    public Keypad(TextArea textArea)
    {
       input = new Scanner( System.in );
       keypressed = 0; // initialize to 0
       this.textArea = textArea;
-      this.jTextArea = null;
       this.currentInput = new StringBuilder();
       this.passwordMode = false;
       this.inputStartPosition = 0;
    }
    
-   // constructor that accepts optional JTextArea
-   public Keypad(JTextArea jTextArea)
-   {
-      input = new Scanner( System.in );
-      keypressed = 0; // initialize to 0
-      this.textArea = null;
-      this.jTextArea = jTextArea;
-      this.currentInput = new StringBuilder();
-      this.passwordMode = false;
-      this.inputStartPosition = 0;
-   }
    // no-argument constructor for terminal-only mode
    public Keypad()
    {
       input = new Scanner( System.in );
       keypressed = 0;
       this.textArea = null;
-      this.jTextArea = null;
       this.currentInput = new StringBuilder();
       this.passwordMode = false;
       this.inputStartPosition = 0;
@@ -59,32 +45,17 @@ public class Keypad implements KeyListener
          System.out.println("Enter key pressed");
          keypressed = 1;
          // Add newline before processing next input
-         if (textArea != null || jTextArea != null) {
-            if (textArea != null) {
-               textArea.append("\n");
-            } else {
-               jTextArea.append("\n");
-            }
+         if (textArea != null) {
+            textArea.append("\n");
          }
          event.consume(); // Consume event to prevent beep
       } else if (keyCode == KeyEvent.VK_BACK_SPACE) {
          // Handle backspace - remove last character from user input only
-         if (textArea != null || jTextArea != null) {
-            String text = textArea != null ? textArea.getText() : jTextArea.getText();
+         if (textArea != null) {
+            String text = textArea.getText();
             // Only delete if we're in the user input area
             if (text.length() > inputStartPosition && currentInput.length() > 0) {
-               if (textArea != null) {
-                  textArea.setText(text.substring(0, text.length() - 1));
-               } else {
-                  jTextArea.setText(text.substring(0, text.length() - 1));
-               }
-               currentInput.deleteCharAt(currentInput.length() - 1);
-            }
-         } else if (jTextArea != null) {
-            String text = jTextArea.getText();
-            // Only delete if we're in the user input area
-            if (text.length() > inputStartPosition && currentInput.length() > 0) {
-               jTextArea.setText(text.substring(0, text.length() - 1));
+               textArea.setText(text.substring(0, text.length() - 1));
                currentInput.deleteCharAt(currentInput.length() - 1);
             }
          } else if (currentInput.length() > 0) {
@@ -105,6 +76,13 @@ public class Keypad implements KeyListener
         return value;
    }
    
+   // Method to simulate button press - sets input value and triggers Enter
+   public void setButtonInput(int value) {
+      ButtonPressed = value;
+      keypressed = 1; // Trigger Enter key
+
+   }
+   
    public void setPasswordMode(boolean enabled) {
       this.passwordMode = enabled;
    }
@@ -113,40 +91,47 @@ public class Keypad implements KeyListener
       return this.passwordMode;
    }
    
+   // Method to update TextArea reference (useful when switching input fields)
+   public void setTextArea(TextArea newTextArea) {
+      this.textArea = newTextArea;
+      this.currentInput = new StringBuilder();
+      this.keypressed = 0;
+      this.inputStartPosition = 0;
+   }
+   
+   public void waitAction(){
+      while (getkeyPressed() != 1){
+         try {
+            Thread.sleep(100);
+         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return;
+         }
+      }
+   }
    @Override
    public void keyTyped(KeyEvent event) {
       char keyChar = event.getKeyChar();
-      // Append typed character to TextArea/JTextArea and currentInput (except Enter and backspace which are handled in keyPressed)
-      if (keyChar != KeyEvent.CHAR_UNDEFINED && keyChar != '\n' && keyChar != '\b') {
-         if (textArea != null || jTextArea != null) {
-            // Display asterisk if in password mode, otherwise display actual character
-            if (passwordMode) {
-               if (textArea != null) {
-                  textArea.append("*");
-               } else {
-                  jTextArea.append("*");
-               }
-            } else {
-               if (textArea != null) {
-                  textArea.append(String.valueOf(keyChar));
-               } else {
-                  jTextArea.append(String.valueOf(keyChar));
-               }
-            }
-            currentInput.append(keyChar);
-         } else if (jTextArea != null) {
-            // Display asterisk if in password mode, otherwise display actual character
-            if (passwordMode) {
-               jTextArea.append("*");
-            } else {
-               jTextArea.append(String.valueOf(keyChar));
-            }
-            currentInput.append(keyChar);
+      // Append typed character to TextArea and currentInput (except Enter and backspace which are handled in keyPressed)
+      if (textArea != null && keyChar != KeyEvent.CHAR_UNDEFINED 
+          && keyChar != '\n' && keyChar != '\b') {
+         // Display asterisk if in password mode, otherwise display actual character
+         if (passwordMode) {
+            textArea.append("*");
+         } else {
+            textArea.append(String.valueOf(keyChar));
          }
+         currentInput.append(keyChar);
       }
       event.consume(); // Consume event to prevent beep when typing in non-editable TextArea
    }
 
+   public int getButtonPressed(){
+      int value = ButtonPressed;
+      ButtonPressed = 0;
+      return value;
+   }
+   
    public int getIntInput()
    {
     
@@ -154,21 +139,17 @@ public class Keypad implements KeyListener
     try{
         String inputLine = "";
         
-        // If TextArea or JTextArea is available, wait for GUI input
-        if (textArea != null || jTextArea != null) {
+        // If TextArea is available, wait for GUI input
+        if (textArea != null) {
             // Clear previous input
             currentInput.setLength(0);
             // Mark where user input starts
-            if (textArea != null) {
-                inputStartPosition = textArea.getText().length();
-            } else {
-                inputStartPosition = jTextArea.getText().length();
-            }
+            inputStartPosition = textArea.getText().length();
             
             // Wait for Enter key in GUI
             while (keypressed != 1) {
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
@@ -176,11 +157,17 @@ public class Keypad implements KeyListener
             keypressed = 0; // Reset
             
             // Get input from currentInput buffer
+            if (!buttonPressState || ButtonPressed == 0){
             inputLine = currentInput.toString().trim();
             currentInput.setLength(0); // Clear for next input
         } else {
-            // Terminal mode - use Scanner
-            inputLine = input.nextLine();
+                int value = ButtonPressed;
+                ButtonPressed = 0;
+               // Terminal mode - use Scanner
+               keypressed = 0; // Reset
+               System.out.printf("%d %s",value, ButtonPressed);
+                  return value;
+            }
         }
         
         int num = Integer.parseInt(inputLine);
@@ -216,24 +203,18 @@ public class Keypad implements KeyListener
     // Add newline after message, before input starts
     if (textArea != null) {
         textArea.append("\n");
-    } else if (jTextArea != null) {
-        jTextArea.append("\n");
     }
     
     for(int i = 2; i > -1; i--){
     try{
         String inputLine = "";
         
-        // If TextArea or JTextArea is available, wait for GUI input
-        if (textArea != null || jTextArea != null) {
+        // If TextArea is available, wait for GUI input
+        if (textArea != null) {
             // Clear previous input
             currentInput.setLength(0);
             // Mark where user input starts
-            if (textArea != null) {
-                inputStartPosition = textArea.getText().length();
-            } else {
-                inputStartPosition = jTextArea.getText().length();
-            }
+            inputStartPosition = textArea.getText().length();
             
             // Wait for Enter key in GUI
             while (keypressed != 1) {
@@ -281,6 +262,7 @@ public class Keypad implements KeyListener
    }
    return 0;
 }
+
 } // end class Keypad  
 
 

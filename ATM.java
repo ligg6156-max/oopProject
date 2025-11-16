@@ -95,6 +95,10 @@ public class ATM
          Sidebuttons[i].setBackground(new Color(0, 0, 0)); // Modern cyan
          Sidebuttons[i].setForeground(Color.WHITE);
          Sidebuttons[i].setFocusable(false); // Prevent button from taking focus
+         final int buttonIndex = i + 1; // Button 1-4 for left side
+         Sidebuttons[i].addActionListener(e -> {
+            keypad.setButtonInput(buttonIndex); // Set the button value
+         });
          leftPanel.add(Sidebuttons[i], c);
       }
       c.gridy = 0;
@@ -105,6 +109,10 @@ public class ATM
          Sidebuttons[i].setBackground(new Color(0, 0, 0)); // Modern cyan
          Sidebuttons[i].setForeground(Color.WHITE);
          Sidebuttons[i].setFocusable(false); // Prevent button from taking focus
+         final int buttonIndex = i + 1; // Button 5-8 for right side
+         Sidebuttons[i].addActionListener(e -> {
+            keypad.setButtonInput(buttonIndex); // Set the button value
+         });
          rightPanel.add(Sidebuttons[i], c);
       }
 
@@ -127,15 +135,7 @@ public class ATM
       screen_panel.repaint();
       
       // Wait for Enter key press (blocking)
-      while (keypad.getkeyPressed() != 1){
-         try {
-            Thread.sleep(100);
-         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return;
-         }
-      }
-      
+      keypad.waitAction();
       // Enter was pressed, show login screen
       loginScreen();
    }
@@ -150,10 +150,10 @@ public class ATM
    }
    public void run()
    {
+      keypad.buttonPressState = false;
       // Start wellcome in a separate thread so GUI doesn't freeze
       Thread atmThread = new Thread(() -> {
          wellcome();
-         frame.pack();
          // welcome and authenticate user; perform transactions
          while ( true )
          {
@@ -264,6 +264,7 @@ private Transaction createTransaction(int type) {
                userExited = true; // this ATM session should end
                break;
             default: // user did not enter an integer from 1-4
+            System.out.printf("%s",mainMenuSelection);
                screen.displayMessageLine( 
                   "\nYou did not enter a valid selection. Try again." );
                break;
@@ -274,14 +275,19 @@ private Transaction createTransaction(int type) {
    // display the main menu and return an input selection
    private int displayMainMenu()
    {
+      int input;
       screen.clear();
+      loginScreen();
+      keypad.buttonPressState = true;
+      keypad.ButtonPressed = 0;
       screen.displayMessageLine( "\nMain menu:" );
       screen.displayMessageLine( "1 - View my balance" );
       screen.displayMessageLine( "2 - Withdraw cash" );
       screen.displayMessageLine( "3 - Transfer funds" );
       screen.displayMessageLine( "4 - Exit\n" );
-      screen.displayMessage( "Enter a choice: " );
-      return keypad.getIntInput(); // return user's selection
+      screen.displayMessage( "leftButton1-4 RightButton 5-8 Enter a choice: " );
+      input = keypad.getIntInput(); // return user's selection
+      return input;
    } // end method displayMainMenu
    
 
