@@ -147,6 +147,8 @@ public class ATM
       screen_panel.revalidate();
       screen_panel.repaint();
       displayArea.requestFocus(); // Focus on TextArea
+      // Restore keypad to main displayArea
+      keypad.setTextArea(displayArea);
    }
    public void run()
    {
