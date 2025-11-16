@@ -40,7 +40,7 @@ public class ATM
       userAuthenticated = false; // user is not authenticated to start
       currentAccountNumber = 0; // no current account number to start
       // Create single TextArea for display and input (4:3 aspect ratio)
-      displayArea = new TextArea("", 30, 80, TextArea.SCROLLBARS_NONE); // Approximately 4:3 ratio for inner screen, no scrollbars
+      displayArea = new TextArea("HK$", 30, 80, TextArea.SCROLLBARS_NONE); // Approximately 4:3 ratio for inner screen, no scrollbars
       displayArea.setEditable(false); // Make it non-editable - use KeyListener for input
       displayArea.setBackground(new Color(0, 0, 255)); // Modern dark background
       displayArea.setForeground(new Color(255, 255, 255)); // Modern cyan text

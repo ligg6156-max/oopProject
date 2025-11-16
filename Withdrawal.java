@@ -6,14 +6,15 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.border.Border;
 public class Withdrawal extends Transaction
 {
    private int amount; // amount to withdraw
    private Keypad keypad; // reference to keypad
+   private Screen screen; // reference to screen
    private CashDispenser cashDispenser; // reference to cash dispenser
-   public JPanel screenPanel; // reference to screen_panel from ATM
-   
+   public JPanel screenPanel; // reference to screen_panel from ATM   
    // constant corresponding to menu option to cancel
    private final static int CANCELED = -1;
 
@@ -43,7 +44,7 @@ public class Withdrawal extends Transaction
          c.weighty = 10.0;
          // Add title
          Border lineborder = javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5);
-         JLabel title = new JLabel("Withdrawal - Please select amount:", JLabel.CENTER);
+         JLabel title = new JLabel("SELECT the amount to withdraw", JLabel.CENTER);
          title.setForeground(new Color(255, 255, 255)); // Modern cyan
          title.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
          title.setPreferredSize(new Dimension(50, 50));
@@ -97,7 +98,7 @@ public class Withdrawal extends Transaction
          c.gridy = 3;
          c.gridx = 0;
          c.gridwidth = 2;
-         JLabel option5 = new JLabel("5 - Type amount manually", JLabel.CENTER);
+         JLabel option5 = new JLabel("5 - Enter the amount and press ENTER", JLabel.CENTER);
          option5.setForeground(new Color(255, 255, 255));
          option5.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
          option5.setPreferredSize(new Dimension(50, 50));
@@ -108,13 +109,20 @@ public class Withdrawal extends Transaction
          c.gridy = 4;
          c.gridx = 0;
          c.gridwidth = 2;
-         JLabel option6 = new JLabel("5 - Type amount manually", JLabel.CENTER);
-         option6.setForeground(new Color(255, 255, 255));
-         option6.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
-         option6.setPreferredSize(new Dimension(50, 50));
-         option6.setBorder(lineborder);
-         screenPanel.add(option6, c);
-         
+         JTextArea inputField = new JTextArea("", 2, 80);
+         inputField.append("HK$");
+         inputField.setEditable(false); // Must be non-editable so KeyListener controls all input
+         inputField.setBackground(new Color(0, 0, 255));
+         inputField.setForeground(new Color(255, 255, 255));
+         inputField.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
+         inputField.setPreferredSize(new Dimension(50, 50));
+         inputField.setBorder(lineborder);
+         inputField.setFocusable(true); // Ensure it can receive focus
+         screenPanel.add(inputField, c);
+         screen = new Screen(inputField);
+         keypad = new Keypad(inputField);
+         inputField.addKeyListener(keypad);
+         inputField.requestFocusInWindow(); // Request focus so it receives key events
          screenPanel.revalidate();
          screenPanel.repaint();
       }
@@ -269,6 +277,25 @@ public class Withdrawal extends Transaction
                userChoice = CANCELED; // save user's choice
                break;
             default: // the user did not enter a value from 1-6
+               times = true;
+               while(times == true){
+                   input = keypad.getIntInput();
+               if (input%100 == 0){
+                   userChoice = input;
+                   times = false;
+                   break;
+               }
+               else if (input <= 0){
+               break;
+               }
+               else{
+               screen.displayMessage( "\nThe amount must be the mutiple of HK$100, try again.\n Or press 0 to return Withdrawal Menu.\n"); 
+               break;
+                }
+               
+            }
+            screen.clear();
+            screen.displayMessage("HK$");
                screen.displayMessageLine( 
                   "\nIvalid selection. Try again." );
          } // end switch

@@ -1,24 +1,31 @@
 // Screen.java
 // Represents the screen of the ATM
 import java.awt.TextArea;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 
 public class Screen
 {
    private TextArea textArea; // Reference to the TextArea in ATM
-   
+   private JTextArea jTextArea; // Reference to the JTextArea in ATM
    // Constructor that accepts TextArea from ATM
    public Screen(TextArea textArea) {
       this.textArea = textArea;
    }
-   
+   public Screen(JTextArea textArea) {
+      this.jTextArea = textArea;
+   }
    // displays a message without a carriage return
    public void displayMessage( String message ) 
    {
       System.out.print( message );
-      if (textArea != null) {
-         SwingUtilities.invokeLater(() -> textArea.append(message));
+      if (textArea != null || jTextArea != null) {
+         if (textArea != null) {
+            SwingUtilities.invokeLater(() -> textArea.append(message));
+         } else {
+            SwingUtilities.invokeLater(() -> jTextArea.append(message));
+         }
       }
    } // end method displayMessage
 
@@ -26,8 +33,12 @@ public class Screen
    public void displayMessageLine( String message ) 
    {
       System.out.println( message );
-      if (textArea != null) {
-         SwingUtilities.invokeLater(() -> textArea.append(message + "\n"));
+      if (textArea != null || jTextArea != null) {
+         if (textArea != null) {
+            SwingUtilities.invokeLater(() -> textArea.append(message + "\n"));
+         } else {
+            SwingUtilities.invokeLater(() -> jTextArea.append(message + "\n"));
+         }
       }
    } // end method displayMessageLine
 
@@ -35,17 +46,25 @@ public class Screen
    public void displayDollarAmount( double amount )
    {
       System.out.printf( "HK$%,.2f", amount );
-      if (textArea != null) {
+      if (textArea != null || jTextArea != null) {
          String formatted = String.format("HK$%,.2f", amount);
-         SwingUtilities.invokeLater(() -> textArea.append(formatted));
+         if (textArea != null) {
+            SwingUtilities.invokeLater(() -> textArea.append(formatted));
+         } else {
+            SwingUtilities.invokeLater(() -> jTextArea.append(formatted));
+         }
       }
    } // end method displayDollarAmount 
    
    // clear the screen
    public void clear()
    {
-      if (textArea != null) {
-         SwingUtilities.invokeLater(() -> textArea.setText(""));
+      if (textArea != null || jTextArea != null) {
+         if (textArea != null) {
+            SwingUtilities.invokeLater(() -> textArea.setText(""));
+         } else {
+            SwingUtilities.invokeLater(() -> jTextArea.setText(""));
+         }
       }
    } // end method clear
 } // end class Screen
