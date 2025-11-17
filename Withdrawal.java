@@ -135,6 +135,44 @@ public class Withdrawal extends Transaction
          screenPanel.repaint();
       }
    }
+
+   public void comfirmationUI() {
+      if (screenPanel != null) {
+         screenPanel.removeAll();
+         screenPanel.setLayout(new GridBagLayout());
+         screenPanel.setBackground(new Color(0, 0, 255)); // Match modern theme
+         GridBagConstraints c = new GridBagConstraints();
+         c.fill = GridBagConstraints.BOTH;
+         c.insets = new java.awt.Insets(10, 10, 10, 10);
+         c.weightx = 1.0;
+         c.weighty = 10.0;
+         JLabel ComfirmDollar = new JLabel("You are about to withdraw ", JLabel.CENTER);
+         ComfirmDollar.setText(ComfirmDollar.getText() + "HK$" + amount);
+         ComfirmDollar.setForeground(new Color(255, 255, 255)); // Modern cyan
+         ComfirmDollar.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD,24));
+         ComfirmDollar.setPreferredSize(new Dimension(50, 50));
+         c.gridx = 0;
+         c.gridy = 1;
+         screenPanel.add(ComfirmDollar, c);
+         // Add title
+         Border lineborder = javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5);
+         JLabel title = new JLabel("Press ENTER to confirm withdrawal", JLabel.CENTER);
+         title.setForeground(new Color(255, 255, 255)); // Modern cyan
+         title.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+         title.setPreferredSize(new Dimension(50, 50));
+         title.setBorder(lineborder);
+         c.gridx = 0;
+         c.gridy = 0;
+         c.gridwidth = 2;
+         screenPanel.add(title, c);
+         
+         // Reset gridwidth for options
+         c.gridwidth = 1;
+         
+         screenPanel.revalidate();
+         screenPanel.repaint();
+      }
+   }
    // perform transaction
    public void execute()
    {
@@ -178,25 +216,39 @@ public class Withdrawal extends Transaction
             // check whether the user has enough money in the account 
             if ( amount <= availableBalance )
             {  
+               int tmp = amount;
+               int cashCount[] = {0,0,0};
                // check whether the cash dispenser has enough money
                if ( cashDispenser.isSufficientCashAvailable( amount ) )
                {
-                  int tmp = amount;
-                  int cashCount[] = {0,0,0};
-                  while (tmp > 0){
-                  if (tmp >= 1000 && cashCount[0] < cashDispenser.getCashCount(0)){
-                    cashCount[0] ++;
-                    tmp -=1000;
-                    }
-                    else if (tmp >= 500 && cashCount[1] < cashDispenser.getCashCount(1)){
-                    cashCount[1] ++;
-                    tmp -= 500;
-                    }
-                    else if(tmp >=100 &&  cashCount[2] < cashDispenser.getCashCount(2)){
-                    cashCount[2] ++;
-                    tmp -= 100;
-                    }
-                }
+                  comfirmationUI();
+                  // wait for user to press enter to confirm
+                  keypad.waitAction();
+                  while(true){
+                  if (keypad.getButtonPressed() == 2){
+                      screen.displayMessageLine( "\nCanceling transaction..." );
+                      return; // return to main menu because user canceled
+                  } 
+                  else if (keypad.getButtonPressed() == 4 || keypad.getButtonPressed() == 0){
+                     while (tmp > 0){
+                     if (tmp >= 1000 && cashCount[0] < cashDispenser.getCashCount(0)){
+                        cashCount[0] ++;
+                        tmp -=1000;
+                        }
+                        else if (tmp >= 500 && cashCount[1] < cashDispenser.getCashCount(1)){
+                        cashCount[1] ++;
+                        tmp -= 500;
+                        }
+                        else if(tmp >=100 &&  cashCount[2] < cashDispenser.getCashCount(2)){
+                        cashCount[2] ++;
+                        tmp -= 100;
+                     }
+                     }
+                     break;
+                  } else {
+                     continue;
+                  }
+               }
                    // update the account involved to reflect withdrawal
                   bankDatabase.debit( getAccountNumber(), amount );
                   
@@ -320,9 +372,10 @@ public class Withdrawal extends Transaction
                }
                else{
                screen.displayMessage( "\nThe amount must be the mutiple of HK$100, try again.\n Or press 0 to return Withdrawal Menu.\n"); 
-               input = keypad.getIntInput();
                this.screen.clear();
                this.screen.displayMessage("HK$");
+               input = keypad.getIntInput();
+
                 }
             }
             break;
