@@ -90,7 +90,7 @@ public class ATM
       leftPanel.setBackground(new Color(30, 30, 40));
       for (int i = 0; i < 4; i++) {
          c.gridy = i + 1;
-         Sidebuttons[i] = new JButton("◄");
+         Sidebuttons[i] = new JButton("►");
          Sidebuttons[i].setPreferredSize(new Dimension(100, 100));
          Sidebuttons[i].setBackground(new Color(0, 0, 0)); // Modern cyan
          Sidebuttons[i].setForeground(Color.WHITE);
@@ -104,7 +104,7 @@ public class ATM
       c.gridy = 0;
       for (int i = 4; i < 8; i++) {
          c.gridy = i + 1;
-         Sidebuttons[i] = new JButton("►");
+         Sidebuttons[i] = new JButton("◄");
          Sidebuttons[i].setPreferredSize(new Dimension(100, 100));
          Sidebuttons[i].setBackground(new Color(0, 0, 0)); // Modern cyan
          Sidebuttons[i].setForeground(Color.WHITE);
