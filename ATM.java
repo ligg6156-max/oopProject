@@ -322,9 +322,8 @@ private Transaction createTransaction(int type) {
          // Reset gridwidth for options
          c.gridwidth = 1;
          c.gridy = 1;
+
          
-         // options
-         // 111111test for test
          c.gridy = 1;
          c.gridx = 0;
          c.gridwidth = 1;
