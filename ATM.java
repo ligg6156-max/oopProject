@@ -323,7 +323,8 @@ private Transaction createTransaction(int type) {
          c.gridwidth = 1;
          c.gridy = 1;
          
-         // Manual entry option (spans both columns)
+         // options
+         // 111111test for test
          c.gridy = 1;
          c.gridx = 0;
          c.gridwidth = 1;
