@@ -2,6 +2,7 @@
 // Represents a withdrawal ATM transaction
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -53,79 +54,87 @@ public class Withdrawal extends Transaction
          title.setBorder(lineborder);
          c.gridx = 0;
          c.gridy = 0;
-         c.gridwidth = 2;
+         c.gridwidth = 4;  // Span all 4 columns
          screenPanel.add(title, c);
          
          // Reset gridwidth for options
-         c.gridwidth = 1;
+         c.gridwidth = 2;
          c.gridy = 1;
          
          // Left column options
-         JLabel option1 = new JLabel("1 - HK$200", JLabel.CENTER);
+         JLabel option1 = new JLabel("HK$200", JLabel.CENTER);
          option1.setForeground(new Color(255, 255, 255));
          option1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
          option1.setPreferredSize(new Dimension(50, 50)); 
          option1.setBorder(lineborder);
-         c.gridx = 0;
+         c.gridx = 0;  // Column 0
          screenPanel.add(option1, c);
          
-         JLabel option3 = new JLabel("3 - HK$800", JLabel.CENTER);
-         option3.setForeground(new Color(255, 255, 255));
-         option3.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
-         option3.setPreferredSize(new Dimension(50, 50)); 
-         option3.setBorder(lineborder);
-         c.gridx = 1;
-         screenPanel.add(option3, c);
-         
-         // Second row
-         c.gridy = 2;
-         
-         JLabel option2 = new JLabel("2 - HK$400", JLabel.CENTER);
+         JLabel option2 = new JLabel("HK$400", JLabel.CENTER);
          option2.setForeground(new Color(255, 255, 255));
          option2.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
          option2.setPreferredSize(new Dimension(50, 50));
          option2.setBorder(lineborder);
-         c.gridx = 0;
+         c.gridx = 2;
          screenPanel.add(option2, c);
          
-         JLabel option4 = new JLabel("4 - HK$1,000", JLabel.CENTER);
+         JLabel option3 = new JLabel("HK$800", JLabel.CENTER);
+         option3.setForeground(new Color(255, 255, 255));
+         option3.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
+         option3.setPreferredSize(new Dimension(50, 50)); 
+         option3.setBorder(lineborder);
+         c.gridy = 2;  // Column 3
+         c.gridx = 0;
+         screenPanel.add(option3, c);
+         
+         JLabel option4 = new JLabel("HK$1,000", JLabel.CENTER);
          option4.setForeground(new Color(255, 255, 255));
          option4.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
          option4.setPreferredSize(new Dimension(50, 50));
          option4.setBorder(lineborder);
-         c.gridx = 1;
+         c.gridx = 2;  // Column 1
          screenPanel.add(option4, c);
          
          // Manual entry option (spans both columns)
          c.gridy = 3;
          c.gridx = 0;
-         c.gridwidth = 2;
-         JLabel option5 = new JLabel("5 - Enter the amount and press ENTER", JLabel.CENTER);
+         c.gridwidth = 4;
+         JLabel option5 = new JLabel("<html><p align=center>or</p><br><b>Enter the amount and press ENTER</b></html>", JLabel.CENTER);
          option5.setForeground(new Color(255, 255, 255));
          option5.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
          option5.setPreferredSize(new Dimension(50, 50));
          option5.setBorder(lineborder);
          screenPanel.add(option5, c);
 
-         // Manual entry option (spans both columns)
-         c.gridy = 4;
+         c.gridy= 4;
          c.gridx = 0;
-         c.gridwidth = 2;
+         c.gridwidth = 3;
+         JLabel inputThing = new JLabel("Input Amount Below:", JLabel.CENTER);
+         inputThing.setForeground(new Color(0, 0, 0));
+         inputThing.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
+         inputThing.setBackground(new Color(0,255,0));
+         inputThing.setOpaque(true);
+         screenPanel.add(inputThing, c);
+
+         // Manual entry option (spans both columns)
+         c.gridx = 3;
+         c.gridwidth = 1;
          JPanel inputPanel = new JPanel();
          inputPanel.setBackground(new Color(0, 0, 255));
+         inputPanel.setForeground(new Color(255,255,255));
          inputPanel.setPreferredSize(new Dimension(50, 50));
          inputPanel.setLayout(new BorderLayout());
          inputPanel.setBorder(lineborder);
          screenPanel.add(inputPanel, c);
 
-         TextArea inputField = new TextArea("", 2, 10, TextArea.SCROLLBARS_NONE);
-         inputField.append("HK$");
+         TextArea inputField = new TextArea("HK$", 2, 10, TextArea.SCROLLBARS_NONE);
+         inputField.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
          inputField.setEditable(false); // Must be non-editable so KeyListener controls all input
          inputField.setBackground(new Color(0, 0, 255));
          inputField.setForeground(new Color(255, 255, 255));
          inputField.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
          inputField.setFocusable(true); // Ensure it can receive focus
-         inputPanel.add(inputField, BorderLayout.EAST);
+         inputPanel.add(inputField, BorderLayout.CENTER);
          screen = new Screen(inputField);
          // Update existing keypad to use new inputField (keeps button connections)
          keypad.setTextArea(inputField);
