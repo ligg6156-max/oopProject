@@ -14,6 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.JOptionPane;
 public class ATM 
 {
    private boolean userAuthenticated; // whether user is authenticated
@@ -258,7 +260,7 @@ private Transaction createTransaction(int type) {
                currentTransaction.execute(); // execute transaction
                break; 
             case EXIT: // user chose to terminate session
-               screen.displayMessageLine( "\nExiting the system..." );
+               JOptionPane.showMessageDialog(null, "Exiting the system...", "EXIT",JOptionPane.INFORMATION_MESSAGE);
                userExited = true; // this ATM session should end
                break;
             case CANCELED:
@@ -277,20 +279,94 @@ private Transaction createTransaction(int type) {
    // display the main menu and return an input selection
    private int displayMainMenu()
    {
-      int input;
-      screen.clear();
-      loginScreen();
-      keypad.buttonPressState = true;
-      keypad.ButtonPressed = 0;
-      screen.displayMessageLine( "\nMain menu:" );
-      screen.displayMessageLine( "1 - View my balance" );
-      screen.displayMessageLine( "2 - Withdraw cash" );
-      screen.displayMessageLine( "3 - Transfer funds" );
-      screen.displayMessageLine( "4 - Exit\n" );
-      screen.displayMessage( "leftButton1-4 RightButton 5-8 Enter a choice: " );
-      input = keypad.getIntInput(); // return user's selection
+       int input;
+       keypad.buttonPressState = true;
+       keypad.ButtonPressed = 0;
+       MainmenuUI();
+       input = keypad.getIntInput(); // return user's selection
+        if (input ==1 || input ==5)
+            input = 1;
+        else if (input ==2 || input ==6) 
+            input = 2;
+        else if (input ==3 || input ==7) 
+            input = 3;
+        else if (input ==4 || input ==8)
+            input = 4;
+        else {
+            // No button pressed, keep input as is
+         }
       return input;
    } // end method displayMainMenu
+   
+   private void MainmenuUI(){
+         screen_panel.removeAll();
+         screen_panel.setLayout(new GridBagLayout());
+         screen_panel.setBackground(new Color(0, 0, 255)); // Match modern theme
+         GridBagConstraints c = new GridBagConstraints();
+         c.fill = GridBagConstraints.BOTH;
+         c.insets = new java.awt.Insets(10, 10, 10, 10);
+         c.weightx = 1.0;
+         c.weighty = 10.0;
+         // Add title
+         Border lineborder = javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5);
+         JLabel title = new JLabel("SELECT the amount to withdraw", JLabel.CENTER);
+         title.setForeground(new Color(255, 255, 255)); // Modern cyan
+         title.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+         title.setPreferredSize(new Dimension(50, 50));
+         title.setBorder(lineborder);
+         c.gridx = 0;
+         c.gridy = 0;
+         c.gridwidth = 2;
+         screen_panel.add(title, c);
+         
+         // Reset gridwidth for options
+         c.gridwidth = 1;
+         c.gridy = 1;
+         
+         // Manual entry option (spans both columns)
+         c.gridy = 1;
+         c.gridx = 0;
+         c.gridwidth = 1;
+         JLabel option1 = new JLabel("View my balance", JLabel.CENTER);
+         option1.setForeground(new Color(255, 255, 255));
+         option1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
+         option1.setPreferredSize(new Dimension(50, 50));
+         option1.setBorder(lineborder);
+         screen_panel.add(option1, c);
+         
+         c.gridy = 2;
+         c.gridx = 0;
+         c.gridwidth = 1;
+         JLabel option2 = new JLabel("Withdraw cash", JLabel.CENTER);
+         option2.setForeground(new Color(255, 255, 255));
+         option2.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
+         option2.setPreferredSize(new Dimension(50, 50));
+         option2.setBorder(lineborder);
+         screen_panel.add(option2, c);
+         
+         c.gridy = 3;
+         c.gridx = 0;
+         c.gridwidth = 1;
+         JLabel option3 = new JLabel("Transfer funds", JLabel.CENTER);
+         option3.setForeground(new Color(255, 255, 255));
+         option3.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
+         option3.setPreferredSize(new Dimension(50, 50));
+         option3.setBorder(lineborder);
+         screen_panel.add(option3, c);
+         
+         c.gridy = 4;
+         c.gridx = 0;
+         c.gridwidth = 1;
+         JLabel option4 = new JLabel("Exit", JLabel.CENTER);
+         option4.setForeground(new Color(255, 255, 255));
+         option4.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
+         option4.setPreferredSize(new Dimension(50, 50));
+         option4.setBorder(lineborder);
+         screen_panel.add(option4, c);
+         
+         screen_panel.revalidate();
+         screen_panel.repaint();
+      }
    
 
 } // end class ATM
