@@ -3,13 +3,13 @@
 import java.awt.TextArea;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Scanner; // program uses Scanner to obtain user input
+import java.util.Scanner;
 
 public class Keypad implements KeyListener
 {
    private Scanner input; // reads data from the command line
    private int keypressed; // stores the key press state
-   private int ButtonPressedMemory; // stores the button pressed value
+   protected int ButtonPressedMemory; // stores the button pressed value
    private TextArea textArea; // reference to GUI TextArea (optional)
    private StringBuilder currentInput; // stores current input being typed
    private boolean passwordMode; // whether to mask input as asterisks
@@ -128,7 +128,9 @@ public class Keypad implements KeyListener
    }
 
    public int getButtonPressed(){
-      return ButtonPressedMemory;
+        int value = ButtonPressedMemory;
+        ButtonPressedMemory = 0;
+      return value;
    }
    
    public int getIntInput()

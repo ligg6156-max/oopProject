@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.TextArea;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.border.Border;
 public class Withdrawal extends Transaction
 {
@@ -18,6 +19,9 @@ public class Withdrawal extends Transaction
    private CashDispenser cashDispenser; // reference to cash dispenser
    public JPanel screenPanel; // reference to screen_panel from ATM   
    private ATM atm; // reference to the ATM
+
+   protected JProgressBar progressBar; // reference to progress bar
+   private int Count100;
    // constant corresponding to menu option to cancel
    private final static int CANCELED = -1;
 
@@ -182,6 +186,53 @@ public class Withdrawal extends Transaction
          screenPanel.repaint();
       }
    }
+
+   public void ProcessingUI(){
+         screenPanel.removeAll();
+         screenPanel.setLayout(new GridBagLayout());
+         screenPanel.setBackground(new Color(0, 0, 255));
+         GridBagConstraints c = new GridBagConstraints();
+         c.fill = GridBagConstraints.BOTH;
+         c.insets = new java.awt.Insets(10, 10, 10, 10);
+         c.weightx = 1.0;
+         c.weighty = 10.0;
+         c.gridx = 0;
+         c.gridy = 0;
+         c.gridheight = 1;
+         JLabel processingLabel = new JLabel("<html><b>Your request is being processed.</b><br><b>Please wait...</b></html>", JLabel.CENTER);
+         processingLabel.setBackground(new Color(255,255,255));
+         processingLabel.setForeground(new Color(0,0,0));
+         processingLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+         processingLabel.setPreferredSize(new Dimension(50, 50));
+         screenPanel.add(processingLabel, c);
+         c.gridy = 1;
+         c.gridheight = 4;
+         progressBar = new JProgressBar(0,Count100);
+         screenPanel.add(progressBar, c);
+         screenPanel.revalidate();
+         screenPanel.repaint();
+   }
+      public void TakeCardUI(){
+         screenPanel.removeAll();
+         screenPanel.setLayout(new GridBagLayout());
+         screenPanel.setBackground(new Color(0, 0, 255));
+         GridBagConstraints c = new GridBagConstraints();
+         c.fill = GridBagConstraints.BOTH;
+         c.insets = new java.awt.Insets(10, 10, 10, 10);
+         c.weightx = 1.0;
+         c.weighty = 10.0;
+         c.gridx = 0;
+         c.gridy = 0;
+         c.gridheight = 1;
+         JLabel takeCardLabel = new JLabel("<html><b>Please take your card.</b><br><b>Thank you for using our ATM!</b></html>", JLabel.CENTER);
+         takeCardLabel.setBackground(new Color(255,255,255));
+         takeCardLabel.setForeground(new Color(0,0,0));
+         takeCardLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+         takeCardLabel.setPreferredSize(new Dimension(50, 50));
+         screenPanel.add(takeCardLabel, c);
+         screenPanel.revalidate();
+         screenPanel.repaint();
+      }
    // perform transaction
    public void execute()
    {
@@ -226,6 +277,7 @@ public class Withdrawal extends Transaction
             if ( amount <= availableBalance )
             {  
                int tmp = amount;
+               Count100 = amount / 100;
                int cashCount[] = {0,0,0};
                // check whether the cash dispenser has enough money
                if ( cashDispenser.isSufficientCashAvailable( amount ) )
@@ -234,23 +286,31 @@ public class Withdrawal extends Transaction
                   // wait for user to press enter to confirm
                   keypad.waitAction();
                   while(true){
-                  if (keypad.getButtonPressed() == 2){
+                  if (keypad.getButtonPressed() == 2)//temporary set value change later
+                  {
                       screen.displayMessageLine( "\nCanceling transaction..." );
                       return; // return to main menu because user canceled
                   } 
                   else if (keypad.getButtonPressed() == 4 || keypad.getButtonPressed() == 0){
+                     ProcessingUI();
                      while (tmp > 0){
                      if (tmp >= 1000 && cashCount[0] < cashDispenser.getCashCount(0)){
                         cashCount[0] ++;
+                        progressBar.setValue(progressBar.getValue() + 10);
                         tmp -=1000;
+                        try { Thread.sleep(200); } catch (InterruptedException e) {} // Delay to show progress
                         }
                         else if (tmp >= 500 && cashCount[1] < cashDispenser.getCashCount(1)){
                         cashCount[1] ++;
+                        progressBar.setValue(progressBar.getValue() + 5);
                         tmp -= 500;
+                        try { Thread.sleep(200); } catch (InterruptedException e) {} // Delay to show progress
                         }
                         else if(tmp >=100 &&  cashCount[2] < cashDispenser.getCashCount(2)){
                         cashCount[2] ++;
+                        progressBar.setValue(progressBar.getValue() + 1);
                         tmp -= 100;
+                        try { Thread.sleep(200); } catch (InterruptedException e) {} // Delay to show progress
                      }
                      }
                      break;
@@ -266,7 +326,10 @@ public class Withdrawal extends Transaction
                   // instruct user to take cash
                   System.out.printf( 
                      "\nPlease take your cash now. \nYou Get %d HK$100, %d HK$500 and %d HK$1,000 withdraw from ",cashCount[2],cashCount[1],cashCount[0]);
-                  screen.displayDollarAmount(amount);
+                     screen.displayDollarAmount(amount);
+                     TakeCardUI();
+                     // Wait for user to acknowledge before returning to main menu
+                     try { Thread.sleep(3000); } catch (InterruptedException e) {} // Show TakeCardUI for 3 seconds
                } // end if
                else // cash dispenser does not have enough cash
                   screen.displayMessageLine( 
@@ -313,21 +376,45 @@ public class Withdrawal extends Transaction
          screen.displayMessageLine( "6 - Cancel transaction" );
          screen.displayMessage( "\nChoose a withdrawal amount: " );
          int input = keypad.getIntInput(); // get user input through keypad
-         if (keypad.getButtonPressed() == 1) {
+         boolean times = true;
+         int tempory = keypad.getButtonPressed();
+            while(true){
+               
+               if (input%100 == 0 || tempory != 0){
+                  System.out.println("Debug: Valid input received: " + input);
+                  break;
+               }
+               else if (input <= 0){
+               break;
+               }
+               else{
+               screen.displayMessage( "\nThe amount must be the mutiple of HK$100, try again.\n Or press 0 to return Withdrawal Menu.\n"); 
+               this.screen.clear();
+               this.screen.displayMessage("HK$");
+               input = keypad.getIntInput();
+
+                }
+            }
+         if (tempory == 1) {
              input = 1;
-         } else if (keypad.getButtonPressed() ==2) {
+             System.out.println("Debug: Button 1 pressed, setting input to 1");
+         } else if (tempory == 2) {
+            System.out.println("Debug: Button 2 pressed, setting input to 3");
              input = 3;
-         } else if (keypad.getButtonPressed() ==3) {
+         } else if (tempory == 3) {
              input = 5;
-         } else if (keypad.getButtonPressed() ==4) {
+             System.out.println("Debug: Button 3 pressed, setting input to 5");
+         } else if (tempory == 4) {
              input = 7;
-         } else if (keypad.getButtonPressed() ==5) {
+             System.out.println("Debug: Button 4 pressed, setting input to 7");
+         } else if (tempory == 5) {
              input = 2;
-         } else if (keypad.getButtonPressed() ==6) {
+             System.out.println("Debug: Button 5 pressed, setting input to 2");
+         } else if (tempory == 6) {
              input = 4;
-         } else if (keypad.getButtonPressed() ==7) {
+         } else if (tempory == 7) {
              input = 6; // Invalid input
-         } else if (keypad.getButtonPressed() ==8) {
+         } else if (tempory == 8) {
              input = 8; // Invalid input
          } else {
                // No button pressed, keep input as is
@@ -344,7 +431,6 @@ public class Withdrawal extends Transaction
                screen.displayMessageLine( "Type out the amount of cash withdraw manually" );
                this.screen.clear();
                this.screen.displayMessage("HK$");
-               boolean times = true;
                while(times == true){
                    input = keypad.getIntInput();
                    this.screen.clear();
