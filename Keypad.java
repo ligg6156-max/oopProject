@@ -9,6 +9,7 @@ public class Keypad implements KeyListener
 {
    private Scanner input; // reads data from the command line
    private int keypressed; // stores the key press state
+   private int ButtonPressedMemory; // stores the button pressed value
    private TextArea textArea; // reference to GUI TextArea (optional)
    private StringBuilder currentInput; // stores current input being typed
    private boolean passwordMode; // whether to mask input as asterisks
@@ -127,9 +128,7 @@ public class Keypad implements KeyListener
    }
 
    public int getButtonPressed(){
-      int value = ButtonPressed;
-      ButtonPressed = 0;
-      return value;
+      return ButtonPressedMemory;
    }
    
    public int getIntInput()
@@ -161,12 +160,12 @@ public class Keypad implements KeyListener
             inputLine = currentInput.toString().trim();
             currentInput.setLength(0); // Clear for next input
         } else {
-                int value = ButtonPressed;
+                ButtonPressedMemory = ButtonPressed;
                 ButtonPressed = 0;
                // Terminal mode - use Scanner
                keypressed = 0; // Reset
-               System.out.printf("%d %s",value, ButtonPressed);
-                  return value;
+               System.out.printf("%d %s",ButtonPressedMemory, ButtonPressed);
+                  return ButtonPressedMemory;
             }
         }
         

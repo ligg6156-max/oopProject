@@ -313,7 +313,7 @@ public class Withdrawal extends Transaction
          screen.displayMessageLine( "6 - Cancel transaction" );
          screen.displayMessage( "\nChoose a withdrawal amount: " );
          int input = keypad.getIntInput(); // get user input through keypad
-         if (keypad.getButtonPressed() ==1) {
+         if (keypad.getButtonPressed() == 1) {
              input = 1;
          } else if (keypad.getButtonPressed() ==2) {
              input = 3;
