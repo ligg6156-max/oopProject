@@ -309,7 +309,7 @@ private Transaction createTransaction(int type) {
          c.weighty = 10.0;
          // Add title
          Border lineborder = javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5);
-         JLabel title = new JLabel("SELECT the amount to withdraw", JLabel.CENTER);
+         JLabel title = new JLabel("Main menu", JLabel.CENTER);
          title.setForeground(new Color(255, 255, 255)); // Modern cyan
          title.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
          title.setPreferredSize(new Dimension(50, 50));
