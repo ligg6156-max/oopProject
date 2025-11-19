@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.TextArea;
+import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -19,11 +20,13 @@ public class Withdrawal extends Transaction
    private CashDispenser cashDispenser; // reference to cash dispenser
    public JPanel screenPanel; // reference to screen_panel from ATM   
    private ATM atm; // reference to the ATM
+   private Thread TakeCardThread;
 
    protected JProgressBar progressBar; // reference to progress bar
    private int Count100;
    // constant corresponding to menu option to cancel
    private final static int CANCELED = -1;
+   private int cashCount[] = {0,0,0};
 
    // Withdrawal constructor
    public Withdrawal( int userAccountNumber, Screen atmScreen, 
@@ -200,19 +203,25 @@ public class Withdrawal extends Transaction
          c.gridy = 0;
          c.gridheight = 1;
          JLabel processingLabel = new JLabel("<html><b>Your request is being processed.</b><br><b>Please wait...</b></html>", JLabel.CENTER);
+         c.gridy = 1;
+         screenPanel.add(Box.createVerticalStrut(200), c);
          processingLabel.setBackground(new Color(255,255,255));
          processingLabel.setForeground(new Color(0,0,0));
          processingLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
          processingLabel.setPreferredSize(new Dimension(50, 50));
          screenPanel.add(processingLabel, c);
-         c.gridy = 1;
-         c.gridheight = 4;
+         c.gridy = 2;
+         c.gridheight = 1;
          progressBar = new JProgressBar(0,Count100);
          screenPanel.add(progressBar, c);
+         c.gridy = 3;
+         c.gridheight = 2;
+         screenPanel.add(Box.createVerticalStrut(200), c);
          screenPanel.revalidate();
          screenPanel.repaint();
    }
       public void TakeCardUI(){
+         TakeCardThread = new Thread(() -> {
          screenPanel.removeAll();
          screenPanel.setLayout(new GridBagLayout());
          screenPanel.setBackground(new Color(0, 0, 255));
@@ -224,15 +233,78 @@ public class Withdrawal extends Transaction
          c.gridx = 0;
          c.gridy = 0;
          c.gridheight = 1;
-         JLabel takeCardLabel = new JLabel("<html><b>Please take your card.</b><br><b>Thank you for using our ATM!</b></html>", JLabel.CENTER);
-         takeCardLabel.setBackground(new Color(255,255,255));
+         
+         screenPanel.removeAll();
+         screenPanel.setLayout(new GridBagLayout());
+         screenPanel.setBackground(new Color(0, 0, 255));
+         c.gridwidth = 2;
+         JLabel accepted = new JLabel("<html><b>Your withdraw is accepted</b></html>", JLabel.CENTER);
+         accepted.setBackground(new Color(0,255,0));
+         accepted.setForeground(new Color(0,0,0));
+         accepted.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+         accepted.setPreferredSize(new Dimension(50, 25));
+         screenPanel.add(accepted, c);
+         JLabel WithdrawAountLabel = new JLabel("You get "+ cashCount[0] +" HKD1000, "+cashCount[1] + " HKD500" + cashCount[2] + " HKD100", JLabel.CENTER);
+         WithdrawAountLabel.setBackground(new Color(0,0,255));
+         WithdrawAountLabel.setForeground(new Color(255,255,255));
+         WithdrawAountLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+         WithdrawAountLabel.setPreferredSize(new Dimension(50, 50));
+         c.gridy = 1;
+         screenPanel.add(WithdrawAountLabel, c);
+         JLabel PleaseSelect = new JLabel("<html><b>Please select</b></html>", JLabel.CENTER);
+         PleaseSelect.setBackground(new Color(0,0,255));
+         PleaseSelect.setForeground(new Color(255,255,255));
+         PleaseSelect.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+         PleaseSelect.setPreferredSize(new Dimension(50, 50));
+         c.gridy = 2;
+         PleaseSelect.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5));
+         screenPanel.add(PleaseSelect, c);
+         c.gridx = 0;
+         c.gridy = 3;
+         c.gridwidth = 1;
+         JLabel blank = new JLabel("", JLabel.CENTER);
+         blank.setBackground(new Color(0,0,255));
+         blank.setForeground(new Color(255,255,255));
+         blank.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5));
+         screenPanel.add(blank, c);
+         c.gridx = 1;
+         JLabel print_advice = new JLabel("<html><b>Print advice & take card</b></html>", JLabel.CENTER);
+         print_advice.setBackground(new Color(0,0,255));
+         print_advice.setForeground(new Color(255,255,255));
+         print_advice.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+         print_advice.setPreferredSize(new Dimension(50, 50));
+         print_advice.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5));
+         screenPanel.add(print_advice, c);
+         
+         c.gridx = 0;
+         c.gridy = 4;
+         JLabel blank1 = new JLabel("", JLabel.CENTER);
+         blank1.setBackground(new Color(0,0,255));
+         blank1.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5));
+         screenPanel.add(blank1, c);
+         c.gridx = 1;
+         JLabel no_advice = new JLabel("<html><b>Take card</b></html>", JLabel.CENTER);
+         no_advice.setBackground(new Color(0,0,255));
+         no_advice.setForeground(new Color(255,255,255));
+         no_advice.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+         no_advice.setPreferredSize(new Dimension(50, 50));
+         no_advice.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5));
+         screenPanel.add(no_advice, c);
+         screenPanel.revalidate();
+         screenPanel.repaint();
+         keypad.waitAction();
+
+         JLabel takeCardLabel = new JLabel("<html><b>Thank you for choosing ATM</b></html>", JLabel.CENTER);
+         takeCardLabel.setBackground(new Color(0,255,0));
          takeCardLabel.setForeground(new Color(0,0,0));
          takeCardLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
          takeCardLabel.setPreferredSize(new Dimension(50, 50));
          screenPanel.add(takeCardLabel, c);
          screenPanel.revalidate();
          screenPanel.repaint();
-      }
+      });
+      TakeCardThread.start();
+   }
    // perform transaction
    public void execute()
    {
@@ -278,7 +350,6 @@ public class Withdrawal extends Transaction
             {  
                int tmp = amount;
                Count100 = amount / 100;
-               int cashCount[] = {0,0,0};
                // check whether the cash dispenser has enough money
                if ( cashDispenser.isSufficientCashAvailable( amount ) )
                {
@@ -328,9 +399,14 @@ public class Withdrawal extends Transaction
                      "\nPlease take your cash now. \nYou Get %d HK$100, %d HK$500 and %d HK$1,000 withdraw from ",cashCount[2],cashCount[1],cashCount[0]);
                      screen.displayDollarAmount(amount);
                      TakeCardUI();
-                     // Wait for user to acknowledge before returning to main menu
-                     try { Thread.sleep(3000); } catch (InterruptedException e) {} // Show TakeCardUI for 3 seconds
-               } // end if
+                      try {
+                        TakeCardThread.join(); // Wait for TakeCardThread to finish
+                        System.out.println("Main thread continues after TakeCardThread finished.");
+                           } catch (InterruptedException e) {
+                              System.out.println("Main thread interrupted while waiting.");
+                              Thread.currentThread().interrupt();
+                           } // end if
+                        }
                else // cash dispenser does not have enough cash
                   screen.displayMessageLine( 
                      "\nInsufficient cash available in the ATM." +

@@ -12,10 +12,10 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
-import javax.swing.JOptionPane;
 public class ATM 
 {
    private boolean userAuthenticated; // whether user is authenticated
@@ -36,6 +36,13 @@ public class ATM
    protected JLabel label;
    protected JPanel screen_panel;
    private TextArea displayArea; // For both displaying messages and input
+
+   protected static final Color BACKGROUND = new Color(30, 30, 40);
+   protected static final Color SCREEN_PANEL_COLOR = new Color(20, 120, 180);
+   protected static final Color BUTTON_COLOR = new Color(70,70,90);
+   protected static final Color MODERN_TEXT = new Color(255, 255, 255);
+   protected static final Color GREEN_COLOR = new Color(50, 150, 50);
+   protected static final Font MODERN_FONT = new Font("Consolas", Font.PLAIN, 18);
    // no-argument ATM constructor initializes instance variables
    public ATM() 
    {
@@ -44,8 +51,9 @@ public class ATM
       // Create single TextArea for display and input (4:3 aspect ratio)
       displayArea = new TextArea("HK$", 30, 80, TextArea.SCROLLBARS_NONE); // Approximately 4:3 ratio for inner screen, no scrollbars
       displayArea.setEditable(false); // Make it non-editable - use KeyListener for input
-      displayArea.setBackground(new Color(0, 0, 255)); // Modern dark background
-      displayArea.setForeground(new Color(255, 255, 255)); // Modern cyan text
+      displayArea.setBackground(SCREEN_PANEL_COLOR); // Modern dark background
+      displayArea.setForeground(MODERN_TEXT); // Modern cyan text
+      displayArea.setFont(MODERN_FONT);
       screen = new Screen(displayArea); // create screen with display TextArea
       cashDispenser = new CashDispenser(); // create cash dispenser
       bankDatabase = new BankDatabase(); // create acct info database
@@ -60,8 +68,8 @@ public class ATM
       frame.setSize(1120, 720); // 5:3 aspect ratio (1000 width, 600 height)
       frame.setLayout(new BorderLayout(10,10));
       frame.setBackground(Color.BLACK); // Set frame background to black
-      UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 18));
-      UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 22));
+      UIManager.put("Button.font", new Font("Consolas", Font.PLAIN, 18));
+      UIManager.put("Label.font", new Font("Consolas", Font.PLAIN, 18));
       Font customFont = new Font("Consolas", Font.PLAIN, 18);
       displayArea.setFont(customFont);
       UIManager.put("TextArea.font", new Font("Consolas", Font.PLAIN, 18));
@@ -94,7 +102,7 @@ public class ATM
          c.gridy = i + 1;
          Sidebuttons[i] = new JButton("►");
          Sidebuttons[i].setPreferredSize(new Dimension(100, 100));
-         Sidebuttons[i].setBackground(new Color(0, 0, 0)); // Modern cyan
+         Sidebuttons[i].setBackground(BUTTON_COLOR); // Modern cyan
          Sidebuttons[i].setForeground(Color.WHITE);
          Sidebuttons[i].setFocusable(false); // Prevent button from taking focus
          final int buttonIndex = i + 1; // Button 1-4 for left side
@@ -108,7 +116,7 @@ public class ATM
          c.gridy = i + 1;
          Sidebuttons[i] = new JButton("◄");
          Sidebuttons[i].setPreferredSize(new Dimension(100, 100));
-         Sidebuttons[i].setBackground(new Color(0, 0, 0)); // Modern cyan
+         Sidebuttons[i].setBackground(BUTTON_COLOR); // Modern cyan
          Sidebuttons[i].setForeground(Color.WHITE);
          Sidebuttons[i].setFocusable(false); // Prevent button from taking focus
          final int buttonIndex = i + 1; // Button 5-8 for right side
@@ -129,7 +137,7 @@ public class ATM
    public void wellcome(){
       screen_panel.removeAll();
       screen_panel.setLayout(new FlowLayout());
-      screen_panel.setBackground(new Color(0, 0, 255)); // Keep modern dark background
+      screen_panel.setBackground(new Color(20, 120, 180)); // Keep modern dark background
       JLabel welcomeLabel = new JLabel("Welcome to the ATM - Press Enter to begin");
       welcomeLabel.setForeground(new Color(255, 255, 255)); // Modern cyan text to match
       screen_panel.add(welcomeLabel);
