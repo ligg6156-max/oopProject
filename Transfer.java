@@ -56,5 +56,7 @@ public class Transfer extends Transaction {
         else {
             screen.displayMessageLine("Insufficient funds. Transfer canceled.");
         }
+        ATM ATMTransfer = new ATM();
+        ATMTransfer.TakeCardUI();
     }
 }

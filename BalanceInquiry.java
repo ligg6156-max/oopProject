@@ -48,6 +48,8 @@ public class BalanceInquiry extends Transaction
       screen.displayMessage( "\n - Total balance:     " );
       screen.displayDollarAmount( totalBalance );
       screen.displayMessageLine( "" );
+      ATM ATMTransfer = new ATM();
+      ATMTransfer.TakeCardUI();
       
    } // end method execute
 } // end class BalanceInquiry

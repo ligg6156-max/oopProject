@@ -16,6 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+import javax.swing.JProgressBar;
+
 public class ATM 
 {
    private boolean userAuthenticated; // whether user is authenticated
@@ -38,6 +40,7 @@ public class ATM
    protected JLabel label;
    protected JPanel screen_panel;
    private TextArea displayArea; // For both displaying messages and input
+   protected JProgressBar progressBar;
 
    protected static final Color BACKGROUND = new Color(30, 30, 40);
    protected static final Color SCREEN_PANEL_COLOR = new Color(20, 120, 180);
@@ -45,6 +48,8 @@ public class ATM
    protected static final Color MODERN_TEXT = new Color(255, 255, 255);
    protected static final Color GREEN_COLOR = new Color(50, 150, 50);
    protected static final Font MODERN_FONT = new Font("Consolas", Font.BOLD, 25);
+   
+   private Thread TakeCardThread;
    // no-argument ATM constructor initializes instance variables
    public ATM() 
    {
@@ -277,6 +282,8 @@ private Transaction createTransaction(int type) {
             case EXIT: // user chose to terminate session
                JOptionPane.showMessageDialog(null, "Exiting the system...", "EXIT",JOptionPane.INFORMATION_MESSAGE);
                userExited = true; // this ATM session should end
+               runProcessingUI();
+               TakeCardUI();
                break;
             case CANCELED:
                screen.displayMessageLine( "\nExiting the system..." );
@@ -337,6 +344,7 @@ private Transaction createTransaction(int type) {
          c.gridy = 1;
 
          
+         
          c.gridy = 1;
          c.gridx = 0;
          c.gridwidth = 1;
@@ -369,16 +377,108 @@ private Transaction createTransaction(int type) {
          c.gridwidth = 1;
          JLabel option4 = new JLabel("Exit", JLabel.CENTER);
          option4.setForeground(new Color(255, 255, 255));
-         option4.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
          option4.setPreferredSize(new Dimension(50, 50));
          option4.setBorder(lineborder);
          screen_panel.add(option4, c);
-         
          screen_panel.revalidate();
          screen_panel.repaint();
       }
-   
+   public void runProcessingUI(){
+        int tmp = 6000;
+        setProcessingUI();
+        while (tmp > 0){
+            if (tmp >= 1000){
+                progressBar.setValue(progressBar.getValue() + 10);
+                tmp -=1000;
+                try { Thread.sleep(200); } catch (InterruptedException e) {} // Delay to show progress
+            }
+            else if (tmp >= 500){
+                progressBar.setValue(progressBar.getValue() + 5);
+                tmp -= 500;
+                try { Thread.sleep(200); } catch (InterruptedException e) {} // Delay to show progress
+            }
+            else if(tmp >=100 ){
+                progressBar.setValue(progressBar.getValue() + 1);
+                tmp -= 100;
+                try { Thread.sleep(200); } catch (InterruptedException e) {} // Delay to show progress
+            }
+        }
+    }
 
+    public void setProcessingUI(){
+        
+         screen_panel.removeAll();
+         screen_panel.setLayout(new GridBagLayout());
+         GridBagConstraints c = new GridBagConstraints();
+         c.fill = GridBagConstraints.BOTH;
+         c.insets = new java.awt.Insets(10, 10, 10, 10);
+         c.weightx = 1.0;
+         c.weighty = 10.0;
+         c.gridx = 0;
+         c.gridy = 0;
+         c.gridheight = 1;
+         JLabel processingLabel = new JLabel("<html><b align=center>Your request is being processed.</b><br><b align=center>Please wait...</b></html>", 
+         JLabel.CENTER);
+         progressBar = new JProgressBar(0,50);
+         screen_panel.add(progressBar, c);
+         c.gridy = 1;
+         screen_panel.add(Box.createVerticalStrut(200), c);
+         processingLabel.setBackground(GREEN_COLOR);
+         processingLabel.setForeground(new Color(0,0,0));
+         processingLabel.setPreferredSize(new Dimension(50, 50));
+         screen_panel.add(processingLabel, c);
+         c.gridy = 2;
+         c.gridheight = 1;
+         c.gridy = 3;
+         c.gridheight = 2;
+         screen_panel.add(Box.createVerticalStrut(200), c);
+         screen_panel.revalidate();
+         screen_panel.repaint();
+       }
+    public void TakeCardUI(){
+         TakeCardThread = new Thread(() -> {
+             screen_panel.removeAll();
+             screen_panel.setLayout(new GridBagLayout());
+             GridBagConstraints c = new GridBagConstraints();
+             c = new GridBagConstraints();  // Reset constraints
+             c.fill = GridBagConstraints.BOTH;
+             c.insets = new java.awt.Insets(10, 10, 10, 10);
+             c.weightx = 1.0;
+             c.weighty = 10.0;
+             c.gridx = 0;
+             c.gridy = 0;
+             c.gridwidth = 1;
+             JLabel takeCardLabel = new JLabel("<html><b>Thank you for choosing ATM</b></html>", JLabel.CENTER);
+             takeCardLabel.setBackground(GREEN_COLOR);
+             takeCardLabel.setForeground(new Color(0,0,0));
+             takeCardLabel.setPreferredSize(new Dimension(50, 50));
+             takeCardLabel.setOpaque(true);
+             screen_panel.add(takeCardLabel, c);
+             c.gridy = 1;
+             screen_panel.add(Box.createVerticalStrut(100), c);
+             c.gridy=2;
+             JLabel takeyourCard = new JLabel("<html><b>Please take your card</b></html>", JLabel.CENTER);
+             takeyourCard.setForeground(new Color(255,255,255));
+             screen_panel.add(takeyourCard, c);
+             c.gridy=3;
+             screen_panel.add(Box.createVerticalStrut(100), c);
+             c.gridy=4;
+             screen_panel.add(Box.createVerticalStrut(100), c);
+             screen_panel.revalidate();
+             screen_panel.repaint();
+             keypad.waitAction();
+             
+             JLabel takeyourCash = new JLabel("<html><b>Please take your cash</b></html>", JLabel.CENTER);
+             takeyourCash.setForeground(new Color(255,255,255));
+             c.gridy = 1;
+             screen_panel.add(takeyourCash, c);
+             screen_panel.revalidate();
+             screen_panel.repaint();
+             keypad.waitAction();
+         
+      });
+      TakeCardThread.start();
+   }
 } // end class ATM
 
 
