@@ -6,13 +6,17 @@ import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.TextArea;
 import javax.swing.Box;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+
 public class Withdrawal extends Transaction
 {
    private int amount; // amount to withdraw
@@ -294,7 +298,7 @@ public class Withdrawal extends Transaction
          c.fill = GridBagConstraints.BOTH;
          c.insets = new java.awt.Insets(10, 10, 10, 10);
          c.weightx = 1.0;
-         c.weighty = 10.0;
+         c.weighty = 5.0;
          c.gridx = 0;
          c.gridy = 0;
          c.gridwidth = 1;
@@ -311,7 +315,11 @@ public class Withdrawal extends Transaction
          takeyourCard.setForeground(new Color(255,255,255));
          screenPanel.add(takeyourCard, c);
          c.gridy=3;
-         screenPanel.add(Box.createVerticalStrut(100), c);
+         Icon takecardIcon = new ImageIcon(getClass().getResource("takeoutCard.png"));
+         Image img = ((ImageIcon) takecardIcon).getImage();
+         Image scaledImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+         Icon scaledIcon = new ImageIcon(scaledImg);
+         screenPanel.add(new JLabel(scaledIcon), c);
          c.gridy=4;
          screenPanel.add(Box.createVerticalStrut(100), c);
          screenPanel.revalidate();
