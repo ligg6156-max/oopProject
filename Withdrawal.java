@@ -11,6 +11,7 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 public class Withdrawal extends Transaction
 {
@@ -27,7 +28,6 @@ public class Withdrawal extends Transaction
    // constant corresponding to menu option to cancel
    private final static int CANCELED = -1;
    private int cashCount[] = {0,0,0};
-
    // Withdrawal constructor
    public Withdrawal( int userAccountNumber, Screen atmScreen, 
       BankDatabase atmBankDatabase, Keypad atmKeypad, 
@@ -40,13 +40,16 @@ public class Withdrawal extends Transaction
       keypad = atmKeypad;
       cashDispenser = atmCashDispenser;
       this.screenPanel = screenPanel;
+      UIManager.put("Label.background", atm.SCREEN_PANEL_COLOR);
+      UIManager.put("ScreenPanel.background", atm.SCREEN_PANEL_COLOR);
+      UIManager.put("Label.font", atm.MODERN_FONT);
    } // end Withdrawal constructor
    
    public void withdrawalUI() {
       if (screenPanel != null) {
          screenPanel.removeAll();
          screenPanel.setLayout(new GridBagLayout());
-         screenPanel.setBackground(new Color(0, 0, 255)); // Match modern theme
+         screenPanel.setBackground(atm.SCREEN_PANEL_COLOR);
          GridBagConstraints c = new GridBagConstraints();
          c.fill = GridBagConstraints.BOTH;
          c.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -55,8 +58,7 @@ public class Withdrawal extends Transaction
          // Add title
          Border lineborder = javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5);
          JLabel title = new JLabel("SELECT the amount to withdraw", JLabel.CENTER);
-         title.setForeground(new Color(255, 255, 255)); // Modern cyan
-         title.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+         title.setForeground(new Color(255, 255, 255));
          title.setPreferredSize(new Dimension(50, 50));
          title.setBorder(lineborder);
          c.gridx = 0;
@@ -71,7 +73,6 @@ public class Withdrawal extends Transaction
          // Left column options
          JLabel option1 = new JLabel("HK$200", JLabel.CENTER);
          option1.setForeground(new Color(255, 255, 255));
-         option1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
          option1.setPreferredSize(new Dimension(50, 50)); 
          option1.setBorder(lineborder);
          c.gridx = 0;  // Column 0
@@ -79,7 +80,6 @@ public class Withdrawal extends Transaction
          
          JLabel option2 = new JLabel("HK$400", JLabel.CENTER);
          option2.setForeground(new Color(255, 255, 255));
-         option2.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
          option2.setPreferredSize(new Dimension(50, 50));
          option2.setBorder(lineborder);
          c.gridx = 2;
@@ -87,7 +87,6 @@ public class Withdrawal extends Transaction
          
          JLabel option3 = new JLabel("HK$800", JLabel.CENTER);
          option3.setForeground(new Color(255, 255, 255));
-         option3.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
          option3.setPreferredSize(new Dimension(50, 50)); 
          option3.setBorder(lineborder);
          c.gridy = 2;  // Column 3
@@ -96,7 +95,6 @@ public class Withdrawal extends Transaction
          
          JLabel option4 = new JLabel("HK$1,000", JLabel.CENTER);
          option4.setForeground(new Color(255, 255, 255));
-         option4.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
          option4.setPreferredSize(new Dimension(50, 50));
          option4.setBorder(lineborder);
          c.gridx = 2;  // Column 1
@@ -108,7 +106,6 @@ public class Withdrawal extends Transaction
          c.gridwidth = 4;
          JLabel option5 = new JLabel("<html><p align=center>or</p><br><b>Enter the amount and press ENTER</b></html>", JLabel.CENTER);
          option5.setForeground(new Color(255, 255, 255));
-         option5.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
          option5.setPreferredSize(new Dimension(50, 50));
          option5.setBorder(lineborder);
          screenPanel.add(option5, c);
@@ -118,8 +115,7 @@ public class Withdrawal extends Transaction
          c.gridwidth = 3;
          JLabel inputThing = new JLabel("Input Amount Below:", JLabel.CENTER);
          inputThing.setForeground(new Color(0, 0, 0));
-         inputThing.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
-         inputThing.setBackground(new Color(0,255,0));
+         inputThing.setBackground(atm.GREEN_COLOR);
          inputThing.setOpaque(true);
          screenPanel.add(inputThing, c);
 
@@ -127,7 +123,6 @@ public class Withdrawal extends Transaction
          c.gridx = 3;
          c.gridwidth = 1;
          JPanel inputPanel = new JPanel();
-         inputPanel.setBackground(new Color(0, 0, 255));
          inputPanel.setForeground(new Color(255,255,255));
          inputPanel.setPreferredSize(new Dimension(50, 50));
          inputPanel.setLayout(new BorderLayout());
@@ -137,9 +132,8 @@ public class Withdrawal extends Transaction
          TextArea inputField = new TextArea("HK$", 2, 10, TextArea.SCROLLBARS_NONE);
          inputField.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
          inputField.setEditable(false); // Must be non-editable so KeyListener controls all input
-         inputField.setBackground(new Color(0, 0, 255));
+         inputField.setBackground(atm.SCREEN_PANEL_COLOR);
          inputField.setForeground(new Color(255, 255, 255));
-         inputField.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 20));
          inputField.setFocusable(true); // Ensure it can receive focus
          inputPanel.add(inputField, BorderLayout.CENTER);
          screen = new Screen(inputField);
@@ -156,7 +150,6 @@ public class Withdrawal extends Transaction
       if (screenPanel != null) {
          screenPanel.removeAll();
          screenPanel.setLayout(new GridBagLayout());
-         screenPanel.setBackground(new Color(0, 0, 255)); // Match modern theme
          GridBagConstraints c = new GridBagConstraints();
          c.fill = GridBagConstraints.BOTH;
          c.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -165,7 +158,6 @@ public class Withdrawal extends Transaction
          JLabel ComfirmDollar = new JLabel("You are about to withdraw ", JLabel.CENTER);
          ComfirmDollar.setText(ComfirmDollar.getText() + "HK$" + amount);
          ComfirmDollar.setForeground(new Color(255, 255, 255)); // Modern cyan
-         ComfirmDollar.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD,24));
          ComfirmDollar.setPreferredSize(new Dimension(50, 50));
          c.gridx = 0;
          c.gridy = 1;
@@ -173,8 +165,7 @@ public class Withdrawal extends Transaction
          // Add title
          Border lineborder = javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5);
          JLabel title = new JLabel("Press ENTER to confirm withdrawal", JLabel.CENTER);
-         title.setForeground(new Color(255, 255, 255)); // Modern cyan
-         title.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+         title.setForeground(new Color(255, 255, 255));
          title.setPreferredSize(new Dimension(50, 50));
          title.setBorder(lineborder);
          c.gridx = 0;
@@ -193,7 +184,6 @@ public class Withdrawal extends Transaction
    public void ProcessingUI(){
          screenPanel.removeAll();
          screenPanel.setLayout(new GridBagLayout());
-         screenPanel.setBackground(new Color(0, 0, 255));
          GridBagConstraints c = new GridBagConstraints();
          c.fill = GridBagConstraints.BOTH;
          c.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -202,12 +192,13 @@ public class Withdrawal extends Transaction
          c.gridx = 0;
          c.gridy = 0;
          c.gridheight = 1;
-         JLabel processingLabel = new JLabel("<html><b>Your request is being processed.</b><br><b>Please wait...</b></html>", JLabel.CENTER);
+         JLabel processingLabel = new JLabel("<html><b>Your request is being processed.</b><br><b>Please wait...</b></html>", 
+         JLabel.CENTER);
+         
          c.gridy = 1;
          screenPanel.add(Box.createVerticalStrut(200), c);
          processingLabel.setBackground(new Color(255,255,255));
          processingLabel.setForeground(new Color(0,0,0));
-         processingLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
          processingLabel.setPreferredSize(new Dimension(50, 50));
          screenPanel.add(processingLabel, c);
          c.gridy = 2;
@@ -224,7 +215,6 @@ public class Withdrawal extends Transaction
          TakeCardThread = new Thread(() -> {
          screenPanel.removeAll();
          screenPanel.setLayout(new GridBagLayout());
-         screenPanel.setBackground(new Color(0, 0, 255));
          GridBagConstraints c = new GridBagConstraints();
          c.fill = GridBagConstraints.BOTH;
          c.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -236,25 +226,19 @@ public class Withdrawal extends Transaction
          
          screenPanel.removeAll();
          screenPanel.setLayout(new GridBagLayout());
-         screenPanel.setBackground(new Color(0, 0, 255));
          c.gridwidth = 2;
          JLabel accepted = new JLabel("<html><b>Your withdraw is accepted</b></html>", JLabel.CENTER);
-         accepted.setBackground(new Color(0,255,0));
+         accepted.setBackground(atm.GREEN_COLOR);
          accepted.setForeground(new Color(0,0,0));
-         accepted.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
          accepted.setPreferredSize(new Dimension(50, 25));
          screenPanel.add(accepted, c);
          JLabel WithdrawAountLabel = new JLabel("You get "+ cashCount[0] +" HKD1000, "+cashCount[1] + " HKD500" + cashCount[2] + " HKD100", JLabel.CENTER);
-         WithdrawAountLabel.setBackground(new Color(0,0,255));
          WithdrawAountLabel.setForeground(new Color(255,255,255));
-         WithdrawAountLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
          WithdrawAountLabel.setPreferredSize(new Dimension(50, 50));
          c.gridy = 1;
          screenPanel.add(WithdrawAountLabel, c);
          JLabel PleaseSelect = new JLabel("<html><b>Please select</b></html>", JLabel.CENTER);
-         PleaseSelect.setBackground(new Color(0,0,255));
          PleaseSelect.setForeground(new Color(255,255,255));
-         PleaseSelect.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
          PleaseSelect.setPreferredSize(new Dimension(50, 50));
          c.gridy = 2;
          PleaseSelect.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5));
@@ -263,15 +247,12 @@ public class Withdrawal extends Transaction
          c.gridy = 3;
          c.gridwidth = 1;
          JLabel blank = new JLabel("", JLabel.CENTER);
-         blank.setBackground(new Color(0,0,255));
          blank.setForeground(new Color(255,255,255));
          blank.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5));
          screenPanel.add(blank, c);
          c.gridx = 1;
          JLabel print_advice = new JLabel("<html><b>Print advice & take card</b></html>", JLabel.CENTER);
-         print_advice.setBackground(new Color(0,0,255));
          print_advice.setForeground(new Color(255,255,255));
-         print_advice.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
          print_advice.setPreferredSize(new Dimension(50, 50));
          print_advice.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5));
          screenPanel.add(print_advice, c);
@@ -279,14 +260,11 @@ public class Withdrawal extends Transaction
          c.gridx = 0;
          c.gridy = 4;
          JLabel blank1 = new JLabel("", JLabel.CENTER);
-         blank1.setBackground(new Color(0,0,255));
          blank1.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5));
          screenPanel.add(blank1, c);
          c.gridx = 1;
          JLabel no_advice = new JLabel("<html><b>Take card</b></html>", JLabel.CENTER);
-         no_advice.setBackground(new Color(0,0,255));
          no_advice.setForeground(new Color(255,255,255));
-         no_advice.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
          no_advice.setPreferredSize(new Dimension(50, 50));
          no_advice.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5));
          screenPanel.add(no_advice, c);
@@ -295,9 +273,8 @@ public class Withdrawal extends Transaction
          keypad.waitAction();
 
          JLabel takeCardLabel = new JLabel("<html><b>Thank you for choosing ATM</b></html>", JLabel.CENTER);
-         takeCardLabel.setBackground(new Color(0,255,0));
+         takeCardLabel.setBackground(atm.GREEN_COLOR);
          takeCardLabel.setForeground(new Color(0,0,0));
-         takeCardLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
          takeCardLabel.setPreferredSize(new Dimension(50, 50));
          screenPanel.add(takeCardLabel, c);
          screenPanel.revalidate();
