@@ -280,10 +280,9 @@ private Transaction createTransaction(int type) {
                currentTransaction.execute(); // execute transaction
                break; 
             case EXIT: // user chose to terminate session
-               JOptionPane.showMessageDialog(null, "Exiting the system...", "EXIT",JOptionPane.INFORMATION_MESSAGE);
-               userExited = true; // this ATM session should end
                runProcessingUI();
                TakeCardUI();
+               userExited = true; // this ATM session should end
                break;
             case CANCELED:
                screen.displayMessageLine( "\nExiting the system..." );
@@ -417,7 +416,7 @@ private Transaction createTransaction(int type) {
          c.gridx = 0;
          c.gridy = 0;
          c.gridheight = 1;
-         JLabel processingLabel = new JLabel("<html><b align=center>Your request is being processed.</b><br><b align=center>Please wait...</b></html>", 
+         JLabel processingLabel = new JLabel("<html><b align=center>Exiting with your Account</b><br><b align=center>Please wait...</b></html>", 
          JLabel.CENTER);
          progressBar = new JProgressBar(0,50);
          screen_panel.add(progressBar, c);
