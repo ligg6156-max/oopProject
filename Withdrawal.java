@@ -31,7 +31,7 @@ public class Withdrawal extends Transaction
    // Withdrawal constructor
    public Withdrawal( int userAccountNumber, Screen atmScreen, 
       BankDatabase atmBankDatabase, Keypad atmKeypad, 
-      CashDispenser atmCashDispenser, JPanel screenPanel )
+      CashDispenser atmCashDispenser, JPanel screenPanel, ATM atm )
    {
       // initialize superclass variables
       super( userAccountNumber, atmScreen, atmBankDatabase );
@@ -40,6 +40,7 @@ public class Withdrawal extends Transaction
       keypad = atmKeypad;
       cashDispenser = atmCashDispenser;
       this.screenPanel = screenPanel;
+      this.atm = atm;
       UIManager.put("Label.background", atm.SCREEN_PANEL_COLOR);
       UIManager.put("ScreenPanel.background", atm.SCREEN_PANEL_COLOR);
       UIManager.put("Label.font", atm.MODERN_FONT);
@@ -143,6 +144,7 @@ public class Withdrawal extends Transaction
          inputField.requestFocusInWindow(); // Request focus so it receives key events
          screenPanel.revalidate();
          screenPanel.repaint();
+         atm.userExited = true; // Reset for next session
       }
    }
 
@@ -192,12 +194,12 @@ public class Withdrawal extends Transaction
          c.gridx = 0;
          c.gridy = 0;
          c.gridheight = 1;
-         JLabel processingLabel = new JLabel("<html><b>Your request is being processed.</b><br><b>Please wait...</b></html>", 
+         JLabel processingLabel = new JLabel("<html><b align=center>Your request is being processed.</b><br><b align=center>Please wait...</b></html>", 
          JLabel.CENTER);
          
          c.gridy = 1;
          screenPanel.add(Box.createVerticalStrut(200), c);
-         processingLabel.setBackground(new Color(255,255,255));
+         processingLabel.setBackground(atm.GREEN_COLOR);
          processingLabel.setForeground(new Color(0,0,0));
          processingLabel.setPreferredSize(new Dimension(50, 50));
          screenPanel.add(processingLabel, c);
@@ -232,11 +234,8 @@ public class Withdrawal extends Transaction
          accepted.setForeground(new Color(0,0,0));
          accepted.setPreferredSize(new Dimension(50, 25));
          screenPanel.add(accepted, c);
-         JLabel WithdrawAountLabel = new JLabel("You get "+ cashCount[0] +" HKD1000, "+cashCount[1] + " HKD500" + cashCount[2] + " HKD100", JLabel.CENTER);
-         WithdrawAountLabel.setForeground(new Color(255,255,255));
-         WithdrawAountLabel.setPreferredSize(new Dimension(50, 50));
          c.gridy = 1;
-         screenPanel.add(WithdrawAountLabel, c);
+         screenPanel.add(Box.createVerticalStrut(100), c);
          JLabel PleaseSelect = new JLabel("<html><b>Please select</b></html>", JLabel.CENTER);
          PleaseSelect.setForeground(new Color(255,255,255));
          PleaseSelect.setPreferredSize(new Dimension(50, 50));
@@ -268,17 +267,74 @@ public class Withdrawal extends Transaction
          no_advice.setPreferredSize(new Dimension(50, 50));
          no_advice.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5));
          screenPanel.add(no_advice, c);
+
          screenPanel.revalidate();
          screenPanel.repaint();
+         Boolean waitForTakeCard = true;
+         while(waitForTakeCard == true){
          keypad.waitAction();
-
+         System.out.printf("%d", keypad.ButtonPressedMemory);
+         switch(keypad.getButtonPressed()){
+         case 7://temporary set value change later
+             System.out.println("Print advice & take card selected.");
+             waitForTakeCard = false;
+             break;
+         case 8:
+             System.out.println("Take card selected.");
+             waitForTakeCard = false;
+             break;
+         case 0,1,2,3,4,5,6:
+            System.out.println("Invalid selection, please select again.");
+            break;
+                }
+         }
+         screenPanel.removeAll();
+         screenPanel.setLayout(new GridBagLayout());
+         c = new GridBagConstraints();  // Reset constraints
+         c.fill = GridBagConstraints.BOTH;
+         c.insets = new java.awt.Insets(10, 10, 10, 10);
+         c.weightx = 1.0;
+         c.weighty = 10.0;
+         c.gridx = 0;
+         c.gridy = 0;
+         c.gridwidth = 1;
          JLabel takeCardLabel = new JLabel("<html><b>Thank you for choosing ATM</b></html>", JLabel.CENTER);
          takeCardLabel.setBackground(atm.GREEN_COLOR);
          takeCardLabel.setForeground(new Color(0,0,0));
          takeCardLabel.setPreferredSize(new Dimension(50, 50));
+         takeCardLabel.setOpaque(true);
          screenPanel.add(takeCardLabel, c);
+         c.gridy = 1;
+         screenPanel.add(Box.createVerticalStrut(100), c);
+         c.gridy=2;
+         JLabel takeyourCard = new JLabel("<html><b>Please take your card</b></html>", JLabel.CENTER);
+         takeyourCard.setForeground(new Color(255,255,255));
+         screenPanel.add(takeyourCard, c);
+         c.gridy=3;
+         screenPanel.add(Box.createVerticalStrut(100), c);
+         c.gridy=4;
+         screenPanel.add(Box.createVerticalStrut(100), c);
          screenPanel.revalidate();
          screenPanel.repaint();
+         keypad.waitAction();
+
+         screenPanel.removeAll();
+         screenPanel.setLayout(new GridBagLayout());
+         JLabel WithdrawAountLabel = new JLabel("You get "+ cashCount[0] +" HKD1000, "+cashCount[1] + " HKD500" + cashCount[2] + " HKD100", JLabel.CENTER);
+         WithdrawAountLabel.setFont(atm.MODERN_FONT);
+         WithdrawAountLabel.setForeground(new Color(255,255,255));
+         WithdrawAountLabel.setPreferredSize(new Dimension(50, 50));
+         c.gridy = 0;
+         c.gridx = 0;
+         screenPanel.add(WithdrawAountLabel, c);
+         JLabel takeyourCash = new JLabel("<html><b>Please take your cash</b></html>", JLabel.CENTER);
+         takeyourCash.setForeground(new Color(255,255,255));
+         c.gridy = 1;
+         screenPanel.add(takeyourCash, c);
+         screenPanel.revalidate();
+         screenPanel.repaint();
+         keypad.waitAction();
+         
       });
       TakeCardThread.start();
    }

@@ -80,6 +80,7 @@ public class Keypad implements KeyListener
    // Method to simulate button press - sets input value and triggers Enter
    public void setButtonInput(int value) {
       ButtonPressed = value;
+      ButtonPressedMemory = value;
       keypressed = 1; // Trigger Enter key
 
    }
