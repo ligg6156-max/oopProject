@@ -44,7 +44,7 @@ public class ATM
    protected static final Color BUTTON_COLOR = new Color(70,70,90);
    protected static final Color MODERN_TEXT = new Color(255, 255, 255);
    protected static final Color GREEN_COLOR = new Color(50, 150, 50);
-   protected static final Font MODERN_FONT = new Font("Consolas", Font.PLAIN, 18);
+   protected static final Font MODERN_FONT = new Font("Consolas", Font.BOLD, 25);
    // no-argument ATM constructor initializes instance variables
    public ATM() 
    {
@@ -70,11 +70,11 @@ public class ATM
       frame.setSize(1120, 720); // 5:3 aspect ratio (1000 width, 600 height)
       frame.setLayout(new BorderLayout(10,10));
       frame.setBackground(Color.BLACK); // Set frame background to black
-      UIManager.put("Button.font", new Font("Consolas", Font.PLAIN, 18));
-      UIManager.put("Label.font", new Font("Consolas", Font.PLAIN, 18));
-      Font customFont = new Font("Consolas", Font.PLAIN, 18);
+      UIManager.put("Button.font", new Font("Consolas", Font.BOLD, 25));
+      UIManager.put("Label.font", new Font("Consolas", Font.BOLD, 25));
+      Font customFont = new Font("Consolas", Font.BOLD, 25);
       displayArea.setFont(customFont);
-      UIManager.put("TextArea.font", new Font("Consolas", Font.PLAIN, 18));
+      UIManager.put("TextArea.font", MODERN_FONT);
       // Create keypad after frame and TextArea are created
       keypad = new Keypad(displayArea); // create keypad with TextArea for GUI input
       frame.addKeyListener(keypad); // register keypad as listener for frame
