@@ -24,7 +24,10 @@ public class BalanceInquiry extends Transaction
       Screen screen = getScreen();
       screen.clear();
       Account account = bankDatabase.getAccount(getAccountNumber());
-
+      if (account == null) {
+         screen.MessagePopup("Error: Account not found. Please contact support.");
+         return;
+      }
       // get the available balance for the account involved
       double availableBalance = 
          bankDatabase.getAvailableBalance( getAccountNumber() );
