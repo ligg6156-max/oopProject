@@ -145,6 +145,7 @@ public class Withdrawal extends Transaction
          inputField.setBackground(atm.SCREEN_PANEL_COLOR);
          inputField.setForeground(new Color(255, 255, 255));
          inputField.setFocusable(true); // Ensure it can receive focus
+         inputField.setFont(atm.MODERN_FONT);
          inputPanel.add(inputField, BorderLayout.CENTER);
          screen = new Screen(inputField, atm);
          // Update existing keypad to use new inputField (keeps button connections)
@@ -166,25 +167,30 @@ public class Withdrawal extends Transaction
          c.insets = new java.awt.Insets(10, 10, 10, 10);
          c.weightx = 1;
          c.weighty = 10.0;
-         JLabel ComfirmDollar = new JLabel("You are about to withdraw ", JLabel.CENTER);
-         ComfirmDollar.setText(ComfirmDollar.getText() + "HK$" + amount);
-         ComfirmDollar.setForeground(new Color(255, 255, 255)); // Modern cyan
-         ComfirmDollar.setPreferredSize(new Dimension(50, 50));
          c.gridx = 0;
+         c.gridy = 0;
+         screenPanel.add(Box.createVerticalStrut(50), c);
          c.gridy = 1;
-         screenPanel.add(ComfirmDollar, c);
-         // Add title
-         JLabel title1 = new JLabel("Press ENTER to confirm withdrawal", JLabel.CENTER);
-
+         screenPanel.add(Box.createVerticalStrut(50), c);
+         c.gridy = 2;
          Border lineborder = javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5);
          JLabel title = new JLabel("Press ENTER to confirm withdrawal", JLabel.CENTER);
          title.setForeground(new Color(255, 255, 255));
          title.setPreferredSize(new Dimension(50, 50));
          title.setBorder(lineborder);
+         screenPanel.add(title, c);
+         // Add title
+         c.gridy = 3;
+         screenPanel.add(Box.createVerticalStrut(50), c);
+         c.gridy = 4;
+         JLabel ComfirmDollar = new JLabel("You are about to withdraw ", JLabel.CENTER);
+         ComfirmDollar.setText(ComfirmDollar.getText() + "HK$" + amount);
+         ComfirmDollar.setForeground(new Color(255, 255, 255)); // Modern cyan
+         ComfirmDollar.setPreferredSize(new Dimension(50, 50));
          c.gridx = 0;
          c.gridy = 0;
          c.gridwidth = 2;
-         screenPanel.add(title, c);
+         screenPanel.add(ComfirmDollar, c);
          
          // Reset gridwidth for options
          c.gridwidth = 1;
@@ -213,6 +219,7 @@ public class Withdrawal extends Transaction
          processingLabel.setBackground(atm.GREEN_COLOR);
          processingLabel.setForeground(new Color(0,0,0));
          processingLabel.setPreferredSize(new Dimension(50, 50));
+         processingLabel.setOpaque(true);
          screenPanel.add(processingLabel, c);
          c.gridy = 2;
          c.gridheight = 1;
@@ -242,6 +249,7 @@ public class Withdrawal extends Transaction
          c.gridwidth = 2;
          JLabel accepted = new JLabel("<html><b>Your withdraw is accepted</b></html>", JLabel.CENTER);
          accepted.setBackground(atm.GREEN_COLOR);
+         accepted.setOpaque(true);
          accepted.setForeground(new Color(0,0,0));
          accepted.setPreferredSize(new Dimension(50, 25));
          screenPanel.add(accepted, c);
@@ -311,9 +319,9 @@ public class Withdrawal extends Transaction
          c.gridwidth = 1;
          JLabel takeCardLabel = new JLabel("<html><b>Thank you for choosing ATM</b></html>", JLabel.CENTER);
          takeCardLabel.setBackground(atm.GREEN_COLOR);
+         takeCardLabel.setOpaque(true);
          takeCardLabel.setForeground(new Color(0,0,0));
          takeCardLabel.setPreferredSize(new Dimension(50, 50));
-         takeCardLabel.setOpaque(true);
          screenPanel.add(takeCardLabel, c);
          c.gridy = 1;
          screenPanel.add(Box.createVerticalStrut(100), c);
@@ -456,11 +464,11 @@ public class Withdrawal extends Transaction
                               Thread.currentThread().interrupt();
                            } // end if
                         }
-               else // cash dispenser does not have enough cash
+               else {// cash dispenser does not have enough cash
                   screen.displayMessageLine( 
                      "\nInsufficient cash available in the ATM." +
                      "\n\nPlease choose a smaller amount." );
-                     screen.MessagePopup("Insufficient cash available in the ATM.\nPlease choose a smaller amount.");
+                     screen.MessagePopup("Insufficient cash available in the ATM.\nPlease choose a smaller amount.");}
             } // end if
             else // not enough money available in user's account
             {
