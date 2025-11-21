@@ -1,11 +1,33 @@
 // BalanceInquiry.java
 // Represents a balance inquiry ATM transaction
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.ComponentOrientation;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.TextArea;
+import javax.swing.Box;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
 
 public class BalanceInquiry extends Transaction
 {
    private Keypad keypad; // reference to keypad
    private ATM atm; // reference to ATM
+   private JPanel screenPanel; // reference to screen panel
+   private Thread TakeCardThread;
 
+   protected JProgressBar progressBar; // reference to progress bar
+   private int Count100;
+   // constant corresponding to menu option to cancel
+   
    // BalanceInquiry constructor
    public BalanceInquiry( int userAccountNumber, Screen atmScreen, 
       BankDatabase atmBankDatabase, Keypad atmKeypad, ATM atmInstance )
@@ -13,6 +35,7 @@ public class BalanceInquiry extends Transaction
       super( userAccountNumber, atmScreen, atmBankDatabase);
       this.keypad = atmKeypad;
       this.atm = atmInstance;
+      this.screenPanel = atmInstance.screen_panel;
 
    } // end BalanceInquiry constructor
 
@@ -24,10 +47,13 @@ public class BalanceInquiry extends Transaction
       Screen screen = getScreen();
       screen.clear();
       Account account = bankDatabase.getAccount(getAccountNumber());
+      
       if (account == null) {
          screen.MessagePopup("Error: Account not found. Please contact support for help.");
          return;
       }
+      
+
       // get the available balance for the account involved
       double availableBalance = 
          bankDatabase.getAvailableBalance( getAccountNumber() );
@@ -59,6 +85,7 @@ public class BalanceInquiry extends Transaction
       screen.displayMessageLine( "" );
       keypad.waitAction();
    } // end method execute
+
 } // end class BalanceInquiry
 
 
