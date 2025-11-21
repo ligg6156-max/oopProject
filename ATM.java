@@ -184,16 +184,19 @@ public class ATM {
       screen_panel.removeAll();
       screen_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
       JLabel welcome = new JLabel("Welocme User");
+      welcome.setForeground(Color.WHITE);
       screen_panel.add(welcome, BorderLayout.CENTER);
+      JLabel timeLabel = new JLabel("", JLabel.CENTER);
+      timeLabel.setForeground(Color.WHITE);
       if (LocalTime.now().getHour() < 12 && LocalTime.now().getHour() >= 5) {
-          JLabel timeLabel = new JLabel("Good Morning!");
+          timeLabel.setText("Good Morning!");
 
           screen_panel.add(timeLabel, BorderLayout.CENTER);
       } else if (LocalTime.now().getHour() < 18) {
-          JLabel timeLabel = new JLabel("Good Afternoon!");
+          timeLabel.setText("Good Afternoon!");
           screen_panel.add(timeLabel, BorderLayout.CENTER);
       } else {
-          JLabel timeLabel = new JLabel("Good Evening!");
+          timeLabel.setText("Good Evening!");
           screen_panel.add(timeLabel, BorderLayout.CENTER);
       }
       screen_panel.revalidate();
