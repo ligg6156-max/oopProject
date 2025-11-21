@@ -98,7 +98,12 @@ public class Keypad implements KeyListener
       this.textArea = newTextArea;
       this.currentInput = new StringBuilder();
       this.keypressed = 0;
-      this.inputStartPosition = 0;
+      // Set inputStartPosition to current text length to preserve existing text
+      if (newTextArea != null) {
+         this.inputStartPosition = newTextArea.getText().length();
+      } else {
+         this.inputStartPosition = 0;
+      }
    }
    
    public void waitAction(){
