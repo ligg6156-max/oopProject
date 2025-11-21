@@ -10,6 +10,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.TextArea;
+import java.time.LocalTime;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -179,7 +180,30 @@ public class ATM {
         // Restore keypad to main displayArea
         keypad.setTextArea(displayArea);
     }
+    public void timeshow(){
+      screen_panel.removeAll();
+      screen_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+      JLabel welcome = new JLabel("Welocme User");
+      screen_panel.add(welcome, BorderLayout.CENTER);
+      if (LocalTime.now().getHour() < 12 && LocalTime.now().getHour() >= 5) {
+          JLabel timeLabel = new JLabel("Good Morning!");
 
+          screen_panel.add(timeLabel, BorderLayout.CENTER);
+      } else if (LocalTime.now().getHour() < 18) {
+          JLabel timeLabel = new JLabel("Good Afternoon!");
+          screen_panel.add(timeLabel, BorderLayout.CENTER);
+      } else {
+          JLabel timeLabel = new JLabel("Good Evening!");
+          screen_panel.add(timeLabel, BorderLayout.CENTER);
+      }
+      screen_panel.revalidate();
+      screen_panel.repaint();
+      try {
+          Thread.sleep(2000);
+      } catch (InterruptedException e) {
+          e.printStackTrace();
+      }
+    }
     public void run() {
         keypad.buttonPressState = false;
         // Start wellcome in a separate thread so GUI doesn't freeze
@@ -200,7 +224,7 @@ public class ATM {
 
                 // Show welcome screen again for next session
                 try {
-                    Thread.sleep(2000); // Wait 2 seconds before showing welcome screen
+                    Thread.sleep(1000); // Wait 1 second before showing welcome screen
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -238,6 +262,7 @@ public class ATM {
         // check whether authentication succeeded
         if (userAuthenticated) {
             currentAccountNumber = accountNumber; // save user's account #
+            timeshow();
         } // end if
         else {
             screen.clear();
@@ -247,6 +272,7 @@ public class ATM {
     } // end method authenticateUser
 
     private Transaction createTransaction(int type) {
+        loginScreen();
         Transaction temp = null;
 
         switch (type) {
