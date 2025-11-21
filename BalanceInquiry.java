@@ -1,30 +1,19 @@
 // BalanceInquiry.java
 // Represents a balance inquiry ATM transaction
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.ComponentOrientation;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.TextArea;
-import javax.swing.Box;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
-
 public class BalanceInquiry extends Transaction
 {
+   private Keypad keypad; // reference to keypad
+   private ATM atm; // reference to ATM
+
    // BalanceInquiry constructor
    public BalanceInquiry( int userAccountNumber, Screen atmScreen, 
-      BankDatabase atmBankDatabase )
+      BankDatabase atmBankDatabase, Keypad atmKeypad, ATM atmInstance )
    {
-      super( userAccountNumber, atmScreen, atmBankDatabase );
+      super( userAccountNumber, atmScreen, atmBankDatabase);
+      this.keypad = atmKeypad;
+      this.atm = atmInstance;
+
    } // end BalanceInquiry constructor
 
    // performs the transaction
@@ -65,9 +54,7 @@ public class BalanceInquiry extends Transaction
       screen.displayMessage( "\n - Total balance:     " );
       screen.displayDollarAmount( totalBalance );
       screen.displayMessageLine( "" );
-      ATM ATMTransfer = new ATM();
-      ATMTransfer.TakeCardUI();
-      
+      keypad.waitAction();
    } // end method execute
 } // end class BalanceInquiry
 

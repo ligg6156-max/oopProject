@@ -277,7 +277,7 @@ public class ATM {
 
         switch (type) {
             case BALANCE_INQUIRY:
-                temp = new BalanceInquiry(currentAccountNumber, screen, bankDatabase);
+                temp = new BalanceInquiry(currentAccountNumber, screen, bankDatabase, keypad, this);
                 break;
             case WITHDRAWAL:
                 temp = new Withdrawal(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser, screen_panel, this);
@@ -519,10 +519,6 @@ public class ATM {
             screen_panel.add(Box.createVerticalStrut(100), c);
             c.gridy = 4;
             screen_panel.add(Box.createVerticalStrut(100), c);
-            screen_panel.revalidate();
-            screen_panel.repaint();
-            keypad.waitAction();
-
             screen_panel.revalidate();
             screen_panel.repaint();
             keypad.waitAction();
