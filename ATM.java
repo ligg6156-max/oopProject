@@ -153,11 +153,13 @@ public class ATM {
     // start ATM 
     public void wellcome() {
         screen_panel.removeAll();
-        screen_panel.setLayout(new FlowLayout());
-        screen_panel.setBackground(new Color(20, 120, 180)); // Keep modern dark background
-        JLabel welcomeLabel = new JLabel("Welcome to the ATM - Press Enter to begin");
-        welcomeLabel.setForeground(new Color(255, 255, 255)); // Modern cyan text to match
-        screen_panel.add(welcomeLabel);
+        screen_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        screen_panel.setBackground(SCREEN_PANEL_COLOR); // Keep modern dark background
+        screen_panel.setOpaque(true);
+        JLabel welcometext = new JLabel("Welcome to the ATM");
+        screen_panel.add(welcometext);
+        Icon welcomeLabel = new ImageIcon(getClass().getResource("welcome.jpg"));
+        screen_panel.add(new JLabel(welcomeLabel));
         screen_panel.revalidate();
         screen_panel.repaint();
 
@@ -218,6 +220,7 @@ public class ATM {
             screen.displayMessageLine("Invalid account number or PIN. Please try again.");
             return;
         }
+        screen.clear();
         screen.displayMessage("\nEnter your PIN: "); // prompt for PIN
         keypad.setPasswordMode(true); // Enable password masking
         int pin = keypad.getIntInput(); // input PIN
@@ -315,7 +318,8 @@ public class ATM {
         keypad.buttonPressState = true;
         keypad.ButtonPressed = 0;
         MainmenuUI();
-        input = keypad.getIntInput(); // return user's selection
+        keypad.waitAction();
+        input = keypad.getButtonPressed(); // return user's selection
         if (input == 1 || input == 5) {
             input = 1; 
         }else if (input == 2 || input == 6) {
