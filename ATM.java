@@ -17,6 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.JProgressBar;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import java.awt.Image;
 
 public class ATM 
 {
@@ -460,6 +463,12 @@ private Transaction createTransaction(int type) {
              takeyourCard.setForeground(new Color(255,255,255));
              screen_panel.add(takeyourCard, c);
              c.gridy=3;
+             Icon takecardIcon = new ImageIcon(getClass().getResource("takeoutCard.png"));
+             Image img = ((ImageIcon) takecardIcon).getImage();
+             Image scaledImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+             Icon scaledIcon = new ImageIcon(scaledImg);
+             screen_panel.add(new JLabel(scaledIcon), c);
+             c.gridy=4;
              screen_panel.add(Box.createVerticalStrut(100), c);
              c.gridy=4;
              screen_panel.add(Box.createVerticalStrut(100), c);
@@ -471,6 +480,7 @@ private Transaction createTransaction(int type) {
              takeyourCash.setForeground(new Color(255,255,255));
              c.gridy = 1;
              screen_panel.add(takeyourCash, c);
+             
              screen_panel.revalidate();
              screen_panel.repaint();
              keypad.waitAction();
