@@ -7,19 +7,20 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.TextArea;
 import javax.swing.Box;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.OverlayLayout;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
-import javax.swing.JProgressBar;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import java.awt.Image;
 
 public class ATM 
 {
@@ -44,6 +45,7 @@ public class ATM
    protected JPanel screen_panel;
    private TextArea displayArea; // For both displaying messages and input
    protected JProgressBar progressBar;
+   protected JLayeredPane layeredPane;
 
    protected static final Color BACKGROUND = new Color(30, 30, 40);
    protected static final Color SCREEN_PANEL_COLOR = new Color(20, 120, 180);
@@ -51,7 +53,6 @@ public class ATM
    protected static final Color MODERN_TEXT = new Color(255, 255, 255);
    protected static final Color GREEN_COLOR = new Color(50, 150, 50);
    protected static final Font MODERN_FONT = new Font("Consolas", Font.BOLD, 25);
-   
    private Thread TakeCardThread;
    // no-argument ATM constructor initializes instance variables
    public ATM() 
@@ -64,11 +65,14 @@ public class ATM
       displayArea.setBackground(SCREEN_PANEL_COLOR); // Modern dark background
       displayArea.setForeground(MODERN_TEXT); // Modern cyan text
       displayArea.setFont(MODERN_FONT);
-      screen = new Screen(displayArea); // create screen with display TextArea
+      screen = new Screen(displayArea, this); // create screen with display TextArea
       cashDispenser = new CashDispenser(); // create cash dispenser
       bankDatabase = new BankDatabase(); // create acct info database
       JPanel mainpanel = new JPanel(new BorderLayout(15,15));
       mainpanel.setBackground(new Color(30, 30, 40)); // Modern dark gray
+      layeredPane = new JLayeredPane();
+      layeredPane.setLayout(new OverlayLayout(layeredPane));
+
       screen_panel = new JPanel(new BorderLayout());
       screen_panel.setPreferredSize(new Dimension(800, 600));
       screen_panel.setBackground(new Color(20, 20, 30)); // Match display area
@@ -85,10 +89,12 @@ public class ATM
       UIManager.put("TextArea.font", MODERN_FONT);
       // Create keypad after frame and TextArea are created
       keypad = new Keypad(displayArea); // create keypad with TextArea for GUI input
+      screen.setKeypad(keypad); // pass keypad reference to screen
       frame.addKeyListener(keypad); // register keypad as listener for frame
       displayArea.addKeyListener(keypad); // register keypad as listener for TextArea
       frame.setFocusable(true); // Make frame focusable to receive key events
-      mainpanel.add(screen_panel, BorderLayout.CENTER);
+      mainpanel.add(layeredPane, BorderLayout.CENTER);
+      layeredPane.add(screen_panel, 0);
             // Create side button panels. BorderLayout only accepts one component
       // per region, so use a panel with GridLayout for multiple buttons.
       Sidebuttons = new JButton[8];
@@ -153,7 +159,7 @@ public class ATM
       screen_panel.add(welcomeLabel);
       screen_panel.revalidate();
       screen_panel.repaint();
-      
+
       // Wait for Enter key press (blocking)
       keypad.waitAction();
       // Enter was pressed, show login screen
@@ -346,7 +352,6 @@ private Transaction createTransaction(int type) {
          c.gridy = 1;
 
          
-         
          c.gridy = 1;
          c.gridx = 0;
          c.gridwidth = 1;
@@ -384,6 +389,7 @@ private Transaction createTransaction(int type) {
          screen_panel.add(option4, c);
          screen_panel.revalidate();
          screen_panel.repaint();
+         
       }
    public void runProcessingUI(){
         int tmp = 6000;

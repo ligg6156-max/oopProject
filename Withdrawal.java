@@ -58,8 +58,8 @@ public class Withdrawal extends Transaction
          GridBagConstraints c = new GridBagConstraints();
          c.fill = GridBagConstraints.BOTH;
          c.insets = new java.awt.Insets(10, 10, 10, 10);
-         c.weightx = 1.0;
-         c.weighty = 10.0;
+         c.weightx = 1;
+         c.weighty = 10;
          // Add title
          Border lineborder = javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5);
          JLabel title = new JLabel("SELECT the amount to withdraw", JLabel.CENTER);
@@ -74,13 +74,14 @@ public class Withdrawal extends Transaction
          // Reset gridwidth for options
          c.gridwidth = 2;
          c.gridy = 1;
-         
+         c.weightx = 0.5;
          // Left column options
          JLabel option1 = new JLabel("HK$200", JLabel.CENTER);
          option1.setForeground(new Color(255, 255, 255));
          option1.setPreferredSize(new Dimension(50, 50)); 
          option1.setBorder(lineborder);
-         c.gridx = 0;  // Column 0
+         c.gridwidth = 2;
+         c.gridx = 0;  // Column 1
          screenPanel.add(option1, c);
          
          JLabel option2 = new JLabel("HK$400", JLabel.CENTER);
@@ -88,6 +89,7 @@ public class Withdrawal extends Transaction
          option2.setPreferredSize(new Dimension(50, 50));
          option2.setBorder(lineborder);
          c.gridx = 2;
+         c.gridwidth = 2; // Width 2
          screenPanel.add(option2, c);
          
          JLabel option3 = new JLabel("HK$800", JLabel.CENTER);
@@ -96,6 +98,7 @@ public class Withdrawal extends Transaction
          option3.setBorder(lineborder);
          c.gridy = 2;  // Column 3
          c.gridx = 0;
+         c.gridwidth = 2; // Width 2
          screenPanel.add(option3, c);
          
          JLabel option4 = new JLabel("HK$1,000", JLabel.CENTER);
@@ -103,6 +106,7 @@ public class Withdrawal extends Transaction
          option4.setPreferredSize(new Dimension(50, 50));
          option4.setBorder(lineborder);
          c.gridx = 2;  // Column 1
+         c.gridwidth = 2; // Width 2
          screenPanel.add(option4, c);
          
          // Manual entry option (spans both columns)
@@ -121,6 +125,7 @@ public class Withdrawal extends Transaction
          JLabel inputThing = new JLabel("Input Amount Below:", JLabel.CENTER);
          inputThing.setForeground(new Color(0, 0, 0));
          inputThing.setBackground(atm.GREEN_COLOR);
+         inputThing.setPreferredSize(new Dimension(75, 50));
          inputThing.setOpaque(true);
          screenPanel.add(inputThing, c);
 
@@ -129,7 +134,7 @@ public class Withdrawal extends Transaction
          c.gridwidth = 1;
          JPanel inputPanel = new JPanel();
          inputPanel.setForeground(new Color(255,255,255));
-         inputPanel.setPreferredSize(new Dimension(50, 50));
+         inputPanel.setPreferredSize(new Dimension(25, 50));
          inputPanel.setLayout(new BorderLayout());
          inputPanel.setBorder(lineborder);
          screenPanel.add(inputPanel, c);
@@ -141,7 +146,7 @@ public class Withdrawal extends Transaction
          inputField.setForeground(new Color(255, 255, 255));
          inputField.setFocusable(true); // Ensure it can receive focus
          inputPanel.add(inputField, BorderLayout.CENTER);
-         screen = new Screen(inputField);
+         screen = new Screen(inputField, atm);
          // Update existing keypad to use new inputField (keeps button connections)
          keypad.setTextArea(inputField);
          inputField.addKeyListener(keypad);
@@ -159,7 +164,7 @@ public class Withdrawal extends Transaction
          GridBagConstraints c = new GridBagConstraints();
          c.fill = GridBagConstraints.BOTH;
          c.insets = new java.awt.Insets(10, 10, 10, 10);
-         c.weightx = 1.0;
+         c.weightx = 1;
          c.weighty = 10.0;
          JLabel ComfirmDollar = new JLabel("You are about to withdraw ", JLabel.CENTER);
          ComfirmDollar.setText(ComfirmDollar.getText() + "HK$" + amount);
@@ -169,6 +174,8 @@ public class Withdrawal extends Transaction
          c.gridy = 1;
          screenPanel.add(ComfirmDollar, c);
          // Add title
+         JLabel title1 = new JLabel("Press ENTER to confirm withdrawal", JLabel.CENTER);
+
          Border lineborder = javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5);
          JLabel title = new JLabel("Press ENTER to confirm withdrawal", JLabel.CENTER);
          title.setForeground(new Color(255, 255, 255));
@@ -378,6 +385,7 @@ public class Withdrawal extends Transaction
                      "\nAmount exceeds cheque limit of " );
                   screen.displayDollarAmount(chequeAccount.getLimit_per_cheque());
                   screen.displayMessageLine( "\nPlease choose a smaller amount." );
+                  screen.MessagePopup("Amount exceeds cheque limit of HKD 50000\nPlease choose a smaller amount.");
                   continue;
                   // will loop again for user to type another amount
                }
@@ -401,7 +409,7 @@ public class Withdrawal extends Transaction
                   if (keypad.getButtonPressed() == 2)//temporary set value change later
                   {
                       screen.displayMessageLine( "\nCanceling transaction..." );
-                      return; // return to main menu because user canceled
+                      screen.MessagePopup("Transaction canceled.");
                   } 
                   else if (keypad.getButtonPressed() == 4 || keypad.getButtonPressed() == 0){
                      ProcessingUI();
@@ -452,17 +460,20 @@ public class Withdrawal extends Transaction
                   screen.displayMessageLine( 
                      "\nInsufficient cash available in the ATM." +
                      "\n\nPlease choose a smaller amount." );
+                     screen.MessagePopup("Insufficient cash available in the ATM.\nPlease choose a smaller amount.");
             } // end if
             else // not enough money available in user's account
             {
                screen.displayMessageLine( 
                   "\nInsufficient funds in your account." +
                   "\n\nPlease choose a smaller amount." );
+               screen.MessagePopup("Insufficient funds in your account.\nPlease choose a smaller amount.");
             } // end else
          } // end if
          else // user chose cancel menu option 
          {
             screen.displayMessageLine( "\nCanceling transaction..." );
+            screen.MessagePopup("Transaction canceled.");
             return; // return to main menu because user canceled
          } // end else
       } while ( !cashDispensed );
@@ -505,7 +516,8 @@ public class Withdrawal extends Transaction
                break;
                }
                else{
-               screen.displayMessage( "\nThe amount must be the mutiple of HK$100, try again.\n Or press 0 to return Withdrawal Menu.\n"); 
+               screen.displayMessage( "\nThe amount must be the mutiple of HK$100, try again.\n Or press 0 to return Withdrawal Menu.\n");
+               screen.MessagePopup("The amount must be the mutiple of HK$100");
                this.screen.clear();
                this.screen.displayMessage("HK$");
                input = keypad.getIntInput();
@@ -562,6 +574,7 @@ public class Withdrawal extends Transaction
                }
                else{
                screen.displayMessage( "\nThe amount must be the mutiple of HK$100, try again.\n Or press 0 to return Withdrawal Menu.\n"); 
+               screen.MessagePopup("The amount must be the mutiple of HK$100");
                
                 }
                
@@ -583,7 +596,8 @@ public class Withdrawal extends Transaction
                break;
                }
                else{
-               screen.displayMessage( "\nThe amount must be the mutiple of HK$100, try again.\n Or press 0 to return Withdrawal Menu.\n"); 
+               screen.displayMessage( "\nThe amount must be the mutiple of HK$100, try again.\n Or press 0 to return Withdrawal Menu.\n");
+               screen.MessagePopup("The amount must be the mutiple of HK$100");
                this.screen.clear();
                this.screen.displayMessage("HK$");
                input = keypad.getIntInput();
