@@ -272,6 +272,8 @@ public class ATM {
             }
         } while (true);
         // Enter was pressed, show login screen
+        setProcessingUI(2);
+        runProcessingUI();
         loginScreen();
     }
 
@@ -412,7 +414,7 @@ public class ATM {
                     currentTransaction.execute(); // execute transaction
                     break;
                 case EXIT: // user chose to terminate session
-                    setProcessingUI();
+                    setProcessingUI(1);
                     runProcessingUI();
                     TakeCardUI();
                     try {
@@ -553,7 +555,7 @@ public class ATM {
         }
     }
 
-    public void setProcessingUI() {
+    public void setProcessingUI(int a) {
 
         screen_panel.removeAll();
         screen_panel.setLayout(new GridBagLayout());
@@ -568,7 +570,18 @@ public class ATM {
         progressBar = new JProgressBar(0, 50);
         screen_panel.add(progressBar, c);
         c.gridy = 1;
-        JLabel processingLabel = new JLabel("<html><b align=center>Exiting with your Account</b><br><b align=center>Please wait...</b></html>",JLabel.CENTER);
+        JLabel processingLabel = new JLabel("_____",JLabel.CENTER);
+        switch (a){
+            case 1:
+                processingLabel.setText("<html><b align=center>Exiting with your Account</b><br><b align=center>Please wait...</b></html>");
+                break;
+            case 2:
+                processingLabel.setText("<html><b align=center>reading with the Card</b><br><b align=center>Please wait...</b></html>");
+                break;
+            default:
+                processingLabel.setText("<br><b align=center>Please wait...</b></html>");
+                break;
+        }
         screen_panel.add(Box.createVerticalStrut(200), c);
         processingLabel.setBackground(GREEN_COLOR);
         processingLabel.setForeground(new Color(0, 0, 0));
