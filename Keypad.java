@@ -177,7 +177,7 @@ public class Keypad implements KeyListener {
                 // Wait for Enter key in GUI
                 while (keypressed != 1) {
                     try {
-                        Thread.sleep(1);
+                        Thread.sleep(50);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                     }

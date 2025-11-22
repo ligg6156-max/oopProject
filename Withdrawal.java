@@ -125,7 +125,7 @@ public class Withdrawal extends Transaction {
             c.gridwidth = 3;
             JLabel inputThing = new JLabel("Input Amount Below:", JLabel.CENTER);
             inputThing.setForeground(new Color(0, 0, 0));
-            inputThing.setBackground(atm.GREEN_COLOR);
+            inputThing.setBackground(ATM.GREEN_COLOR);
             inputThing.setPreferredSize(new Dimension(75, 50));
             inputThing.setOpaque(true);
             screenPanel.add(inputThing, c);
@@ -143,10 +143,10 @@ public class Withdrawal extends Transaction {
             TextArea inputField = new TextArea("HK$", 2, 10, TextArea.SCROLLBARS_NONE);
             inputField.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
             inputField.setEditable(false); // Must be non-editable so KeyListener controls all input
-            inputField.setBackground(atm.SCREEN_PANEL_COLOR);
+            inputField.setBackground(ATM.SCREEN_PANEL_COLOR);
             inputField.setForeground(new Color(255, 255, 255));
             inputField.setFocusable(true); // Ensure it can receive focus
-            inputField.setFont(atm.MODERN_FONT);
+            inputField.setFont(ATM.MODERN_FONT);
             inputPanel.add(inputField, BorderLayout.CENTER);
             screen = new Screen(inputField, atm);
             screen.setKeypad(keypad); // Set keypad reference for the new screen
@@ -218,7 +218,7 @@ public class Withdrawal extends Transaction {
 
         c.gridy = 1;
         screenPanel.add(Box.createVerticalStrut(200), c);
-        processingLabel.setBackground(atm.GREEN_COLOR);
+        processingLabel.setBackground(ATM.GREEN_COLOR);
         processingLabel.setForeground(new Color(0, 0, 0));
         processingLabel.setPreferredSize(new Dimension(50, 50));
         processingLabel.setOpaque(true);
@@ -251,7 +251,7 @@ public class Withdrawal extends Transaction {
             screenPanel.setLayout(new GridBagLayout());
             c.gridwidth = 2;
             JLabel accepted = new JLabel("<html><b>Your withdraw is accepted</b></html>", JLabel.CENTER);
-            accepted.setBackground(atm.GREEN_COLOR);
+            accepted.setBackground(ATM.GREEN_COLOR);
             accepted.setOpaque(true);
             accepted.setForeground(new Color(0, 0, 0));
             accepted.setPreferredSize(new Dimension(50, 25));
@@ -324,7 +324,7 @@ public class Withdrawal extends Transaction {
             c.gridy = 0;
             c.gridwidth = 1;
             JLabel takeCardLabel = new JLabel("<html><b>Thank you for choosing ATM</b></html>", JLabel.CENTER);
-            takeCardLabel.setBackground(atm.GREEN_COLOR);
+            takeCardLabel.setBackground(ATM.GREEN_COLOR);
             takeCardLabel.setOpaque(true);
             takeCardLabel.setForeground(new Color(0, 0, 0));
             takeCardLabel.setPreferredSize(new Dimension(50, 50));
@@ -350,7 +350,7 @@ public class Withdrawal extends Transaction {
             screenPanel.removeAll();
             screenPanel.setLayout(new GridBagLayout());
             JLabel WithdrawAountLabel = new JLabel("You get " + cashCount[0] + " HKD1000, " + cashCount[1] + " HKD500, " + cashCount[2] + " HKD100", JLabel.CENTER);
-            WithdrawAountLabel.setFont(atm.MODERN_FONT);
+            WithdrawAountLabel.setFont(ATM.MODERN_FONT);
             WithdrawAountLabel.setForeground(new Color(255, 255, 255));
             WithdrawAountLabel.setPreferredSize(new Dimension(50, 50));
             c.gridy = 0;
