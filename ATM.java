@@ -96,6 +96,7 @@ public class ATM {
         // Create keypad after frame and TextArea are created
         keypad = new Keypad(displayArea); // create keypad with TextArea for GUI input
         screen.setKeypad(keypad); // pass keypad reference to screen
+        keypad.setScreen(screen); // pass screen reference to keypad
         frame.addKeyListener(keypad); // register keypad as listener for frame
         displayArea.addKeyListener(keypad); // register keypad as listener for TextArea
         frame.setFocusable(true); // Make frame focusable to receive key events
@@ -339,7 +340,6 @@ public class ATM {
         if (accountNumber == CANCELED) {
             screen.clear();
             screen.displayMessageLine("Invalid account number or PIN. Please try again.");
-            screen.MessagePopup("Invalid account number or PIN. Please try again.");
             return;
         }
         screen.clear();
