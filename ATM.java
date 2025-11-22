@@ -217,8 +217,11 @@ public class ATM {
         cardLabel.setForeground(Color.CYAN);
         cardLabel.setFont(new Font("CONSOLAS", Font.BOLD, 20));
         cardLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-
-        JLabel instructionLabel = new JLabel("CONTINUE button to begin", JLabel.CENTER);
+        Icon InsertcardIcon = new ImageIcon(getClass().getResource("welcome.png"));
+        Image img = ((ImageIcon) InsertcardIcon).getImage();
+        Image scaledImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        Icon scaledIcon = new ImageIcon(scaledImg);
+        JLabel instructionLabel = new JLabel(scaledIcon, JLabel.CENTER);
         instructionLabel.setForeground(new Color(200, 200, 200));
         instructionLabel.setFont(new Font("CONSOLAS", Font.BOLD, 18));
 
