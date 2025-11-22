@@ -160,98 +160,111 @@ public class ATM {
         screen_panel.removeAll();
         screen_panel.setLayout(new BorderLayout());
         screen_panel.setBackground(SCREEN_PANEL_COLOR); // Keep modern dark background
-      // Create main container
-      JPanel mainContainer = new JPanel(new BorderLayout());
-      mainContainer.setBackground(SCREEN_PANEL_COLOR);
-      mainContainer.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
-      
-      // Top panel with time and date
-      JPanel topPanel = new JPanel(new BorderLayout());
-      topPanel.setBackground(SCREEN_PANEL_COLOR);
-      
-      // Current time and date
-      SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-      String currentTime = timeFormat.format(new Date());
-      String currentDate = dateFormat.format(new Date());
-      
-      JLabel timeLabel = new JLabel(currentTime, JLabel.RIGHT);
-      timeLabel.setForeground(Color.WHITE);
-      timeLabel.setFont(new Font("CONSOLAS", Font.BOLD, 20));
-      
-      JLabel dateLabel = new JLabel(currentDate, JLabel.RIGHT);
-      dateLabel.setForeground(Color.WHITE);
-      dateLabel.setFont(new Font("CONSOLAS", Font.PLAIN, 16));      
-      JPanel timePanel = new JPanel(new BorderLayout());
-      timePanel.setBackground(SCREEN_PANEL_COLOR);
-      timePanel.add(timeLabel, BorderLayout.NORTH);
-      timePanel.add(dateLabel, BorderLayout.SOUTH);
-      
-      topPanel.add(timePanel, BorderLayout.EAST);
-      
-      // Bank logo area
-      JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-      logoPanel.setBackground(SCREEN_PANEL_COLOR);
-      
-      JLabel bankLogo = new JLabel("OOP BANK", JLabel.CENTER);
-      bankLogo.setForeground(Color.WHITE);
-      bankLogo.setFont(new Font("CONSOLAS", Font.BOLD, 36));
-      bankLogo.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
-      logoPanel.add(bankLogo);
-      
-      topPanel.add(logoPanel, BorderLayout.CENTER);
-      
-      // Welcome message area
-      JPanel welcomePanel = new JPanel(new GridLayout(4, 1, 10, 10));
-      welcomePanel.setBackground(SCREEN_PANEL_COLOR);
-      
-      JLabel welcomeLabel1 = new JLabel("Welcome to", JLabel.CENTER);
-      welcomeLabel1.setForeground(Color.WHITE);
-      welcomeLabel1.setFont(new Font("CONSOLAS", Font.BOLD, 28));
-      
-      JLabel welcomeLabel2 = new JLabel("ATM SERVICE", JLabel.CENTER);
-      welcomeLabel2.setForeground(Color.YELLOW);
-      welcomeLabel2.setFont(new Font("CONSOLAS", Font.BOLD, 32));
-      
-      JLabel cardLabel = new JLabel("Inserted Card", JLabel.CENTER);
-      cardLabel.setForeground(Color.CYAN);
-      cardLabel.setFont(new Font("CONSOLAS", Font.BOLD, 20));
-      cardLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-      
-      JLabel instructionLabel = new JLabel("CONTINUE button to begin", JLabel.CENTER);
-      instructionLabel.setForeground(new Color(200, 200, 200));
-      instructionLabel.setFont(new Font("CONSOLAS", Font.BOLD, 18));
-      
-      welcomePanel.add(welcomeLabel1);
-      welcomePanel.add(welcomeLabel2);
-      welcomePanel.add(cardLabel);
-      welcomePanel.add(instructionLabel);
-            JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-      bottomPanel.setBackground(SCREEN_PANEL_COLOR);
-      
-      JLabel GoodLabel = new JLabel("", JLabel.CENTER);
-      GoodLabel.setForeground(Color.WHITE);
-      if (LocalTime.now().getHour() < 12 && LocalTime.now().getHour() >= 5) {
-          GoodLabel.setText("Good Morning!");
+        // Create main container
+        JPanel mainContainer = new JPanel(new BorderLayout());
+        mainContainer.setBackground(SCREEN_PANEL_COLOR);
+        mainContainer.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
 
-          screen_panel.add(GoodLabel, BorderLayout.CENTER);
-      } else if (LocalTime.now().getHour() < 18) {
-          GoodLabel.setText("Good Afternoon!");
-          screen_panel.add(GoodLabel, BorderLayout.CENTER);
-      } else {
-          GoodLabel.setText("Good Evening!");
-          screen_panel.add(GoodLabel, BorderLayout.CENTER);
-      }
-      bottomPanel.add(GoodLabel);
-      
-      mainContainer.add(topPanel, BorderLayout.NORTH);
-      mainContainer.add(welcomePanel, BorderLayout.CENTER);
-      mainContainer.add(bottomPanel, BorderLayout.SOUTH);
-      screen_panel.add(mainContainer, BorderLayout.CENTER);
-      screen_panel.revalidate();
-      screen_panel.repaint();
+        // Top panel with time and date
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(SCREEN_PANEL_COLOR);
+
+        // Current time and date
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String currentTime = timeFormat.format(new Date());
+        String currentDate = dateFormat.format(new Date());
+
+        JLabel timeLabel = new JLabel(currentTime, JLabel.RIGHT);
+        timeLabel.setForeground(Color.WHITE);
+        timeLabel.setFont(new Font("CONSOLAS", Font.BOLD, 20));
+
+        JLabel dateLabel = new JLabel(currentDate, JLabel.RIGHT);
+        dateLabel.setForeground(Color.WHITE);
+        dateLabel.setFont(new Font("CONSOLAS", Font.PLAIN, 16));
+        JPanel timePanel = new JPanel(new BorderLayout());
+        timePanel.setBackground(SCREEN_PANEL_COLOR);
+        timePanel.add(timeLabel, BorderLayout.NORTH);
+        timePanel.add(dateLabel, BorderLayout.SOUTH);
+
+        topPanel.add(timePanel, BorderLayout.EAST);
+
+        // Bank logo area
+        JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        logoPanel.setBackground(SCREEN_PANEL_COLOR);
+
+        JLabel bankLogo = new JLabel("OOP BANK", JLabel.CENTER);
+        bankLogo.setForeground(Color.WHITE);
+        bankLogo.setFont(new Font("CONSOLAS", Font.BOLD, 36));
+        bankLogo.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        logoPanel.add(bankLogo);
+
+        topPanel.add(logoPanel, BorderLayout.CENTER);
+
+        // Welcome message area
+        JPanel welcomePanel = new JPanel(new GridLayout(4, 1, 10, 10));
+        welcomePanel.setBackground(SCREEN_PANEL_COLOR);
+
+        JLabel welcomeLabel1 = new JLabel("Welcome to", JLabel.CENTER);
+        welcomeLabel1.setForeground(Color.WHITE);
+        welcomeLabel1.setFont(new Font("CONSOLAS", Font.BOLD, 28));
+
+        JLabel welcomeLabel2 = new JLabel("ATM SERVICE", JLabel.CENTER);
+        welcomeLabel2.setForeground(Color.YELLOW);
+        welcomeLabel2.setFont(new Font("CONSOLAS", Font.BOLD, 32));
+
+        JLabel cardLabel = new JLabel("Inserted Card", JLabel.CENTER);
+        cardLabel.setForeground(Color.CYAN);
+        cardLabel.setFont(new Font("CONSOLAS", Font.BOLD, 20));
+        cardLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+        JLabel instructionLabel = new JLabel("CONTINUE button to begin", JLabel.CENTER);
+        instructionLabel.setForeground(new Color(200, 200, 200));
+        instructionLabel.setFont(new Font("CONSOLAS", Font.BOLD, 18));
+
+        welcomePanel.add(welcomeLabel1);
+        welcomePanel.add(welcomeLabel2);
+        welcomePanel.add(cardLabel);
+        welcomePanel.add(instructionLabel);
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        bottomPanel.setBackground(SCREEN_PANEL_COLOR);
+
+        JLabel GoodLabel = new JLabel("", JLabel.CENTER);
+        GoodLabel.setForeground(Color.WHITE);
+        if (LocalTime.now().getHour() < 12 && LocalTime.now().getHour() >= 5) {
+            GoodLabel.setText("Good Morning!");
+
+            screen_panel.add(GoodLabel, BorderLayout.CENTER);
+        } else if (LocalTime.now().getHour() < 18) {
+            GoodLabel.setText("Good Afternoon!");
+            screen_panel.add(GoodLabel, BorderLayout.CENTER);
+        } else {
+            GoodLabel.setText("Good Evening!");
+            screen_panel.add(GoodLabel, BorderLayout.CENTER);
+        }
+        bottomPanel.add(GoodLabel);
+
+        mainContainer.add(topPanel, BorderLayout.NORTH);
+        mainContainer.add(welcomePanel, BorderLayout.CENTER);
+        mainContainer.add(bottomPanel, BorderLayout.SOUTH);
+        screen_panel.add(mainContainer, BorderLayout.CENTER);
+        screen_panel.revalidate();
+        screen_panel.repaint();
         // Wait for Enter key press (blocking)
-        keypad.waitAction();
+        while (true) {
+            if (keypad.keypressed == 0) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                currentTime = timeFormat.format(new Date());
+                timeLabel.setText(currentTime);
+                timeLabel.repaint();
+            } else {
+                break;
+            }
+        }
         // Enter was pressed, show login screen
         loginScreen();
     }
@@ -266,20 +279,22 @@ public class ATM {
         // Restore keypad to main displayArea
         keypad.setTextArea(displayArea);
     }
-    public void timeshow(){
-      screen_panel.removeAll();
-      screen_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
-      JLabel welcome = new JLabel("Welocme User");
-      welcome.setForeground(Color.WHITE);
-      screen_panel.add(welcome, BorderLayout.CENTER);
-      screen_panel.revalidate();
-      screen_panel.repaint();
-      try {
-          Thread.sleep(2000);
-      } catch (InterruptedException e) {
-          e.printStackTrace();
-      }
+
+    public void timeshow() {
+        screen_panel.removeAll();
+        screen_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        JLabel welcome = new JLabel("Welocme User");
+        welcome.setForeground(Color.WHITE);
+        screen_panel.add(welcome, BorderLayout.CENTER);
+        screen_panel.revalidate();
+        screen_panel.repaint();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
+
     public void run() {
         keypad.buttonPressState = false;
         // Start wellcome in a separate thread so GUI doesn't freeze
@@ -359,7 +374,7 @@ public class ATM {
                 temp = new Withdrawal(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser, screen_panel, this);
                 break;
             case TRANSFER:
-                temp = new Transfer(currentAccountNumber, screen, bankDatabase, keypad,this);
+                temp = new Transfer(currentAccountNumber, screen, bankDatabase, keypad, this);
                 break;
         }
 
@@ -423,18 +438,18 @@ public class ATM {
         keypad.waitAction();
         input = keypad.getButtonPressed(); // return user's selection
         if (input == 1 || input == 5) {
-            input = 1; 
-        }else if (input == 2 || input == 6) {
-            input = 2; 
-        }else if (input == 3 || input == 7) {
-            input = 3; 
-        }else if (input == 4 || input == 8) {
-            input = 4; 
-        }else {
+            input = 1;
+        } else if (input == 2 || input == 6) {
+            input = 2;
+        } else if (input == 3 || input == 7) {
+            input = 3;
+        } else if (input == 4 || input == 8) {
+            input = 4;
+        } else {
             // No button pressed, keep input as is
         }
         return input;
-        
+
     } // end method displayMainMenu
 
     private void MainmenuUI() {
@@ -606,18 +621,17 @@ public class ATM {
     }
 } // end class ATM
 
-
-/**************************************************************************
- * (C) Copyright 1992-2007 by Deitel & Associates, Inc. and               *
- * Pearson Education, Inc. All Rights Reserved.                           *
- *                                                                        *
- * DISCLAIMER: The authors and publisher of this book have used their     *
- * best efforts in preparing the book. These efforts include the          *
- * development, research, and testing of the theories and programs        *
- * to determine their effectiveness. The authors and publisher make       *
- * no warranty of any kind, expressed or implied, with regard to these    *
- * programs or to the documentation contained in these books. The authors *
- * and publisher shall not be liable in any event for incidental or       *
- * consequential damages in connection with, or arising out of, the       *
- * furnishing, performance, or use of these programs.                     *
- *************************************************************************/
+/**
+ * ************************************************************************
+ * (C) Copyright 1992-2007 by Deitel & Associates, Inc. and * Pearson Education,
+ * Inc. All Rights Reserved. * * DISCLAIMER: The authors and publisher of this
+ * book have used their * best efforts in preparing the book. These efforts
+ * include the * development, research, and testing of the theories and programs
+ * * to determine their effectiveness. The authors and publisher make * no
+ * warranty of any kind, expressed or implied, with regard to these * programs
+ * or to the documentation contained in these books. The authors * and publisher
+ * shall not be liable in any event for incidental or * consequential damages in
+ * connection with, or arising out of, the * furnishing, performance, or use of
+ * these programs. *
+ ************************************************************************
+ */

@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Keypad implements KeyListener
 {
    private Scanner input; // reads data from the command line
-   private int keypressed; // stores the key press state
+   protected int keypressed; // stores the key press state
    protected int ButtonPressedMemory; // stores the button pressed value
    private TextArea textArea; // reference to GUI TextArea (optional)
    private StringBuilder currentInput; // stores current input being typed
