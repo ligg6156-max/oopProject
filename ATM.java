@@ -8,9 +8,13 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.TextArea;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.Date;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -154,16 +158,88 @@ public class ATM {
     // start ATM 
     public void wellcome() {
         screen_panel.removeAll();
-        screen_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        screen_panel.setLayout(new BorderLayout());
         screen_panel.setBackground(SCREEN_PANEL_COLOR); // Keep modern dark background
-        screen_panel.setOpaque(true);
-        JLabel welcometext = new JLabel("Welcome to the ATM");
-        screen_panel.add(welcometext);
-        Icon welcomeLabel = new ImageIcon(getClass().getResource("welcome.jpg"));
-        screen_panel.add(new JLabel(welcomeLabel));
-        screen_panel.revalidate();
-        screen_panel.repaint();
-
+      // Create main container
+      JPanel mainContainer = new JPanel(new BorderLayout());
+      mainContainer.setBackground(SCREEN_PANEL_COLOR);
+      mainContainer.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+      
+      // Top panel with time and date
+      JPanel topPanel = new JPanel(new BorderLayout());
+      topPanel.setBackground(SCREEN_PANEL_COLOR);
+      
+      // Current time and date
+      SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+      String currentTime = timeFormat.format(new Date());
+      String currentDate = dateFormat.format(new Date());
+      
+      JLabel timeLabel = new JLabel(currentTime, JLabel.RIGHT);
+      timeLabel.setForeground(Color.WHITE);
+      timeLabel.setFont(new Font("CONSOLAS", Font.BOLD, 20));
+      
+      JLabel dateLabel = new JLabel(currentDate, JLabel.RIGHT);
+      dateLabel.setForeground(Color.WHITE);
+      dateLabel.setFont(new Font("CONSOLAS", Font.PLAIN, 36));      
+      JPanel timePanel = new JPanel(new BorderLayout());
+      timePanel.setBackground(SCREEN_PANEL_COLOR);
+      timePanel.add(timeLabel, BorderLayout.NORTH);
+      timePanel.add(dateLabel, BorderLayout.SOUTH);
+      
+      topPanel.add(timePanel, BorderLayout.EAST);
+      
+      // Bank logo area
+      JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+      logoPanel.setBackground(SCREEN_PANEL_COLOR);
+      
+      JLabel bankLogo = new JLabel("OOP BANK", JLabel.CENTER);
+      bankLogo.setForeground(Color.WHITE);
+      bankLogo.setFont(new Font("CONSOLAS", Font.BOLD, 36));
+      bankLogo.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+      logoPanel.add(bankLogo);
+      
+      topPanel.add(logoPanel, BorderLayout.CENTER);
+      
+      // Welcome message area
+      JPanel welcomePanel = new JPanel(new GridLayout(4, 1, 10, 10));
+      welcomePanel.setBackground(SCREEN_PANEL_COLOR);
+      
+      JLabel welcomeLabel1 = new JLabel("Welcome to", JLabel.CENTER);
+      welcomeLabel1.setForeground(Color.WHITE);
+      welcomeLabel1.setFont(new Font("CONSOLAS", Font.BOLD, 28));
+      
+      JLabel welcomeLabel2 = new JLabel("ATM SERVICE", JLabel.CENTER);
+      welcomeLabel2.setForeground(Color.YELLOW);
+      welcomeLabel2.setFont(new Font("CONSOLAS", Font.BOLD, 32));
+      
+      JLabel cardLabel = new JLabel("Inserted Card", JLabel.CENTER);
+      cardLabel.setForeground(Color.CYAN);
+      cardLabel.setFont(new Font("CONSOLAS", Font.BOLD, 20));
+      cardLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+      
+      JLabel instructionLabel = new JLabel("CONTINUE button to begin", JLabel.CENTER);
+      instructionLabel.setForeground(new Color(200, 200, 200));
+      instructionLabel.setFont(new Font("CONSOLAS", Font.BOLD, 18));
+      
+      welcomePanel.add(welcomeLabel1);
+      welcomePanel.add(welcomeLabel2);
+      welcomePanel.add(cardLabel);
+      welcomePanel.add(instructionLabel);
+            JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+      bottomPanel.setBackground(SCREEN_PANEL_COLOR);
+      
+      JLabel securityLabel = new JLabel("Secure Banking • 24/7 Service", JLabel.CENTER);
+      securityLabel.setForeground(new Color(180, 180, 180));
+      securityLabel.setFont(new Font("CONSOLAS", Font.PLAIN, 14));
+      bottomPanel.add(securityLabel);
+      
+      mainContainer.add(topPanel, BorderLayout.NORTH);
+      mainContainer.add(welcomePanel, BorderLayout.CENTER);
+      mainContainer.add(bottomPanel, BorderLayout.SOUTH);
+      screen_panel.add(mainContainer, BorderLayout.CENTER);
+      screen_panel.revalidate();
+      screen_panel.repaint();
         // Wait for Enter key press (blocking)
         keypad.waitAction();
         // Enter was pressed, show login screen
