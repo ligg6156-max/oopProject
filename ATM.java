@@ -361,6 +361,7 @@ public class ATM {
             // No button pressed, keep input as is
         }
         return input;
+        
     } // end method displayMainMenu
 
     private void MainmenuUI() {
@@ -489,6 +490,7 @@ public class ATM {
 
     public void TakeCardUI() {
         TakeCardThread = new Thread(() -> {
+            keypad.buttonPressState = false;
             screen_panel.removeAll();
             screen_panel.setLayout(new GridBagLayout());
             GridBagConstraints c = new GridBagConstraints();

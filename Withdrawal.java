@@ -466,15 +466,13 @@ public class Withdrawal extends Transaction
                         }
                else {// cash dispenser does not have enough cash
                   screen.displayMessageLine( 
-                     "\nInsufficient cash available in the ATM." +
-                     "\n\nPlease choose a smaller amount." );
+                     "\nInsufficient cash available in the ATM. \n\nPlease choose a smaller amount." );
                      screen.MessagePopup("Insufficient cash available in the ATM.\nPlease choose a smaller amount.");}
             } // end if
             else // not enough money available in user's account
             {
                screen.displayMessageLine( 
-                  "\nInsufficient funds in your account." +
-                  "\n\nPlease choose a smaller amount." );
+                  "\nInsufficient funds in your account. \n\nPlease choose a smaller amount." );
                screen.MessagePopup("Insufficient funds in your account.\nPlease choose a smaller amount.");
             } // end else
          } // end if
@@ -529,7 +527,7 @@ public class Withdrawal extends Transaction
                this.screen.clear();
                this.screen.displayMessage("HK$");
                input = keypad.getIntInput();
-
+               tempory = keypad.getButtonPressed();
                 }
             }
          if (tempory == 1) {

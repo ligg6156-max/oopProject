@@ -136,6 +136,7 @@ public class Keypad implements KeyListener
    public int getButtonPressed(){
         int value = ButtonPressedMemory;
         ButtonPressedMemory = 0;
+        ButtonPressed = 0;
       return value;
    }
    
