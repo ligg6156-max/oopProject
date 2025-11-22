@@ -181,7 +181,7 @@ public class ATM {
       
       JLabel dateLabel = new JLabel(currentDate, JLabel.RIGHT);
       dateLabel.setForeground(Color.WHITE);
-      dateLabel.setFont(new Font("CONSOLAS", Font.PLAIN, 36));      
+      dateLabel.setFont(new Font("CONSOLAS", Font.PLAIN, 16));      
       JPanel timePanel = new JPanel(new BorderLayout());
       timePanel.setBackground(SCREEN_PANEL_COLOR);
       timePanel.add(timeLabel, BorderLayout.NORTH);
