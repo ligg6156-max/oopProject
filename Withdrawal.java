@@ -148,6 +148,7 @@ public class Withdrawal extends Transaction
          inputField.setFont(atm.MODERN_FONT);
          inputPanel.add(inputField, BorderLayout.CENTER);
          screen = new Screen(inputField, atm);
+         screen.setKeypad(keypad); // Set keypad reference for the new screen
          // Update existing keypad to use new inputField (keeps button connections)
          keypad.setTextArea(inputField);
          inputField.addKeyListener(keypad);
@@ -253,6 +254,7 @@ public class Withdrawal extends Transaction
          accepted.setForeground(new Color(0,0,0));
          accepted.setPreferredSize(new Dimension(50, 25));
          screenPanel.add(accepted, c);
+         keypad.setButtonPressState(true);
          c.gridy = 1;
          screenPanel.add(Box.createVerticalStrut(100), c);
          JLabel PleaseSelect = new JLabel("<html><b>Please select</b></html>", JLabel.CENTER);
@@ -304,6 +306,8 @@ public class Withdrawal extends Transaction
              break;
          case 0,1,2,3,4,5,6:
             System.out.println("Invalid selection, please select again.");
+            screen.MessagePopup("<html><p align=center><B>Invalid choice. </b></p><BR><p align=center><B>Please press the correct button to proceed.</B></p></html>");
+
             break;
                 }
          }
@@ -343,7 +347,7 @@ public class Withdrawal extends Transaction
 
          screenPanel.removeAll();
          screenPanel.setLayout(new GridBagLayout());
-         JLabel WithdrawAountLabel = new JLabel("You get "+ cashCount[0] +" HKD1000, "+cashCount[1] + " HKD500" + cashCount[2] + " HKD100", JLabel.CENTER);
+         JLabel WithdrawAountLabel = new JLabel("You get "+ cashCount[0] +" HKD1000, "+cashCount[1] + " HKD500, " + cashCount[2] + " HKD100", JLabel.CENTER);
          WithdrawAountLabel.setFont(atm.MODERN_FONT);
          WithdrawAountLabel.setForeground(new Color(255,255,255));
          WithdrawAountLabel.setPreferredSize(new Dimension(50, 50));
@@ -364,7 +368,7 @@ public class Withdrawal extends Transaction
    // perform transaction
    public void execute()
    {
-      keypad.buttonPressState = true;
+      keypad.setButtonPressState(true);
       Screen screen = getScreen();
       screen.clear();
       withdrawalUI();
@@ -563,32 +567,11 @@ public class Withdrawal extends Transaction
                userChoice = amounts[ input ]; // save user's choice
                break; 
             case 5:
-               screen.displayMessageLine( "Type out the amount of cash withdraw manually" );
-               this.screen.clear();
-               this.screen.displayMessage("HK$");
-               while(times == true){
-                   input = keypad.getIntInput();
-                   this.screen.clear();
-                   this.screen.displayMessage("HK$");
-               if (input%100 == 0){
-                   userChoice = input;
-                   times = false;
-                   break;
-               }
-               else if (input <= 0){
-               break;
-               }
-               else{
-               screen.displayMessage( "\nThe amount must be the mutiple of HK$100, try again.\n Or press 0 to return Withdrawal Menu.\n"); 
-               screen.MessagePopup("The amount must be the mutiple of HK$100");
-               
-                }
-               
-            }
+            case 7:
+            case 6:
+            case 8:
+            screen.MessagePopup("<html><p align=center><B>Invalid choice. </b></p><BR><p align=center><B>Please press the correct button to proceed.</B></p></html>");
             break;
-            case 6: // the user chose to cancel
-               userChoice = CANCELED; // save user's choice
-               break;
             default: // the user did not enter a value from 1-6
                times = true;
                while(times == true){

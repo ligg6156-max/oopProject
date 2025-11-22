@@ -114,6 +114,9 @@ public class Screen extends JPanel {
                 super.paintComponent(g);
             }
         };
+        Boolean state;
+        state = keypad.buttonPressState;
+        keypad.buttonPressState = false;
         MessagePanel.setLayout(new GridBagLayout());
         MessagePanel.setOpaque(false); // Required for transparency
         GridBagConstraints c = new GridBagConstraints();
@@ -154,6 +157,7 @@ public class Screen extends JPanel {
         atm.layeredPane.remove(MessagePanel);
         atm.layeredPane.revalidate();
         atm.layeredPane.repaint();
+        keypad.buttonPressState = state;
     }
 
 } // end class Screen

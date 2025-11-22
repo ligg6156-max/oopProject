@@ -328,11 +328,12 @@ public class ATM {
     // attempts to authenticate user against database
     private void authenticateUser() {
         screen.clear();
-        screen.displayMessage("\nPlease enter your account number: ");
+        screen.displayMessage("\n\n> Please enter your account number: ");
         int accountNumber = keypad.getIntInput(); // input account number
         if (accountNumber == CANCELED) {
             screen.clear();
             screen.displayMessageLine("Invalid account number or PIN. Please try again.");
+            screen.MessagePopup("Invalid account number or PIN. Please try again.");
             return;
         }
         screen.clear();
@@ -343,6 +344,7 @@ public class ATM {
         if (accountNumber == CANCELED) {
             screen.clear();
             screen.displayMessageLine("Invalid account number or PIN. Please try again.");
+            screen.MessagePopup("Invalid account number or PIN. Please try again.");
             return;
         }
 

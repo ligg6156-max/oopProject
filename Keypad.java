@@ -115,7 +115,20 @@ public class Keypad implements KeyListener
             return;
          }
       }
+      if (!buttonPressState){
+         ButtonPressed = 0;
+         ButtonPressedMemory = 0;
+      }
    }
+   
+   public boolean getButtonPressedState(){
+        return buttonPressState;
+   }
+
+   public void setButtonPressState(boolean state){
+        buttonPressState = state;
+   }
+
    @Override
    public void keyTyped(KeyEvent event) {
       char keyChar = event.getKeyChar();
