@@ -251,10 +251,10 @@ public class ATM {
         screen_panel.revalidate();
         screen_panel.repaint();
         // Wait for Enter key press (blocking)
-        while (true) {
+        do {
             if (keypad.keypressed == 0) {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -264,7 +264,7 @@ public class ATM {
             } else {
                 break;
             }
-        }
+        } while (true);
         // Enter was pressed, show login screen
         loginScreen();
     }
