@@ -1,7 +1,9 @@
+
 import java.awt.*;
 import javax.swing.*;
 
 public class Transfer extends Transaction {
+
     private Keypad keypad;
     private BankDatabase bankDatabase;
     private Screen screen;
@@ -39,7 +41,7 @@ public class Transfer extends Transaction {
                 screen.displayMessageLine(" Amount exceeds cheque limit.");
                 screen.displayDollarAmount(chequeAccount.getLimit_per_cheque());
                 screen.displayMessageLine("\nTransfer canceled.");
-                screen.MessagePopup("Amount exceeds cheque limit (HK$50,000). Please try a smaller amount.");
+                screen.MessagePopup("<html><p align=center><b>Amount exceeds cheque limit (HK$50,000).<BR>Please try a smaller amount.</b></p></html>");
                 return;
             }
         }
@@ -121,33 +123,33 @@ public class Transfer extends Transaction {
 
         screen.displayMessageLine("Press button 7 or 8 to continue.");
         keypad.waitAction();
-        int pressed = keypad.getButtonPressed();
         boolean wait = true;
-            while (wait) {
-                if (pressed == 7 || pressed == 8) {
-                    wait = false;
-                }
-                else
+        int pressed = keypad.getButtonPressed();
+        while (wait) {
+            if (pressed == 7 || pressed == 8) {
+                wait = false;
+            } else {
                 keypad.waitAction();
+                pressed = keypad.getButtonPressed();
             }
-            System.out.println("Button pressed: " + pressed);
-        if (pressed == 8){
+        }
+        System.out.println("Button pressed: " + pressed);
+        if (pressed == 8) {
             showTakeCardUI(amount, toAccount, false);
             try {
                 takeCardthread.join();
-                    } catch (InterruptedException e) {
-                        System.out.println("Main thread interrupted while waiting.");
-                        Thread.currentThread().interrupt();
-                    } // end if
-                }
-        else {
+            } catch (InterruptedException e) {
+                System.out.println("Main thread interrupted while waiting.");
+                Thread.currentThread().interrupt();
+            } // end if
+        } else {
             showTakeCardUI(amount, toAccount, true);
             try {
                 takeCardthread.join();
-                    } catch (InterruptedException e) {
-                        System.out.println("Main thread interrupted while waiting.");
-                        Thread.currentThread().interrupt();
-                    } // end if
+            } catch (InterruptedException e) {
+                System.out.println("Main thread interrupted while waiting.");
+                Thread.currentThread().interrupt();
+            } // end if
         }
 
     }
@@ -190,8 +192,8 @@ public class Transfer extends Transaction {
             }
             c.gridy = 3;
             if (printReceipt) {
-                JLabel receipt = new JLabel("<html><center>Receipt:<br>HK$" +
-                        amount + " to Account " + toAccount + "</center></html>", SwingConstants.CENTER);
+                JLabel receipt = new JLabel("<html><center>Receipt:<br>HK$"
+                        + amount + " to Account " + toAccount + "</center></html>", SwingConstants.CENTER);
                 receipt.setForeground(Color.WHITE);
                 receipt.setFont(atm.MODERN_FONT);
                 screenPanel.add(receipt, c);
