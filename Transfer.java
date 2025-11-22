@@ -101,17 +101,19 @@ public class Transfer extends Transaction {
         prompt.setFont(atm.MODERN_FONT);
         c.gridy = 1;
         screenPanel.add(prompt, c);
-
         c.gridwidth = 1;
         c.gridy = 2;
-        c.gridx = 0;
+        screenPanel.add(Box.createVerticalStrut(100), c);
+        c.weightx = 0.25;
+        c.gridy = 3;
+        c.gridx = 1;
         JLabel option1 = new JLabel("Print advice & take card", SwingConstants.CENTER);
         option1.setForeground(Color.WHITE);
         option1.setBorder(BorderFactory.createLineBorder(Color.WHITE, 4));
         option1.setFont(atm.MODERN_FONT);
         screenPanel.add(option1, c);
 
-        c.gridx = 1;
+        c.gridy = 4;
         JLabel option2 = new JLabel("Take card only", SwingConstants.CENTER);
         option2.setForeground(Color.WHITE);
         option2.setBorder(BorderFactory.createLineBorder(Color.WHITE, 4));
