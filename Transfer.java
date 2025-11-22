@@ -1,12 +1,15 @@
+
 import java.awt.*;
 import javax.swing.*;
 
 public class Transfer extends Transaction {
+
     private Keypad keypad;
     private BankDatabase bankDatabase;
     private Screen screen;
     private ATM atm;
     private JPanel screenPanel;
+    private Thread takeCardthread;
 
     public Transfer(int fromAccountNumber, Screen screen, BankDatabase bankDatabase, Keypad keypad, ATM atm) {
         super(fromAccountNumber, screen, bankDatabase);
@@ -38,7 +41,7 @@ public class Transfer extends Transaction {
                 screen.displayMessageLine(" Amount exceeds cheque limit.");
                 screen.displayDollarAmount(chequeAccount.getLimit_per_cheque());
                 screen.displayMessageLine("\nTransfer canceled.");
-                screen.MessagePopup("Amount exceeds cheque limit (HK$50,000). Please try a smaller amount.");
+                screen.MessagePopup("<html><p align=center><b>Amount exceeds cheque limit (HK$50,000).<BR>Please try a smaller amount.</b></p></html>");
                 return;
             }
         }
@@ -115,26 +118,44 @@ public class Transfer extends Transaction {
         option2.setFont(atm.MODERN_FONT);
         screenPanel.add(option2, c);
 
-        screenPanel.setBackground(Color.BLUE);
         screenPanel.revalidate();
         screenPanel.repaint();
 
         screen.displayMessageLine("Press button 7 or 8 to continue.");
-        new Thread(() -> {
-            boolean wait = true;
-            while (wait) {
+        keypad.waitAction();
+        boolean wait = true;
+        int pressed = keypad.getButtonPressed();
+        while (wait) {
+            if (pressed == 7 || pressed == 8) {
+                wait = false;
+            } else {
                 keypad.waitAction();
-                int pressed = keypad.getButtonPressed();
-                if (pressed == 7 || pressed == 8) {
-                    wait = false;
-                    showTakeCardUI(amount, toAccount, pressed == 7);
-                }
+                pressed = keypad.getButtonPressed();
             }
-        }).start();
+        }
+        System.out.println("Button pressed: " + pressed);
+        if (pressed == 8) {
+            showTakeCardUI(amount, toAccount, false);
+            try {
+                takeCardthread.join();
+            } catch (InterruptedException e) {
+                System.out.println("Main thread interrupted while waiting.");
+                Thread.currentThread().interrupt();
+            } // end if
+        } else {
+            showTakeCardUI(amount, toAccount, true);
+            try {
+                takeCardthread.join();
+            } catch (InterruptedException e) {
+                System.out.println("Main thread interrupted while waiting.");
+                Thread.currentThread().interrupt();
+            } // end if
+        }
+
     }
 
     private void showTakeCardUI(double amount, int toAccount, boolean printReceipt) {
-        SwingUtilities.invokeLater(() -> {
+        takeCardthread = new Thread(() -> {
             screenPanel.removeAll();
             screenPanel.setLayout(new GridBagLayout());
             GridBagConstraints c = new GridBagConstraints();
@@ -169,22 +190,22 @@ public class Transfer extends Transaction {
             } catch (Exception e) {
                 screenPanel.add(new JLabel("<< Card Image Missing >>", JLabel.CENTER), c);
             }
-
             c.gridy = 3;
             if (printReceipt) {
-                JLabel receipt = new JLabel("<html><center>Receipt:<br>HK$" +
-                        amount + " to Account " + toAccount + "</center></html>", SwingConstants.CENTER);
+                JLabel receipt = new JLabel("<html><center>Receipt:<br>HK$"
+                        + amount + " to Account " + toAccount + "</center></html>", SwingConstants.CENTER);
                 receipt.setForeground(Color.WHITE);
                 receipt.setFont(atm.MODERN_FONT);
                 screenPanel.add(receipt, c);
-            }
 
-            screenPanel.setBackground(Color.BLUE);
+            }
             screenPanel.revalidate();
             screenPanel.repaint();
 
             screen.displayMessageLine("Please take your card to finish.");
-            new Thread(() -> keypad.waitAction()).start();
+            keypad.waitAction();
         });
+        takeCardthread.start();
+
     }
 }
