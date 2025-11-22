@@ -472,6 +472,7 @@ public class ATM {
         // Add title
         Border lineborder = javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5);
         JLabel title = new JLabel("Main menu", JLabel.CENTER);
+        title.setForeground(Color.WHITE);
         title.setPreferredSize(new Dimension(50, 50));
         title.setBorder(lineborder);
         title.setBackground(GREEN_COLOR);
