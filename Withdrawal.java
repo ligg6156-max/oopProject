@@ -298,7 +298,7 @@ public class Withdrawal extends Transaction {
                 keypad.waitAction();
                 System.out.printf("%d", keypad.ButtonPressedMemory);
                 switch (keypad.getButtonPressed()) {
-                    case 7://temporary set value change later
+                    case 7:
                         System.out.println("Print advice & take card selected.");
                         waitForTakeCard = false;
                         break;
