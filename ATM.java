@@ -238,11 +238,14 @@ public class ATM {
             GoodLabel.setText("Good Morning!");
 
             screen_panel.add(GoodLabel, BorderLayout.CENTER);
-        } else if (LocalTime.now().getHour() < 18) {
+        } else if (LocalTime.now().getHour() < 18 && LocalTime.now().getHour() >= 13) {
             GoodLabel.setText("Good Afternoon!");
             screen_panel.add(GoodLabel, BorderLayout.CENTER);
-        } else {
+        } else if(LocalTime.now().getHour() < 20){
             GoodLabel.setText("Good Evening!");
+            screen_panel.add(GoodLabel, BorderLayout.CENTER);
+        } else {
+            GoodLabel.setText("Good Night!");
             screen_panel.add(GoodLabel, BorderLayout.CENTER);
         }
         bottomPanel.add(GoodLabel);
@@ -409,6 +412,7 @@ public class ATM {
                     currentTransaction.execute(); // execute transaction
                     break;
                 case EXIT: // user chose to terminate session
+                    setProcessingUI();
                     runProcessingUI();
                     TakeCardUI();
                     try {
@@ -523,7 +527,6 @@ public class ATM {
 
     public void runProcessingUI() {
         int tmp = 6000;
-        setProcessingUI();
         while (tmp > 0) {
             if (tmp >= 1000) {
                 progressBar.setValue(progressBar.getValue() + 10);
@@ -562,11 +565,10 @@ public class ATM {
         c.gridx = 0;
         c.gridy = 0;
         c.gridheight = 1;
-        JLabel processingLabel = new JLabel("<html><b align=center>Exiting with your Account</b><br><b align=center>Please wait...</b></html>",
-                JLabel.CENTER);
         progressBar = new JProgressBar(0, 50);
         screen_panel.add(progressBar, c);
         c.gridy = 1;
+        JLabel processingLabel = new JLabel("<html><b align=center>Exiting with your Account</b><br><b align=center>Please wait...</b></html>",JLabel.CENTER);
         screen_panel.add(Box.createVerticalStrut(200), c);
         processingLabel.setBackground(GREEN_COLOR);
         processingLabel.setForeground(new Color(0, 0, 0));
