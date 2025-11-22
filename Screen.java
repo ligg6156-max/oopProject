@@ -137,7 +137,7 @@ public class Screen extends JPanel {
         JLabel MessageLabel = new JLabel(message);
         MessageLabel.setHorizontalAlignment(JLabel.CENTER);
         MessageLabel.setForeground(java.awt.Color.WHITE);
-        MessageLabel.setBackground(atm.SCREEN_PANEL_COLOR);
+        MessageLabel.setBackground(ATM.SCREEN_PANEL_COLOR);
         MessagePanel.add(MessageLabel, c);
         MessageLabel.setOpaque(true);
         c.gridy = 3;
@@ -145,11 +145,13 @@ public class Screen extends JPanel {
         JLabel OK = new JLabel("Press ENTER to continue", JLabel.CENTER);
         OK.setHorizontalAlignment(JLabel.CENTER);
         OK.setForeground(java.awt.Color.WHITE);
-        OK.setBackground(atm.SCREEN_PANEL_COLOR);
+        OK.setBackground(ATM.SCREEN_PANEL_COLOR);
         OK.setOpaque(true);
         OK.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         c.gridy = 4;
         MessagePanel.add(OK, c);
+        
+        // Set bounds to cover the entire screen_panel area        
         atm.layeredPane.add(MessagePanel, JLayeredPane.POPUP_LAYER);
         atm.layeredPane.revalidate();
         atm.layeredPane.repaint();
