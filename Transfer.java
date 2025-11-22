@@ -7,6 +7,7 @@ public class Transfer extends Transaction {
     private Screen screen;
     private ATM atm;
     private JPanel screenPanel;
+    private Thread takeCardthread;
 
     public Transfer(int fromAccountNumber, Screen screen, BankDatabase bankDatabase, Keypad keypad, ATM atm) {
         super(fromAccountNumber, screen, bankDatabase);
@@ -115,26 +116,44 @@ public class Transfer extends Transaction {
         option2.setFont(atm.MODERN_FONT);
         screenPanel.add(option2, c);
 
-        screenPanel.setBackground(Color.BLUE);
         screenPanel.revalidate();
         screenPanel.repaint();
 
         screen.displayMessageLine("Press button 7 or 8 to continue.");
-        new Thread(() -> {
-            boolean wait = true;
+        keypad.waitAction();
+        int pressed = keypad.getButtonPressed();
+        boolean wait = true;
             while (wait) {
-                keypad.waitAction();
-                int pressed = keypad.getButtonPressed();
                 if (pressed == 7 || pressed == 8) {
                     wait = false;
-                    showTakeCardUI(amount, toAccount, pressed == 7);
                 }
+                else
+                keypad.waitAction();
             }
-        }).start();
+            System.out.println("Button pressed: " + pressed);
+        if (pressed == 8){
+            showTakeCardUI(amount, toAccount, false);
+            try {
+                takeCardthread.join();
+                    } catch (InterruptedException e) {
+                        System.out.println("Main thread interrupted while waiting.");
+                        Thread.currentThread().interrupt();
+                    } // end if
+                }
+        else {
+            showTakeCardUI(amount, toAccount, true);
+            try {
+                takeCardthread.join();
+                    } catch (InterruptedException e) {
+                        System.out.println("Main thread interrupted while waiting.");
+                        Thread.currentThread().interrupt();
+                    } // end if
+        }
+
     }
 
     private void showTakeCardUI(double amount, int toAccount, boolean printReceipt) {
-        SwingUtilities.invokeLater(() -> {
+        takeCardthread = new Thread(() -> {
             screenPanel.removeAll();
             screenPanel.setLayout(new GridBagLayout());
             GridBagConstraints c = new GridBagConstraints();
@@ -169,7 +188,6 @@ public class Transfer extends Transaction {
             } catch (Exception e) {
                 screenPanel.add(new JLabel("<< Card Image Missing >>", JLabel.CENTER), c);
             }
-
             c.gridy = 3;
             if (printReceipt) {
                 JLabel receipt = new JLabel("<html><center>Receipt:<br>HK$" +
@@ -177,14 +195,15 @@ public class Transfer extends Transaction {
                 receipt.setForeground(Color.WHITE);
                 receipt.setFont(atm.MODERN_FONT);
                 screenPanel.add(receipt, c);
-            }
 
-            screenPanel.setBackground(Color.BLUE);
+            }
             screenPanel.revalidate();
             screenPanel.repaint();
 
             screen.displayMessageLine("Please take your card to finish.");
-            new Thread(() -> keypad.waitAction()).start();
+            keypad.waitAction();
         });
+        takeCardthread.start();
+
     }
 }
