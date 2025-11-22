@@ -286,7 +286,7 @@ public class ATM {
                 temp = new Withdrawal(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser, screen_panel, this);
                 break;
             case TRANSFER:
-                temp = new Transfer(currentAccountNumber, screen, bankDatabase, keypad);
+                temp = new Transfer(currentAccountNumber, screen, bankDatabase, keypad,this);
                 break;
         }
 
