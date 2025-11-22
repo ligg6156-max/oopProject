@@ -522,7 +522,7 @@ public class Withdrawal extends Transaction {
                 if (input % 100 == 0 || tempory != 0) {
                     System.out.println("Debug: Valid input received: " + input);
                     break;
-                } else if (input == -1) {
+                } else if (input <= 0) {
                     this.screen.clear();
                     this.screen.displayMessage("HK$");
                     input = keypad.getIntInput();
