@@ -229,10 +229,20 @@ public class ATM {
             JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
       bottomPanel.setBackground(SCREEN_PANEL_COLOR);
       
-      JLabel securityLabel = new JLabel("Secure Banking • 24/7 Service", JLabel.CENTER);
-      securityLabel.setForeground(new Color(180, 180, 180));
-      securityLabel.setFont(new Font("CONSOLAS", Font.PLAIN, 14));
-      bottomPanel.add(securityLabel);
+      JLabel GoodLabel = new JLabel("", JLabel.CENTER);
+      GoodLabel.setForeground(Color.WHITE);
+      if (LocalTime.now().getHour() < 12 && LocalTime.now().getHour() >= 5) {
+          GoodLabel.setText("Good Morning!");
+
+          screen_panel.add(GoodLabel, BorderLayout.CENTER);
+      } else if (LocalTime.now().getHour() < 18) {
+          GoodLabel.setText("Good Afternoon!");
+          screen_panel.add(GoodLabel, BorderLayout.CENTER);
+      } else {
+          GoodLabel.setText("Good Evening!");
+          screen_panel.add(GoodLabel, BorderLayout.CENTER);
+      }
+      bottomPanel.add(GoodLabel);
       
       mainContainer.add(topPanel, BorderLayout.NORTH);
       mainContainer.add(welcomePanel, BorderLayout.CENTER);
@@ -262,19 +272,6 @@ public class ATM {
       JLabel welcome = new JLabel("Welocme User");
       welcome.setForeground(Color.WHITE);
       screen_panel.add(welcome, BorderLayout.CENTER);
-      JLabel timeLabel = new JLabel("", JLabel.CENTER);
-      timeLabel.setForeground(Color.WHITE);
-      if (LocalTime.now().getHour() < 12 && LocalTime.now().getHour() >= 5) {
-          timeLabel.setText("Good Morning!");
-
-          screen_panel.add(timeLabel, BorderLayout.CENTER);
-      } else if (LocalTime.now().getHour() < 18) {
-          timeLabel.setText("Good Afternoon!");
-          screen_panel.add(timeLabel, BorderLayout.CENTER);
-      } else {
-          timeLabel.setText("Good Evening!");
-          screen_panel.add(timeLabel, BorderLayout.CENTER);
-      }
       screen_panel.revalidate();
       screen_panel.repaint();
       try {
