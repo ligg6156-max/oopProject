@@ -402,7 +402,7 @@ public class Withdrawal extends Transaction {
                                 "\nAmount exceeds cheque limit of ");
                         screen.displayDollarAmount(chequeAccount.getLimit_per_cheque());
                         screen.displayMessageLine("\nPlease choose a smaller amount.");
-                        screen.MessagePopup("Amount exceeds cheque limit of HKD 50000\nPlease choose a smaller amount.");
+                        screen.MessagePopup("<html><p align=center>Amount exceeds cheque limit of HKD 50000<br>Please choose a smaller amount.</p></html>");
                         continue;
                         // will loop again for user to type another amount
                     }
