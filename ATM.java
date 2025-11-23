@@ -341,7 +341,6 @@ public class ATM {
         int accountNumber = keypad.getIntInput(); // input account number
         if (accountNumber == CANCELED) {
             screen.clear();
-            screen.MessagePopup("Invalid account number or PIN. Please try again.");
             return;
         }
         screen.clear();
