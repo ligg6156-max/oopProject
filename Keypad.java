@@ -177,7 +177,7 @@ public class Keypad implements KeyListener {
                 // Wait for Enter key in GUI
                 while (keypressed != 1) {
                     try {
-                        Thread.sleep(1);
+                        Thread.sleep(50);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                     }
@@ -205,22 +205,17 @@ public class Keypad implements KeyListener {
                 return -1;
             }
             return num;
-        } catch (java.lang.NumberFormatException e) 
-         {
+        } catch (java.lang.NumberFormatException e) {
 
             if (inputLine.equals(".")) {
                 screen.MessagePopup("<html><p align=center>The following input is not an number.</p></html>");
 
-            } 
-
-            else if (inputLine.contains(".")) {
+            } else if (inputLine.contains(".")) {
                 System.out.printf("The following input is not an integer! It contains a decimal point.");
                 System.out.print("Try again: ");
                 screen.MessagePopup("<html><p align=center>The following input is not an integer!<br> It contains a decimal point.</p></html>");
 
-            } 
-
-            else if (inputLine.isEmpty()) {
+            } else if (inputLine.isEmpty()) {
                 System.out.printf("The following input is empty!");
                 System.out.print("Try again: ");
                 screen.MessagePopup("<html><p align=center>The following input is empty!</p></html>");
@@ -235,56 +230,51 @@ public class Keypad implements KeyListener {
             textArea.append("\n");
         }
 
-        for (int i = 2; i > -1; i--) {
-            try {
-                String inputLine = "";
+        String inputLine = "";
+        try {
 
-                // If TextArea is available, wait for GUI input
-                if (textArea != null) {
-                    // Clear previous input
-                    currentInput.setLength(0);
-                    // Mark where user input starts
-                    inputStartPosition = textArea.getText().length();
+            // If TextArea is available, wait for GUI input
+            if (textArea != null) {
+                // Clear previous input
+                currentInput.setLength(0);
+                // Mark where user input starts
+                inputStartPosition = textArea.getText().length();
 
-                    // Wait for Enter key in GUI
-                    while (keypressed != 1) {
-                        try {
-                            Thread.sleep(50);
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        }
-                    }
-                    keypressed = 0; // Reset
-
-                    // Get input from currentInput buffer
-                    inputLine = currentInput.toString().trim();
-                    currentInput.setLength(0); // Clear for next input
-                } else {
-                    // Terminal mode - use Scanner
-                    inputLine = input.nextLine();
-                }
-
-                double num = Double.parseDouble(inputLine);
-                if (num < 0) {
-                    if (i > 0) {
-                        System.out.printf("\nThe number cannot be negative, %d try remaining\n", i);
-                        System.out.print("Try again: ");
-                        continue;
-                    } else {
-                        return -1;
+                // Wait for Enter key in GUI
+                while (keypressed != 1) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                     }
                 }
-                return num;
-            } catch (java.lang.NumberFormatException e) {
-                if (i > 0) {
-                    System.out.printf("The following input is not a number! %d try remaining\n", i);
-                    System.out.print("Try again: ");
-                } else {
-                    return 0;
-                }
+                keypressed = 0; // Reset
+
+                // Get input from currentInput buffer
+                inputLine = currentInput.toString().trim();
+                currentInput.setLength(0); // Clear for next input
+            } else {
+                // Terminal mode - use Scanner
+                inputLine = input.nextLine();
+            }
+
+            double num = Double.parseDouble(inputLine);
+            if (num < 0) {
+
+                System.out.printf("\nThe number cannot be negative.");
+                System.out.print("Try again: ");
+                return -1;
+            }
+            return num;
+        } catch (java.lang.NumberFormatException e) {
+            if (inputLine.isEmpty()) {
+                screen.MessagePopup("<html><p align=center>The following input is empty!</p></html>");
+                return 0;
+            } else {
+                screen.MessagePopup("<html><p align=center>The following input is not a number!</p></html>");
+                return 0;
             }
         }
-        return 0;
     }
 
 } // end class Keypad  
@@ -301,5 +291,5 @@ public class Keypad implements KeyListener {
  * shall not be liable in any event for incidental or * consequential damages in
  * connection with, or arising out of, the * furnishing, performance, or use of
  * these programs. *
- ************************************************************************
+ * ***********************************************************************
  */

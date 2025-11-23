@@ -345,7 +345,7 @@ public class ATM {
             return;
         }
         screen.clear();
-        screen.displayMessage("\nEnter your PIN: "); // prompt for PIN
+        screen.displayMessage("\n>Enter your PIN: "); // prompt for PIN
         keypad.setPasswordMode(true); // Enable password masking
         int pin = keypad.getIntInput(); // input PIN
         keypad.setPasswordMode(false); // Disable password masking
