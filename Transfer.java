@@ -51,7 +51,7 @@ public class Transfer extends Transaction {
 
         if (getAccountNumber() == toAccount) {
             screen.displayMessageLine(" Cannot transfer to your own account.");
-            screen.MessagePopup("Transfer canceled. You cannot transfer to your own account.");
+            screen.MessagePopup("Cannot transfer to your own account.");
             return;
         }
 
