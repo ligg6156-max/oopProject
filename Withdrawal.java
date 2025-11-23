@@ -176,7 +176,7 @@ public class Withdrawal extends Transaction {
             screenPanel.add(Box.createVerticalStrut(50), c);
             c.gridy = 2;
             Border lineborder = javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5);
-            JLabel title = new JLabel("<html>Press ENTER/Right Panel Button to confirm withdrawal<br>Or press Left Panel Button to cancel</html>", JLabel.CENTER);
+            JLabel title = new JLabel("<html><p align=center>Press ENTER/Right Panel Button to confirm withdrawal<br>Or press Left Panel Button to cancel</p></html>", JLabel.CENTER);
             title.setForeground(new Color(255, 255, 255));
             title.setPreferredSize(new Dimension(50, 50));
             title.setBorder(lineborder);
