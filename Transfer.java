@@ -206,6 +206,7 @@ public class Transfer extends Transaction {
 
             screen.displayMessageLine("Please take your card to finish.");
             keypad.waitAction();
+            atm.userExited=true;
         });
         takeCardthread.start();
 
