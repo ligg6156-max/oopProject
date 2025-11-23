@@ -214,7 +214,7 @@ public class ATM {
         welcomeLabel2.setForeground(Color.YELLOW);
         welcomeLabel2.setFont(new Font("CONSOLAS", Font.BOLD, 32));
 
-        JLabel cardLabel = new JLabel("Insert Card", JLabel.CENTER);
+        JLabel cardLabel = new JLabel("Please Insert Card", JLabel.CENTER);
         cardLabel.setForeground(Color.CYAN);
         cardLabel.setFont(new Font("CONSOLAS", Font.BOLD, 20));
         cardLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
