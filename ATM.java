@@ -292,7 +292,7 @@ public class ATM {
     public void timeshow() {
         screen_panel.removeAll();
         screen_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
-        JLabel welcome = new JLabel("Welcome User " + currentAccountNumber, JLabel.CENTER);
+        JLabel welcome = new JLabel("Welcome User", JLabel.CENTER);
         welcome.setForeground(Color.WHITE);
         screen_panel.add(welcome, BorderLayout.CENTER);
         screen_panel.revalidate();
