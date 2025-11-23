@@ -294,17 +294,20 @@ public class Withdrawal extends Transaction {
             screenPanel.revalidate();
             screenPanel.repaint();
             Boolean waitForTakeCard = true;
+            int buttonchoice = 0;
             while (waitForTakeCard == true) {
                 keypad.waitAction();
                 System.out.printf("%d", keypad.ButtonPressedMemory);
                 switch (keypad.getButtonPressed()) {
                     case 7:
                         System.out.println("Print advice & take card selected.");
+                        buttonchoice = 7;
                         waitForTakeCard = false;
                         break;
                     case 8:
                         System.out.println("Take card selected.");
                         waitForTakeCard = false;
+                        buttonchoice = 8;
                         break;
                     case 0, 1, 2, 3, 4, 5, 6:
                         System.out.println("Invalid selection, please select again.");
@@ -349,13 +352,18 @@ public class Withdrawal extends Transaction {
 
             screenPanel.removeAll();
             screenPanel.setLayout(new GridBagLayout());
+            c.gridy = 0;
+            c.gridx = 0;
+            if (buttonchoice == 7) {
             JLabel WithdrawAountLabel = new JLabel("You get " + cashCount[0] + " HKD1000, " + cashCount[1] + " HKD500, " + cashCount[2] + " HKD100", JLabel.CENTER);
             WithdrawAountLabel.setFont(ATM.MODERN_FONT);
             WithdrawAountLabel.setForeground(new Color(255, 255, 255));
             WithdrawAountLabel.setPreferredSize(new Dimension(50, 50));
-            c.gridy = 0;
-            c.gridx = 0;
             screenPanel.add(WithdrawAountLabel, c);
+            }
+            else {
+            screenPanel.add(Box.createVerticalStrut(50), c);
+            }
             JLabel takeyourCash = new JLabel("<html><b>Please take your cash</b></html>", JLabel.CENTER);
             takeyourCash.setForeground(new Color(255, 255, 255));
             c.gridy = 1;
