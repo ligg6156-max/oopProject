@@ -176,7 +176,7 @@ public class Withdrawal extends Transaction {
             screenPanel.add(Box.createVerticalStrut(50), c);
             c.gridy = 2;
             Border lineborder = javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255), 5);
-            JLabel title = new JLabel("Press ENTER to confirm withdrawal", JLabel.CENTER);
+            JLabel title = new JLabel("<html>Press ENTER/Right Panel Button to confirm withdrawal<br>Or press Left Panel Button to cancel</html>", JLabel.CENTER);
             title.setForeground(new Color(255, 255, 255));
             title.setPreferredSize(new Dimension(50, 50));
             title.setBorder(lineborder);
@@ -213,8 +213,7 @@ public class Withdrawal extends Transaction {
         c.gridx = 0;
         c.gridy = 0;
         c.gridheight = 1;
-        JLabel processingLabel = new JLabel("<html><b align=center>Your request is being processed.</b><br><b align=center>Please wait...</b></html>",
-                JLabel.CENTER);
+        JLabel processingLabel = new JLabel("<html><b align=center>Your request is being processed.</b><br><b align=center>Please wait...</b></html>", JLabel.CENTER);
 
         c.gridy = 1;
         screenPanel.add(Box.createVerticalStrut(200), c);
@@ -381,7 +380,6 @@ public class Withdrawal extends Transaction {
         keypad.setButtonPressState(true);
         Screen screen = getScreen();
         screen.clear();
-        withdrawalUI();
         boolean cashDispensed = false; // cash was not dispensed yet
         double availableBalance; // amount available for withdrawal
 
@@ -390,7 +388,7 @@ public class Withdrawal extends Transaction {
         Account account = bankDatabase.getAccount(getAccountNumber());
         // loop until cash is dispensed or the user cancels
         do {
-            // obtain a chosen withdrawal amount from the user 
+            withdrawalUI();
             amount = displayMenuOfAmounts();
 
             // check whether user chose a withdrawal amount or canceled
@@ -422,11 +420,13 @@ public class Withdrawal extends Transaction {
                         comfirmationUI();
                         // wait for user to press enter to confirm
                         keypad.waitAction();
+                        int temppress = keypad.getButtonPressed();
                         while (true) {
-                            if (keypad.getButtonPressed() == 2)//temporary set value change later
+                            if (temppress > 0 && temppress < 5)//temporary set value change later
                             {
-                                screen.displayMessageLine("\nCanceling transaction...");
                                 screen.MessagePopup("Transaction canceled.");
+                                amount = CANCELED;
+                                break;
                             } else if (keypad.getButtonPressed() == 4 || keypad.getButtonPressed() == 0) {
                                 ProcessingUI();
                                 while (tmp > 0) {
@@ -461,7 +461,11 @@ public class Withdrawal extends Transaction {
                                 continue;
                             }
                         }
+                        if (amount == CANCELED) {
+                            continue;
+                        }
                         // update the account involved to reflect withdrawal
+
                         bankDatabase.debit(getAccountNumber(), amount);
 
                         cashDispenser.dispenseCash(cashCount[0], cashCount[1], cashCount[2]); // dispense cash
